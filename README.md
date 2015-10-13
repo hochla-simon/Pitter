@@ -8,8 +8,8 @@ This is a school project, goal is to develop an easy to use photo managing and s
 The repository contains...
 
 # Project Members:
-Céline Gimbernat
-Daniel Naro
-Šimon Hochla
-Patrick Patoila
-Christian Handschigl
+Céline Gimbernat  
+Daniel Naro  
+Šimon Hochla  
+Patrick Patoila  
+Christian Handschigl  
