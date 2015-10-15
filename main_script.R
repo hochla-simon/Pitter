@@ -1,25 +1,43 @@
-file <- "./data/English_dependency_tree_metrics.txt";
-dataRead = read.table(file,header=FALSE)
-numberRows <- dim(dataRead)[1]
-#Checking validity:
-validity <- TRUE;
-for( i in 1:numberRows){
-  n = dataRead[i,1];
-  meanKsquare = dataRead[i,2];
-  meanD = dataRead[i,3];
-  if(!((4-6/n)<=meanKsquare && meanKsquare<=(n-1) )){
-    validity <- FALSE;
-    break;
+check_validity <- function(file) {
+  dataRead = read.table(file,header=FALSE)
+  numberRows <- dim(dataRead)[1]
+  #Checking validity:
+  validity <- TRUE;
+  for( i in 1:numberRows){
+    n = dataRead[i,1];
+    meanKsquare = dataRead[i,2];
+    meanD = dataRead[i,3];
+    if(!((4-6/n)<=meanKsquare && meanKsquare<=(n-1) )){
+      validity <- FALSE;
+      break;
+    }
+    meanDLowerBound = n/(8*(n-1))*meanKsquare + 1/2;
+    meanDUpperBound = n-1;
+    if(!(meanDLowerBound<=meanD && meanD<=meanDUpperBound )){
+      validity <- FALSE;
+      break;
+    }
   }
-  dLowerBound = n/(8*(n-1))*meanKsquare + 1/2;
-  dUpperBound = n-1;
-  if(!(dLowerBound<=meanD && meanD<=dUpperBound )){
-    validity <- FALSE;
-    break;
+  if(validity){
+    cat("The data in file ",file," is valid.\n");
+  }else{
+    cat("The data in file ",file," is unvalid.\n");
   }
 }
-if(validity){
-  cat("The data in file ",file," is valid");
-}else{
-  cat("The data in file ",file," is unvalid");
+write_summary <- function(language,file) {
+  dataRead = read.table(file,header=FALSE);
+  ns <- dataRead$V1;
+  meanKsquares <- dataRead$V2;
+  meanDs <- dataRead$V3;
+  cat(language, dim(dataRead)[1], mean(ns), sd(ns), mean(meanKsquares), sd(meanKsquares),"\n");
+}
+source = read.table("list.txt", 
+                    header = TRUE,               # this is to indicate the first line of the file contains the names of the columns instead of the real data
+                    as.is = c("language","file") # this is need to have the cells treated as real strings and not as categorial data.
+)
+for (x in 1:nrow(source)) {
+  check_validity(source$file[x])
+}
+for (x in 1:nrow(source)) {
+  write_summary(source$language[x], source$file[x])
 }
