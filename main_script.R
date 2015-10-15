@@ -1,3 +1,4 @@
+tolerance <- 10E-6;
 check_validity <- function(file) {
   dataRead = read.table(file,header=FALSE)
   numberRows <- dim(dataRead)[1]
@@ -7,13 +8,13 @@ check_validity <- function(file) {
     n = dataRead[i,1];
     meanKsquare = dataRead[i,2];
     meanD = dataRead[i,3];
-    if(!((4-6/n)<=meanKsquare && meanKsquare<=(n-1) )){
+    if(!((4-6/n)<=(meanKsquare + tolerance) && (meanKsquare-tolerance)<=(n-1) )){
       validity <- FALSE;
       break;
     }
     meanDLowerBound = n/(8*(n-1))*meanKsquare + 1/2;
     meanDUpperBound = n-1;
-    if(!(meanDLowerBound<=meanD && meanD<=meanDUpperBound )){
+    if(!(meanDLowerBound<=(meanD + tolerance) && (meanD-tolerance)<=meanDUpperBound )){
       validity <- FALSE;
       break;
     }
