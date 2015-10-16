@@ -6,9 +6,11 @@
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="/css/style.css" type="text/css" />
   <link rel="stylesheet" href="/css/jquery-ui.min.css" type="text/css" />
+  <link rel="stylesheet" href="/css/dropzone.css" type="text/css" />
   <script src="/js/jquery.min.js" type="text/javascript"></script>
   <script src="/js/jquery-ui.min.js" type="text/javascript"></script>
   <script src="/js/scripts.js" type="text/javascript"></script>
+  <script src="/js/dropzone.js"></script>
   <?php echo $site['script'];?>
  </head>
  <body>
