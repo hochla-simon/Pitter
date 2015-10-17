@@ -14,13 +14,18 @@
   <?php echo $site['script'];?>
  </head>
  <body>
+	<div id="wrapper">
+	  <?php
+	  include(dirname(__FILE__).'/header.php');
+	  
+	  include(dirname(__FILE__).'/navigation.php');
+	  
+	  include(dirname(__FILE__).'/content.php');
+	  
+	  include(dirname(__FILE__).'/bottom.php');
+	?>
+	</div>
   <?php
-  include(dirname(__FILE__).'/header.php');
-  
-  include(dirname(__FILE__).'/navigation.php');
-  
-  include(dirname(__FILE__).'/content.php');
-  
   include(dirname(__FILE__).'/footer.php');
   ?>
  </body>
