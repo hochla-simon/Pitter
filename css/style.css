@@ -145,6 +145,27 @@ font-weight:400;
 img.pic {
 	padding: 5px;
 	border: solid 1px #D4D4D4;
+	max-width: 70px;
+	max-height: 70px;
+}
+.miniature {
+	float: left;
+	width: 80px;
+	height: 80px;
+	margin: 5px;
+	text-align: center;
+}
+
+#content-box1 {
+	width: 49%;
+	float: left;
+	overflow: auto;
+}
+
+#content-box2 {
+	margin: 0 0 0 51%;
+	width: 49%;
+	border: solid 1px #D4D4D4;
 }
 
 .confirmMessage, .errorMessage{
