@@ -6,4 +6,10 @@ function createMessage($text, $cssClass = 'error'){
 	else
 		return $msg;
 }
+function createSession($data){
+	$_SESSION = $data;
+}
+function destroySession(){
+	session_destroy();
+}
 ?>

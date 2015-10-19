@@ -1,6 +1,6 @@
   <div id="header">
 	<div id="logo">
-		<img src="/img/logo.png" alt="" />
+		<img src="/images/logo.png" alt="" />
 		<?php echo $config['projectName'];?>
 	</div>
 	<div id="slogan">

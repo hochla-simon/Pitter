@@ -4,6 +4,7 @@ session_start();
 session_regenerate_id();
 include(dirname(__FILE__).'/includes/config.php');
 include(dirname(__FILE__).'/includes/functions.php');
+include(dirname(__FILE__).'/includes/databases/mysql.php');
 
 $page = (($_GET['page'] != '') ? $_GET['page'] : 'common/home.php');
 /*if(!file_exists(dirname(__FILE__).'/config.txt')){
@@ -15,12 +16,7 @@ else */if(!file_exists(dirname(__FILE__).'/pages/'.$page)){
 
 $site = array();
 ob_start();
-try{
-	include(dirname(__FILE__).'/pages/'.$page);
-}
-catch(DatabaseException $e){
-	echo createMessage($e->getMessage());
-}
+include(dirname(__FILE__).'/pages/'.$page);
 $site['content'] = ob_get_contents();
 ob_end_clean();
 

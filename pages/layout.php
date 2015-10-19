@@ -3,14 +3,11 @@
  <head>
   <title><?php echo $site['title'];?> | <?php echo $config[projectName];?></title>
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/css/style.css" type="text/css" />
-  <link rel="stylesheet" href="/css/jquery-ui.min.css" type="text/css" />
-  <link rel="stylesheet" href="/css/dropzone.css" type="text/css" />
-  <script src="/js/jquery.min.js" type="text/javascript"></script>
-  <script src="/js/jquery-ui.min.js" type="text/javascript"></script>
-  <script src="/js/scripts.js" type="text/javascript"></script>
-  <script src="/js/dropzone.js"></script>
+  <link rel="icon" href="<?php echo $config['projectURL'];?>/images/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="<?php echo $config['projectURL'];?>/css/style.css" type="text/css" />
+  <link rel="stylesheet" href="<?php echo $config['projectURL'];?>/css/dropzone.css" type="text/css" />
+  <script src="<?php echo $config['projectURL'];?>/js/jquery.min.js" type="text/javascript"></script>
+  <script src="<?php echo $config['projectURL'];?>/js/dropzone.js"></script>
   <?php echo $site['script'];?>
  </head>
  <body>

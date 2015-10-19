@@ -59,10 +59,10 @@ table {
 	border-spacing: 0;
 }
 i{
-font-style:italic;
+	font-style:italic;
 }
 b{
-font-weight:400;
+	font-weight:400;
 }
 
 #wrapper {
@@ -141,7 +141,6 @@ font-weight:400;
 	border-top: none;
 	overflow: hidden;
 }
-
 img.pic {
 	padding: 5px;
 	border: solid 1px #D4D4D4;
@@ -155,28 +154,25 @@ img.pic {
 	margin: 5px;
 	text-align: center;
 }
-
 #content-box1 {
 	width: 49%;
 	float: left;
 	overflow: auto;
 }
-
 #content-box2 {
 	margin: 0 0 0 51%;
 	width: 49%;
 	border: solid 1px #D4D4D4;
 }
-
 .confirmMessage, .errorMessage{
-background:rgba(255, 255, 255, 0.4);
-color:#ffffff;
-padding:7px 10px;
-font-size:20px;
-font-weight:300;
-margin:5px 0;
-border-radius:5px;
+	background:rgba(255, 255, 255, 0.4);
+	color:#ffffff;
+	padding:7px 10px;
+	font-size:20px;
+	font-weight:300;
+	margin:5px 0;
+	border-radius:5px;
 }
 .errorMessage{
-background:#B7252C;
+	background:#B7252C;
 }
