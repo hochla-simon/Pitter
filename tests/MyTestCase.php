@@ -10,6 +10,9 @@ class MyTestCase extends FixtureTestCase {
     );
 
     function testReadDatabase() {
+
+        $this->setUp();
+
         $conn = $this->getConnection()->getConnection();
 
         // fixtures auto loaded, let's read some data

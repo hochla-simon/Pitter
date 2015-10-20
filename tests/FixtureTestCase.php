@@ -3,7 +3,7 @@
 require_once dirname( dirname(__FILE__) ).DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 #require 'vendor' . DIRECTORY_SEPARATOR . 'Autoload.php';
 
-class FixtureTestCase extends \PHPUnit_Extensions_Database_TestCase {
+class FixtureTestCase extends PHPUnit_Extensions_Database_TestCase {
 
     public $fixtures = array(
         'posts',
@@ -14,8 +14,11 @@ class FixtureTestCase extends \PHPUnit_Extensions_Database_TestCase {
     private $conn = null;
 
     public function setUp() {
+        echo 'doing setup\n';
         $conn = $this->getConnection();
         $pdo = $conn->getConnection();
+
+
 
         // set up tables
         $fixtureDataSet = $this->getDataSet($this->fixtures);

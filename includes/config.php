@@ -3,7 +3,7 @@ $config = array(
 	'navigation' => array(
 		array('text' => 'Home', 'url' => '/common/home.php'),
 		array('text' => 'Upload Photos', 'url' => '/upload/index.php'),
-		array('text' => 'View Photos', 'url' => '/view/index.php')
+		array('text' => 'View Photos', 'url' => '/view/upload.php')
 	)
 );
 

@@ -1,5 +1,6 @@
 <?php
-$target_dir = dirname( dirname(__FILE__) ). DIRECTORY_SEPARATOR ."uploads/";
+$target_dir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images'. DIRECTORY_SEPARATOR;
+echo $target_dir;
 $target_file = $target_dir . basename($_FILES["file"]["name"]);
 #echo "will try to move to " . $target_file;
 $uploadOk = 1;
@@ -35,7 +36,9 @@ if ($uploadOk == 0) {
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
         echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
     } else {
+        http_response_code(500);
         echo "Sorry, there was an error uploading your file.";
     }
 }
+die();
 ?>

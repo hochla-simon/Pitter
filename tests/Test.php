@@ -1,7 +1,6 @@
 <?php
 
 require 'MyTestCase.php';
-
 /**
  * Created by PhpStorm.
  * User: daniel
