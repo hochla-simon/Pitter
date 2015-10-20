@@ -1,33 +1,4 @@
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url(../fonts/Lato-300.woff) format('woff');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url(../fonts/Lato-400.woff) format('woff');
-}
-
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+* {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -41,129 +12,167 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-	line-height: 1;
+	font-size: 11.5pt;
+	color: #5C5B5B;
+	line-height: 1em;
+	background: #E0DCDC;
+	font-family: Georgia, serif;
 }
-ol, ul {
-	list-style: none;
+a:hover {
+	text-decoration: none;
 }
-blockquote, q {
-	quotes: none;
+a {
+	text-decoration: underline;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+br.clearfix {
+	clear: both;
+}
+
+h1,h2,h3,h4 {
+	font-weight: normal;
+	letter-spacing: -1px;
+}
+h2,h3,h4 {
+	color: #2C2B2B;
+	margin-bottom: 1em;
+}
+h2 {
+	font-size: 2.25em;
+}
+h3 {
+	font-size: 1.75em;
+}
+h4 {
+	font-size: 1.5em;
+}
+p {
+	margin-bottom: 1.5em;
+}
+ul {
+	margin-bottom: 1.5em;
+}
+ul h4 {
+	margin-bottom: 0.35em;
 }
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
 i{
-font-style:italic;
+	font-style:italic;
 }
 b{
-font-weight:400;
+	font-weight:400;
 }
-a{
-text-decoration:none;
-color:#BF0B1A;
+
+#wrapper {
+	position: relative;
+	max-width: 1300px;
+	margin: 1px auto 0 auto;
+	background: #FFFFFF;
+	border-radius: 0px 0px 6px 6px;
+	box-shadow: 0px 5px 20px 2px rgba(0,0,0,0.1);
 }
-a:hover{
-color:#aaa;
+#header {
+	background: #000000;
+	padding: 40px;
+	color: #FFFFFF;
+	border: solid 1px #333333;
+	border-bottom: none;
+	overflow: hidden;
 }
-html, body{
-font-family:Lato,Calibri,Helvetica,Arial,Thaoma,Verdana,sans-serif;
-color:#ffffff;
-font-size:16px;
-background:#BF0B1A;
+#logo {
+	left: 45px;
+	font-size: 2.8em;
 }
-#header, #navigation, #content, #footer{
-float:left;
-width:100%;
-box-sizing:border-box;
--moz-box-sizing:border-box;
--webkit-box-sizing:border-box;
-padding:30px 25px;
+#logo img {
+	width: 70px;
+	position: relative;
+	top: 5px;
 }
-#header{
-padding-bottom:15px;
-background:#ffffff;
+#slogan {
+	line-height: 160px;
+	height: 160px;
+	padding: 5px 0 0 0;
+	position: absolute;
+	right: 45px;
+	top: 0;
 }
-#header #logo{
-font-weight:300;
-font-size:43px;
-color:#444444;
+
+#footer {
+	margin: 20px 0 20px 0;
+	text-align: center;
+	color: #8C8B8B;
+	text-shadow: 0 1px 0 #FFFFFF;
 }
-#navigation{
-padding-top:0;
-padding-bottom:0;
-background:#ffffff;
+#footer a {
+	color: #8C8B8B;
 }
-#navigation a{
-float:left;
-width:auto;
-padding:10px 35px;
-font-size:25px;
-background:#ffffff;
-color:#777;
-font-weight:300;
-border:1px solid #777;
-border-bottom:none;
-margin-left:2px;
-margin-top:10px;
+#navigation {
+	padding: 0px 45px 0px 45px;
+	background-image:linear-gradient(#000000, #6C6C6C);
+	margin: 0;
+	border: solid 1px #333333;
+	border-top: none;
+	letter-spacing: -1px;
+	font-size: 1.25em;
+	height: 35px;
 }
-#navigation a.current, #navigation a:hover{
-margin-top:0;
-padding:15px 35px;
-color:#ffffff;
-border-color:#BF0B1A;
-background:#BF0B1A;
+#navigation a {
+	float:left;
+	padding: 10px 10px 10px 10px;
+	border-right : dotted 1px black;
+	border-left : dotted 1px black;
+	text-decoration: none;
+	color: #FFFFFF;
+}
+#navigation a.current, a:hover {
+	background: #333333;
+	border-radius: 3px 3px 0px 0px;
 }
 #content{
-
+	padding: 15px;
 }
-#footer{
-position:fixed;
-bottom:0;
-right:0;
-background:#ffffff;
-color:#444444;
-font-size:13px;
-background:#ffffff;
-padding:3px 5px;
-border-radius:5px 0 0 0;
-float:right;
-width:auto;
+#page-bottom{
+	background: #000000;
+	padding: 10px;
+	color: #FFFFFF;
+	border: solid 1px #333333;
+	border-top: none;
+	overflow: hidden;
 }
-h1, h2, h3, h4, h5, h6{
-font-size:45px;
-font-weight:300;
-margin-bottom:25px;
+img.pic {
+	padding: 5px;
+	border: solid 1px #D4D4D4;
+	max-width: 70px;
+	max-height: 70px;
 }
-h2{
-font-size:40px;
+.miniature {
+	float: left;
+	width: 80px;
+	height: 80px;
+	margin: 5px;
+	text-align: center;
 }
-h3{
-font-size:36px;
+#content-box1 {
+	width: 49%;
+	float: left;
+	overflow: auto;
 }
-h4{
-font-size:32px;
-}
-h5{
-font-size:28px;
-}
-h6{
-font-size:24px;
+#content-box2 {
+	margin: 0 0 0 51%;
+	width: 49%;
+	border: solid 1px #D4D4D4;
 }
 .confirmMessage, .errorMessage{
-background:rgba(255, 255, 255, 0.4);
-color:#ffffff;
-padding:7px 10px;
-font-size:20px;
-font-weight:300;
-margin:5px 0;
-border-radius:5px;
+	background:rgba(255, 255, 255, 0.4);
+	color:#ffffff;
+	padding:7px 10px;
+	font-size:20px;
+	font-weight:300;
+	margin:5px 0;
+	border-radius:5px;
 }
 .errorMessage{
-background:#B7252C;
+	background:#B7252C;
 }
