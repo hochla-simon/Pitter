@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="<?php echo $config['projectURL'];?>/css/dropzone.css" type="text/css" />
   <script src="<?php echo $config['projectURL'];?>/js/jquery.min.js" type="text/javascript"></script>
   <script src="<?php echo $config['projectURL'];?>/js/dropzone.js"></script>
+  <script src="<?php echo $config['projectURL'];?>/js/scripts.js" type="text/javascript"></script>
   <?php echo $site['script'];?>
  </head>
  <body>
