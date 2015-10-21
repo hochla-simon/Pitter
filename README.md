@@ -12,4 +12,3 @@ Céline Gimbernat
 Daniel Naro  
 Šimon Hochla  
 Patrick Patoila  
-Christian Handschigl  

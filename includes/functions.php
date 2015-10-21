@@ -12,3 +12,17 @@ function createSession($data){
 function destroySession(){
 	session_destroy();
 }
+function addModuleNavigation($module, $data){
+	global $config;
+	$data['url'] = '/'.$module.'/index.html';
+	$newNavigation = array();
+	$i = 0;
+	for( ; $i < $data['position'] && $i < count($config['navigation']); $i++){
+		$newNavigation[] = $config['navigation'][$i];
+	}
+	$newNavigation[] = $data;
+	for( ; $i < count($config['navigation']); $i++){
+		$newNavigation[] = $config['navigation'][$i];
+	}
+	$config['navigation'] = $newNavigation;
+}

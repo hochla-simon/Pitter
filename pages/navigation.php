@@ -1,9 +1,9 @@
-  <div id="navigation">
-   <?php
-   foreach($config['navigation'] as $link){
-	?>
-		<a href="<?=preg_replace('!\.php$!', '.html', $link['url'])?>" <?=(('/'.$page == $link['url']) ? 'class="current"' : '')?>><?=$link['text']?></a>
-	<?php
-	}
-   ?>
-  </div>
+	<div id="navigation">
+		<?php
+		foreach($config['navigation'] as $link){
+			?>
+			<a href="<?php echo $link['url'];?>" <?php echo (('/'.$page == $link['url']) ? 'class="current"' : '');?>><?php echo $link['text'];?></a>
+			<?php
+		}
+		?>
+	</div>

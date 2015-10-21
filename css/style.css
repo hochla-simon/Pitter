@@ -64,7 +64,6 @@ i{
 b{
 	font-weight:400;
 }
-
 #wrapper {
 	position: relative;
 	max-width: 1300px;
@@ -98,7 +97,6 @@ b{
 	right: 45px;
 	top: 0;
 }
-
 #footer {
 	margin: 20px 0 20px 0;
 	text-align: center;
@@ -175,4 +173,47 @@ img.pic {
 }
 .errorMessage{
 	background:#B7252C;
+}
+
+@media screen and (max-width: 500px){
+	body{
+		font-size: 70%;
+	}
+	#header {
+		padding: 10px;
+	}
+	#slogan {
+		line-height: normal;
+		height: auto;
+		padding: 5px 0 0 0;
+		position: relative;
+		left: 10px;
+	}
+	#navigation {
+		padding: 0px;
+	}
+	#navigation a {
+		padding: 10px;
+	}
+	#content{
+		padding: 5px;
+	}
+	img.pic {
+		padding: 0px;
+	}
+	.miniature {
+		width: 70px;
+		height: 70px;
+		margin: 2px;
+	}
+	#content-box1 {
+		width: 100%;
+		float: none;
+		overflow: auto;
+		margin-bottom: 5px;
+	}
+	#content-box2 {
+		margin: 0;
+		width: 100%;
+	}
 }

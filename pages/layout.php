@@ -19,8 +19,6 @@
 	  include(dirname(__FILE__).'/navigation.php');
 	  
 	  include(dirname(__FILE__).'/content.php');
-	  
-	  include(dirname(__FILE__).'/bottom.php');
 	?>
 	</div>
   <?php

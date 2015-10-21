@@ -2,8 +2,8 @@
 error_reporting(E_ALL & ~E_NOTICE);
 session_start();
 session_regenerate_id();
-include(dirname(__FILE__).'/includes/config.php');
 include(dirname(__FILE__).'/includes/functions.php');
+include(dirname(__FILE__).'/includes/config.php');
 include(dirname(__FILE__).'/includes/databases/mysql.php');
 
 $page = (($_GET['page'] != '') ? $_GET['page'] : 'common/home.php');
