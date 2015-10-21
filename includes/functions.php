@@ -12,4 +12,3 @@ function createSession($data){
 function destroySession(){
 	session_destroy();
 }
-?>

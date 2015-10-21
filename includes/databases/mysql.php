@@ -10,4 +10,3 @@ if($config['databaseHost'] != '' and $config['databaseUser'] != '' and $config['
 		createMessage('Dateabase error: Could not connect to database by using the specified credentials.');
 	}
 }
-?>

@@ -5,6 +5,7 @@ $target_file = $target_dir . basename($_FILES["file"]["name"]);
 #echo "will try to move to " . $target_file;
 $uploadOk = 1;
 $imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+$imageFileName = pathinfo($target_file,PATHINFO_FILENAME);
 // Check if image file is a actual image or fake image
 if(isset($_POST["submit"])) {
     $check = getimagesize($_FILES["file"]["tmp_name"]);
@@ -33,7 +34,19 @@ if ($uploadOk == 0) {
     echo "Sorry, your file was not uploaded.";
 // if everything is ok, try to upload file
 } else {
-    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+
+    $conn = new PDO('mysql:host=localhost;dbname=pitter', 'root', '');
+
+    $insert_sql_string = 'INSERT INTO Pictures (name, imageFormat, dateCreated, dateAdded, dateSeen)
+            VALUES (?, ?, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())';
+    $data = array($imageFileName,$imageFileType);
+
+    $insert_query=$conn->prepare($insert_sql_string);
+    $insert_query->execute($data);
+    $last_id = $conn->lastInsertId();
+
+    $newTarget_file_name = $target_dir. $last_id.'.'.$imageFileType;
+    if (move_uploaded_file($_FILES["file"]["tmp_name"], $newTarget_file_name)) {
         echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
     } else {
         http_response_code(500);
@@ -41,4 +54,3 @@ if ($uploadOk == 0) {
     }
 }
 die();
-?>

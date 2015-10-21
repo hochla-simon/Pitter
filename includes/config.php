@@ -17,4 +17,3 @@ if(count($tmpConfig) == 0){
 }
 
 $config = array_merge($config, (array)$tmpConfig);
-?>

@@ -3,12 +3,12 @@
 require_once dirname( dirname(__FILE__) ).DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 #require 'vendor' . DIRECTORY_SEPARATOR . 'Autoload.php';
 
-class FixtureTestCase extends PHPUnit_Extensions_Database_TestCase {
+class FixturePitterCase extends PHPUnit_Extensions_Database_TestCase {
 
     public $fixtures = array(
-        'options',
-        'postmeta',
-        'posts'
+        'pictures',
+        'albums',
+        'tags'
     );
 
     private $conn = null;
@@ -19,22 +19,14 @@ class FixtureTestCase extends PHPUnit_Extensions_Database_TestCase {
         $pdo = $conn->getConnection();
 
 
+        $query = file_get_contents(dirname( dirname(__FILE__) ).DIRECTORY_SEPARATOR.'mysql_scripts'.DIRECTORY_SEPARATOR."create_table_v1.sql");
 
-        // set up tables
-        $fixtureDataSet = $this->getDataSet($this->fixtures);
-        foreach ($fixtureDataSet->getTableNames() as $table) {
-            // drop table
-            $pdo->exec("DROP TABLE IF EXISTS `$table`;");
-            // recreate table
-            $meta = $fixtureDataSet->getTableMetaData($table);
-            $create = "CREATE TABLE IF NOT EXISTS `$table` ";
-            $cols = array();
-            foreach ($meta->getColumns() as $col) {
-                $cols[] = "`$col` VARCHAR(200)";
-            }
-            $create .= '('.implode(',', $cols).');';
-            $pdo->exec($create);
-        }
+        $stmt = $db->prepare($query);
+
+        if ($stmt->execute())
+            echo "Success";
+        else
+            echo "Fail";
 
         parent::setUp();
     }
@@ -62,6 +54,8 @@ class FixtureTestCase extends PHPUnit_Extensions_Database_TestCase {
             }
         }
         return $this->conn;
+        $pdo = $conn->getConnection();
+
     }
 
     public function getDataSet($fixtures = array()) {

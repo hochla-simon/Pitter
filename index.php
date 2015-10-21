@@ -21,4 +21,3 @@ $site['content'] = ob_get_contents();
 ob_end_clean();
 
 include(dirname(__FILE__).'/pages/layout.php');
-?>
