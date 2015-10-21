@@ -124,12 +124,13 @@ b{
 	text-decoration: none;
 	color: #FFFFFF;
 }
-#navigation a.current, a:hover {
+#navigation a.current, #navigation a:hover {
 	background: #333333;
 	border-radius: 3px 3px 0 0;
 }
 #content{
 	padding: 15px;
+	overflow: hidden;
 }
 #page-bottom{
 	background: #000000;
@@ -139,28 +140,16 @@ b{
 	border-top: none;
 	overflow: hidden;
 }
-img.pic {
-	padding: 5px;
+#picList {
+	margin-left: 10px;
+}
+#picView {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 	border: solid 1px #D4D4D4;
-	max-width: 70px;
-	max-height: 70px;
-}
-.miniature {
-	float: left;
-	width: 80px;
-	height: 80px;
-	margin: 5px;
-	text-align: center;
-}
-#content-box1 {
-	width: 49%;
-	float: left;
-	overflow: auto;
-}
-#content-box2 {
-	margin: 0 0 0 51%;
-	width: 49%;
-	border: solid 1px #D4D4D4;
+	max-width: 1200px;
+	max-height: 700px;
 }
 .confirmMessage, .errorMessage{
 	background:rgba(255, 255, 255, 0.4);
@@ -197,23 +186,5 @@ img.pic {
 	}
 	#content{
 		padding: 5px;
-	}
-	img.pic {
-		padding: 0px;
-	}
-	.miniature {
-		width: 70px;
-		height: 70px;
-		margin: 2px;
-	}
-	#content-box1 {
-		width: 100%;
-		float: none;
-		overflow: auto;
-		margin-bottom: 5px;
-	}
-	#content-box2 {
-		margin: 0;
-		width: 100%;
 	}
 }
