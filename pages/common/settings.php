@@ -22,9 +22,9 @@ if(isset($_POST['submit'])){
 			unset($_POST[$key]);
 		}
 	}
-	foreach($fields as $field => $description){
-		if(trim($_POST[$field]) == ''){
-			$errors[] = 'Please provide the <i>'.$description.'</i>.';
+	foreach($fields as $key => $field){
+		if(trim($_POST[$key]) == ''){
+			$errors[] = 'Please provide the <i>'.$field['name'].'</i>.';
 		}
 	}
 	if(count($errors) == 0){
@@ -36,6 +36,7 @@ if(isset($_POST['submit'])){
 	}
 	if(count($errors) == 0){
 		$open = fopen(dirname(__FILE__).'/config.txt', 'w+');
+		$config['installed'] = true;
 		fwrite($open, json_encode($config));
 		fclose($open);
 		$message = createMessage('Changes successfully saved.', 'confirm');
