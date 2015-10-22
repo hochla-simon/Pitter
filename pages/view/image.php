@@ -1,12 +1,8 @@
 <?php
 $id = $_GET['id'];
-$conn = new mysqli('localhost', 'root', '', 'pitter');
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 $sql = "SELECT id, imageFormat FROM Pictures WHERE id=" . $id;
-$result = $conn->query($sql);
+$result = $dbConnection->query($sql);
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
@@ -16,7 +12,6 @@ if ($result->num_rows > 0) {
     http_response_code(404);
     die();
 }
-$conn->close();
 
 $path = dirname(__FILE__) . '/../../data/images/' . $id . '.' . $extension;
 
