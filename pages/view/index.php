@@ -1,16 +1,16 @@
 <?php
 $site['title'] = 'Photos';
 
-$sql = "SELECT id, name, imageFormat FROM Pictures";
+$sql = "SELECT id, filename, extension FROM images";
 $result = $db->query($sql);
 
-if (mysql_num_rows($result) > 0) {
+if (!empty($result)) {
 	echo '<ul id="picList">';
 	while($row = mysql_fetch_array($result)) {
-		echo '<li><a href="photoView.html?id=' . $row["id"] . '">' . $row["name"] . '.' . $row["imageFormat"] . '</a></li>';
+		echo '<li><a href="photoView.html?id=' . $row['id'] . '">' . $row['filename'] . '.' . $row['extension'] . '</a></li>';
 	}
 	echo '</ul>';
 } else {
-	echo "No photos!";
+	echo '<h2>No photos!</h2>';
 }
 ?>
