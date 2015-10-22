@@ -35,25 +35,28 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
 
+    $tmp_id = rand ();
+    $tmpTarget_file_name = $target_dir. $tmp_id.'.'.$imageFileType;
+    if (move_uploaded_file($_FILES["file"]["tmp_name"], $tmpTarget_file_name)) {
+        $insert_sql_string = 'INSERT INTO images (ownerId,filename, extension, created) VALUES (0,\''.$imageFileName.'\',\''.$imageFileType.'\', CURRENT_TIMESTAMP());';
 
-    $insert_sql_string = 'INSERT INTO images (ownerId,filename, extension, created) VALUES (0,\''.$imageFileName.'\',\''.$imageFileType.'\', CURRENT_TIMESTAMP());';
-    //$data = array($imageFileName,$imageFileType);
-    file_put_contents('php://stderr', print_r($insert_sql_string, TRUE));
 
-    $db->query($insert_sql_string);
-    //$insert_query=$conn->prepare($insert_sql_string);
-    //$insert_query->execute($data);
-    $last_id = mysql_insert_id();
+        $db->query($insert_sql_string);
+        //$insert_query=$conn->prepare($insert_sql_string);
+        //$insert_query->execute($data);
+        $last_id = mysql_insert_id();
 
-    $newTarget_file_name = $target_dir. $last_id.'.'.$imageFileType;
-    if (move_uploaded_file($_FILES["file"]["tmp_name"], $newTarget_file_name)) {
+        $newTarget_file_name = $target_dir. $last_id.'.'.$imageFileType;
+
+
+        rename ( $tmpTarget_file_name, $newTarget_file_name );
         echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
     } else {
         http_response_code(500);
-        $delete_sql_string ='DELETE FROM images WHERE id='.$last_id.';';
         $db->query($delete_sql_string);
         echo "Sorry, there was an error uploading your file.";
     }
+
 }
 
 /*$percent = 0.5;
