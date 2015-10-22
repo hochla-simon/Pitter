@@ -50,6 +50,8 @@ if ($uploadOk == 0) {
         echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
     } else {
         http_response_code(500);
+        $delete_sql_string ='DELETE FROM images WHERE id='.$last_id.';';
+        $db->query($delete_sql_string);
         echo "Sorry, there was an error uploading your file.";
     }
 }
