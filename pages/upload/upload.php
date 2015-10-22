@@ -35,15 +35,15 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
 
-    $conn = new PDO('mysql:host=localhost;dbname=pitter', 'root', '');
 
-    $insert_sql_string = 'INSERT INTO Pictures (name, imageFormat, dateCreated, dateAdded, dateSeen)
-            VALUES (?, ?, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP())';
-    $data = array($imageFileName,$imageFileType);
+    $insert_sql_string = 'INSERT INTO images (ownerId,filename, extension, created) VALUES (0,\''.$imageFileName.'\',\''.$imageFileType.'\', CURRENT_TIMESTAMP());';
+    //$data = array($imageFileName,$imageFileType);
+    file_put_contents('php://stderr', print_r($insert_sql_string, TRUE));
 
-    $insert_query=$conn->prepare($insert_sql_string);
-    $insert_query->execute($data);
-    $last_id = $conn->lastInsertId();
+    $db->query($insert_sql_string);
+    //$insert_query=$conn->prepare($insert_sql_string);
+    //$insert_query->execute($data);
+    $last_id = mysql_insert_id();
 
     $newTarget_file_name = $target_dir. $last_id.'.'.$imageFileType;
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $newTarget_file_name)) {
@@ -53,4 +53,21 @@ if ($uploadOk == 0) {
         echo "Sorry, there was an error uploading your file.";
     }
 }
+
+/*$percent = 0.5;
+
+// Get new dimensions
+list($width, $height) = getimagesize($newTarget_file_name);
+$new_width = $width * $percent;
+$new_height = $height * $percent;
+
+// Resample
+$image_p = imagecreatetruecolor($new_width, $new_height);
+$image = imagecreatefromjpeg($newTarget_file_name);
+imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+// Output
+$previewfilename = $target_dir. $last_id.'_preview.'.$imageFileType
+imagejpeg($image_p, null, 100);*/
+
 die();

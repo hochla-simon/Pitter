@@ -6,9 +6,7 @@ require_once dirname( dirname(__FILE__) ).DIRECTORY_SEPARATOR.'vendor'.DIRECTORY
 class FixturePitterCase extends PHPUnit_Extensions_Database_TestCase {
 
     public $fixtures = array(
-        'pictures',
-        'albums',
-        'tags'
+        'users'
     );
 
     private $conn = null;
@@ -18,10 +16,15 @@ class FixturePitterCase extends PHPUnit_Extensions_Database_TestCase {
         $conn = $this->getConnection();
         $pdo = $conn->getConnection();
 
+        $pdo->exec("DROP TABLE IF EXISTS `tags`;");
+        $pdo->exec("DROP TABLE IF EXISTS `metadata`;");
+        $pdo->exec("DROP TABLE IF EXISTS `images`;");
+        $pdo->exec("DROP TABLE IF EXISTS `users`;");
+        $pdo->exec("DROP TABLE IF EXISTS `albums`;");
 
         $query = file_get_contents(dirname( dirname(__FILE__) ).DIRECTORY_SEPARATOR.'mysql_scripts'.DIRECTORY_SEPARATOR."create_table_v1.sql");
 
-        $stmt = $db->prepare($query);
+        $stmt = $pdo->prepare($query);
 
         if ($stmt->execute())
             echo "Success";
@@ -32,14 +35,15 @@ class FixturePitterCase extends PHPUnit_Extensions_Database_TestCase {
     }
 
     public function tearDown() {
-        $allTables =
-            $this->getDataSet($this->fixtures)->getTableNames();
-        foreach ($allTables as $table) {
-            // drop table
-            $conn = $this->getConnection();
-            $pdo = $conn->getConnection();
-            $pdo->exec("DROP TABLE IF EXISTS `$table`;");
-        }
+
+        $conn = $this->getConnection();
+        $pdo = $conn->getConnection();
+
+        $pdo->exec("DROP TABLE IF EXISTS `tags`;");
+        $pdo->exec("DROP TABLE IF EXISTS `metadata`;");
+        $pdo->exec("DROP TABLE IF EXISTS `images`;");
+        $pdo->exec("DROP TABLE IF EXISTS `users`;");
+        $pdo->exec("DROP TABLE IF EXISTS `albums`;");
 
         parent::tearDown();
     }
@@ -47,8 +51,8 @@ class FixturePitterCase extends PHPUnit_Extensions_Database_TestCase {
     public function getConnection() {
         if ($this->conn === null) {
             try {
-                $pdo = new PDO('mysql:host=localhost;dbname=pitter', 'root', '');
-                $this->conn = $this->createDefaultDBConnection($pdo, 'pitter');
+                $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', '');
+                $this->conn = $this->createDefaultDBConnection($pdo, 'test');
             } catch (PDOException $e) {
                 echo $e->getMessage();
             }
@@ -64,7 +68,7 @@ class FixturePitterCase extends PHPUnit_Extensions_Database_TestCase {
         }
         $compositeDs = new
         PHPUnit_Extensions_Database_DataSet_CompositeDataSet(array());
-        $fixturePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'test_database';
+        $fixturePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'pitter_database';
 
         foreach ($fixtures as $fixture) {
             $path =  $fixturePath . DIRECTORY_SEPARATOR . "$fixture.xml";

@@ -9,6 +9,7 @@ class Database{
 		$this->connection = @mysql_connect($host, $user, $password);
 		if($this->connection){
 			if(!@mysql_select_db($database, $this->connection)){
+
 				$this->msg = 'Database error: '.mysql_error();
 				return false;
 			}
