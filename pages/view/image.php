@@ -1,13 +1,13 @@
 <?php
 $id = $_GET['id'];
 
-$sql = "SELECT id, imageFormat FROM Pictures WHERE id=" . $id;
-$result = $dbConnection->query($sql);
+$sql = "SELECT id, extension FROM images WHERE id=" . $id;
+$result = $db->query($sql);
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $id = $row["id"];
-    $extension = $row["imageFormat"];
+if (!empty($result)) {
+    $row = mysql_fetch_array($result);
+    $id = $row['id'];
+    $extension = $row['extension'];
 } else {
     http_response_code(404);
     die();
