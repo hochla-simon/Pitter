@@ -22,7 +22,7 @@ if(count($tmpConfig) == 0){
 		'projectName' => 'Pitter',
 		'slogan' => 'Manage your pictures privately',
 		'copyright' => 'Copyright 2015 by <a href="https://github.com/hochla-simon/Pitter" target="_blank">Pitter</a>',
-		'content' => '<h2>What is Pitter?</h2>
+		'homeContent' => '<h2>What is Pitter?</h2>
 			<p>This is a private photo gallery where you can store your photos securely in your own server.</p>
 			<h2>Installation</h2>
 			<p>Coming soon...</p>'
