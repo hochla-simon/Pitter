@@ -1,3 +1,8 @@
 <?php
-$db->install();
+if($db->install()){
+	echo 'Installed';
+}
+else{
+	echo 'Error: '.$db->getErrorMessage();
+}
 ?>
