@@ -39,7 +39,7 @@ if(isset($_POST['submit'])){
 		unset($newConfig['navigation']);
 		$newConfig['installed'] = true;
 		$open = fopen(dirname(__FILE__).'/../../data/configuration/config.txt', 'w+');
-		fwrite($open, json_encode($config));
+		fwrite($open, json_encode($newConfig));
 		fclose($open);
 		$db = $testDB;
 		$message = createMessage('Changes successfully saved.', 'confirm');
