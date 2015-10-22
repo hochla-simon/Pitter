@@ -1,7 +1,8 @@
 <?php
-class MySQL{
+class Database{
 	
 	private $connection;
+	private $isConnected = false;
 	private $msg;
 	
 	function __construct(){
@@ -26,6 +27,9 @@ class MySQL{
 				$this->setErrorMessage('Dateabase error: Could select the database by using the specified database name.');
 				return false;
 			}
+			else{
+				$this->isConnected = true;
+			}
 		}
 		else{
 			$this->setErrorMessage('Dateabase error: Could not connect to database by using the specified credentials.');
@@ -43,5 +47,9 @@ class MySQL{
 	
 	function testDatabaseConnection(){
 		
+	}
+	
+	function isConnected(){
+		return $this->isConnected;
 	}
 }

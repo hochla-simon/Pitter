@@ -28,7 +28,7 @@ if(isset($_POST['submit'])){
 		}
 	}
 	if(count($errors) == 0){
-		$db = new MySQL();
+		$db = new Database();
 		$config = array_merge($config, array('db_name' => $_POST['db_name'], 'db_host' => $_POST['db_host'], 'db_port' => $_POST['db_port'], 'db_user' => $_POST['db_user'], 'db_pass' => $_POST['db_pass']));
 		if(!$db->connect($_POST['databaseHost'], $_POST['databaseUser'], $_POST['databasePassword'], $_POST['databaseName'])){
 			$errors[] = 'Could not connect to database.';

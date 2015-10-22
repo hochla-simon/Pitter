@@ -4,7 +4,7 @@ session_start();
 session_regenerate_id();
 include(dirname(__FILE__).'/includes/functions.php');
 include(dirname(__FILE__).'/includes/config.php');
-include(dirname(__FILE__).'/includes/databases/mysql.php');
+include(dirname(__FILE__).'/includes/database.php');
 
 $page = (($_GET['page'] != '') ? $_GET['page'] : 'common/home.php');
 /*if(!file_exists(dirname(__FILE__).'/config.txt')){
