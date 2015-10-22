@@ -29,6 +29,7 @@ class Database{
 			}
 			else{
 				$this->isConnected = true;
+				return true;
 			}
 		}
 		else{
@@ -39,6 +40,10 @@ class Database{
 	
 	function setErrorMessage($msg){
 		$this->msg = $msg;
+	}
+
+	function getErrorMessage(){
+		return $this->msg;
 	}
 	
 	function query($query){

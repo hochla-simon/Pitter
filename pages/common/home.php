@@ -1,5 +1,5 @@
 <?php
 $site['title'] = 'Welcome';
 
-echo $config['content'];
+echo $config['homeContent'];
 ?>
