@@ -1,4 +1,6 @@
 <?php
+$site['title'] = 'Database Installation';
+
 if($db->install()){
 	echo 'Installed';
 }

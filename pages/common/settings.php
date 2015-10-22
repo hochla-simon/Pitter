@@ -28,17 +28,20 @@ if(isset($_POST['submit'])){
 		}
 	}
 	if(count($errors) == 0){
-		$db = new Database();
-		$config = array_merge($config, array('db_name' => $_POST['db_name'], 'db_host' => $_POST['db_host'], 'db_port' => $_POST['db_port'], 'db_user' => $_POST['db_user'], 'db_pass' => $_POST['db_pass']));
-		if(!$db->connect($_POST['databaseHost'], $_POST['databaseUser'], $_POST['databasePassword'], $_POST['databaseName'])){
+		$testDB = new Database();
+		unset($_POST['submit']);
+		if(!$testDB->connect($_POST['databaseHost'], $_POST['databaseUser'], $_POST['databasePassword'], $_POST['databaseName'])){
 			$errors[] = 'Could not connect to database.';
 		}
 	}
 	if(count($errors) == 0){
-		$open = fopen(dirname(__FILE__).'/config.txt', 'w+');
-		$config['installed'] = true;
+		$newConfig = array_merge($config, $_POST);
+		unset($newConfig['navigation']);
+		$newConfig['installed'] = true;
+		$open = fopen(dirname(__FILE__).'/../../data/configuration/config.txt', 'w+');
 		fwrite($open, json_encode($config));
 		fclose($open);
+		$db = $testDB;
 		$message = createMessage('Changes successfully saved.', 'confirm');
 	}
 	else{
@@ -46,8 +49,7 @@ if(isset($_POST['submit'])){
 	}
 }
 ?>
-<h1><?php echo $site['title'];?></h1>
-<?=$message?>
+<?php echo $message;?>
 <form action="" method="post">
  <?php
  foreach($fields as $key => $field){

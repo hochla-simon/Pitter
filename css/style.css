@@ -152,10 +152,9 @@ b{
 	max-height: 700px;
 }
 .confirmMessage, .errorMessage{
-	background:rgba(255, 255, 255, 0.4);
+	background:#87A644;
 	color:#ffffff;
 	padding:7px 10px;
-	font-size:20px;
 	font-weight:300;
 	margin:5px 0;
 	border-radius:5px;

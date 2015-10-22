@@ -9,7 +9,7 @@ class Database{
 		$this->connection = @mysql_connect($host, $user, $password);
 		if($this->connection){
 			if(!@mysql_select_db($database, $this->connection)){
-				$this->setErrorMessage('Database error: '.mysql_error());
+				$this->msg = 'Database error: '.mysql_error();
 				return false;
 			}
 			else{
@@ -18,13 +18,9 @@ class Database{
 			}
 		}
 		else{
-			$this->setErrorMessage('Dateabase error: Could not connect to database by using the specified credentials.');
+			$this->msg = 'Dateabase error: Could not connect to database by using the specified credentials.';
 			return false;
 		}
-	}
-	
-	function setErrorMessage($msg){
-		$this->msg = $msg;
 	}
 
 	function getErrorMessage(){
@@ -32,7 +28,14 @@ class Database{
 	}
 	
 	function query($query){
-		return @mysql_query($query, $this->connection);
+		$result = @mysql_query($query, $this->connection);
+		if(!$result){
+			$this->msg = mysql_error();
+		}
+		else{
+			$this->msg = '';
+		}
+		return $result;
 	}
 	
 	function multiQuery($query){

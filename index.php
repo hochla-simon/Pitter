@@ -8,7 +8,7 @@ include(dirname(__FILE__).'/includes/database.php');
 
 if($config['installed']){
 	$db = new Database();
-	$db->connect();
+	$db->connect($config['databaseHost'], $config['databaseUser'], $config['databasePassword'], $config['databaseName']);
 }
 
 $page = (($_GET['page'] != '') ? $_GET['page'] : 'common/home.php');

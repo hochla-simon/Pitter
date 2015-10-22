@@ -1,6 +1,6 @@
-DROP TABLE users;
-DROP TABLE images;
-DROP TABLE albums;
-DROP TABLE imagesToAlbums;
-DROP TABLE tags;
-DROP TABLE metadata;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS albums;
+DROP TABLE IF EXISTS imagesToAlbums;
+DROP TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS metadata;

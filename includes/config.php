@@ -16,7 +16,7 @@ while($module = readdir($openModules)){
 
 
 
-$tmpConfig = json_decode(@file_get_contents(dirname(__FILE__).'/config.txt'), true);
+$tmpConfig = json_decode(@file_get_contents(dirname(__FILE__).'/../data/configuration/config.txt'), true);
 if(count($tmpConfig) == 0){
 	$tmpConfig = array(
 		'databaseType' => 'mysql',

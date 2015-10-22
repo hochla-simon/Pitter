@@ -45,7 +45,6 @@ id            int NOT NULL AUTO_INCREMENT,
 imageId        int NOT NULL,
 name             varchar(31) NOT NULL,
 description        varchar(255) DEFAULT '',
-FOREIGN KEY    (imageId)    REFERENCES images(id),
 PRIMARY KEY (id)
 );
 
