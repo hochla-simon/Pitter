@@ -4,13 +4,15 @@
         <table_data name="users">
             <row>
                 <field name="id">1</field>
-                <field name="nick">john_smith</field>
+                <field name="firstName">John</field>
+                <field name="lastName">Smith</field>
                 <field name="email">johnsmith@mailprovider.com</field>
                 <field name="password">1234</field>
             </row>
             <row>
                 <field name="id">2</field>
-                <field name="nick">john_doe</field>
+                <field name="firstName">John</field>
+                <field name="lastName">Doe</field>
                 <field name="email">johndoe@mailprovider.com</field>
                 <field name="password">1234</field>
             </row>
