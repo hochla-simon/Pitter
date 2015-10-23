@@ -2,7 +2,7 @@ function resizeImage(){
     var height;
 
     if (typeof(window.innerWidth) === 'number') {
-        height = window.innerHeight - 260;
+        height = window.innerHeight;
     } else if (document.documentElement && document.documentElement.clientHeight) {
         height = document.documentElement.clientHeight;
     }
