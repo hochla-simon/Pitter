@@ -1,6 +1,5 @@
 <?php
 $target_dir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images'. DIRECTORY_SEPARATOR;
-echo $target_dir;
 $target_file = $target_dir . basename($_FILES["file"]["name"]);
 #echo "will try to move to " . $target_file;
 $uploadOk = 1;
@@ -17,14 +16,12 @@ if(isset($_POST["submit"])) {
         $uploadOk = 0;
     }
 }
-// Check if file already exists
-if (file_exists($target_file)) {
-    echo "Sorry, file already exists.";
-    $uploadOk = 0;
-}
 // Allow certain file formats
-if($imageFileType != "jpg" && $imageFileType != "JPG" && $imageFileType != "png" && $imageFileType != "PNG"  && $imageFileType != "jpeg" &&
-    $imageFileType != "JPEG" && $imageFileType != "gif" && $imageFileType != "GIF") {
+$imageFileType = strtolower($imageFileType);
+if ($imageFileType === 'jpeg' ){
+    $imageFileType = 'jpg';
+}
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
     echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
     http_response_code(415);
     $uploadOk = 0;

@@ -130,7 +130,7 @@ b{
 }
 #content{
 	padding: 15px;
-	overflow: hidden;
+	overflow: visible;
 }
 #page-bottom{
 	background: #000000;
