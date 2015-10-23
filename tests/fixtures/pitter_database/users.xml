@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<mysqldump>
+    <database name="pitter">
+        <table_data name="users">
+            <row>
+                <field name="id">1</field>
+                <field name="firstName">John</field>
+                <field name="lastName">Smith</field>
+                <field name="email">johnsmith@mailprovider.com</field>
+                <field name="password">1234</field>
+            </row>
+            <row>
+                <field name="id">2</field>
+                <field name="firstName">John</field>
+                <field name="lastName">Doe</field>
+                <field name="email">johndoe@mailprovider.com</field>
+                <field name="password">1234</field>
+            </row>
+        </table_data>
+    </database>
+</mysqldump>
