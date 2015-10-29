@@ -56,20 +56,6 @@ if ($uploadOk == 0) {
 
 }
 
-/*$percent = 0.5;
 
-// Get new dimensions
-list($width, $height) = getimagesize($newTarget_file_name);
-$new_width = $width * $percent;
-$new_height = $height * $percent;
-
-// Resample
-$image_p = imagecreatetruecolor($new_width, $new_height);
-$image = imagecreatefromjpeg($newTarget_file_name);
-imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-
-// Output
-$previewfilename = $target_dir. $last_id.'_preview.'.$imageFileType
-imagejpeg($image_p, null, 100);*/
 
 die();
