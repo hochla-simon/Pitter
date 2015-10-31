@@ -5,4 +5,3 @@ $moduleConfig = array(
 		'text' => 'View Photos'
 	)
 );
-?>
