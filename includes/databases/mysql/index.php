@@ -19,7 +19,7 @@ class Database{
 			}
 		}
 		else{
-			$this->msg = 'Dateabase error: Could not connect to database by using the specified credentials.';
+			$this->msg = 'Database error: Could not connect to database by using the specified credentials.';
 			return false;
 		}
 	}
