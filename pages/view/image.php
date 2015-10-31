@@ -25,6 +25,7 @@ header('Content-Type: image/' . $extension);
 
 if(isset($_GET["max_size"])){
     list($width, $height) = getimagesize($path);
+    //echo 'path: '.$path;
     $longest_side;
     if ($width > $height){
         $longest_side = $width;
@@ -39,10 +40,12 @@ if(isset($_GET["max_size"])){
     }else {
         $percent;
 
-        $percent = $longest_side / $max_size;
+        $ratio = $longest_side / $max_size;
 
-        $new_width = $width * $percent;
-        $new_height = $height * $percent;
+        $new_width = $width / $ratio;
+        $new_height = $height / $ratio;
+
+        //echo 'new width '.$new_width.' new height '.$new_height;
 
         // Resample
         $image_p = imagecreatetruecolor($new_width, $new_height);

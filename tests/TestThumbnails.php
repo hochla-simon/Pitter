@@ -8,13 +8,18 @@
  */
 class TestThumbnails extends PHPUnit_Framework_TestCase
 {
-    public function testJPEGThumbnail(){
-        $id_for_jpeg = 5;
-        $original_max_size = 3264;
+    protected function getFileSize($id, $ext, $new_file_size){
+        //$id_for_jpeg = 5;
+        //$original_max_size = 3264;
 
-        $path = dirname(__FILE__).'/tmp.jpeg';
+        $path = dirname(__FILE__).'/tmp.'.$ext;
 
-        $imageString = file_get_contents("http://localhost/view/image.html?id=".$id_for_jpeg);
+        $url = "http://localhost/view/image.html?id=".$id;
+        if($new_file_size != null){
+            $url = $url."&max_size=".$new_file_size;
+        }
+
+        $imageString = file_get_contents($url);
         file_put_contents($path,$imageString);
 
         list($width, $height) = getimagesize($path);
@@ -25,10 +30,22 @@ class TestThumbnails extends PHPUnit_Framework_TestCase
         }else{
             $max_size_downloaded = $height;
         }
-        $this->assertEquals($max_size_downloaded, $original_max_size);
-
+        return $max_size_downloaded;
     }
 
+    public function testJPEGS(){
+        $this->assertEquals(3264, $this->getFileSize(5,'jpeg',null));
+        $this->assertEquals(200, $this->getFileSize(5,'jpeg',200));
+        $this->assertEquals(3264, $this->getFileSize(5,'jpeg',5000));
+
+        $this->assertEquals(800, $this->getFileSize(13,'gif',null));
+        $this->assertEquals(200, $this->getFileSize(13,'gif',200));
+        $this->assertEquals(800, $this->getFileSize(13,'gif',5000));
+
+        $this->assertEquals(512, $this->getFileSize(14,'png',null));
+        $this->assertEquals(200, $this->getFileSize(14,'png',200));
+        $this->assertEquals(512, $this->getFileSize(14,'png',5000));
+    }
 
 
 }
