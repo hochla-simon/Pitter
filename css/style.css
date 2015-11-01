@@ -140,8 +140,25 @@ b{
 	border-top: none;
 	overflow: hidden;
 }
-#picList {
-	margin-left: 10px;
+.thumbnail {
+	margin: 10px;
+	display: inline-block;
+	height: 100px;
+	width: 100px;
+	border: solid 1px black;
+	vertical-align: middle;
+	text-align: center;
+}
+.thumbnail:hover {
+	border-color: red;
+}
+.thumbnail .center_img {
+	vertical-align: middle;
+	display: inline-block;
+	height: 100%;
+}
+.thumbnail a img {
+	vertical-align: middle;
 }
 #picView {
 	display: block;
