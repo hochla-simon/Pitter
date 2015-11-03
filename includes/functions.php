@@ -17,7 +17,7 @@ function addModuleNavigation($module, $data){
 	$data['url'] = '/'.$module.'/index.html';
 	$newNavigation = array();
 	$i = 0;
-	for( ; $i < $data['position'] && $i < count($config['navigation']); $i++){
+	for( ; $i < $data['position'] && $i < count($config['navigation']) && $config['navigation'][$i]['position'] < $data['position']; $i++){
 		$newNavigation[] = $config['navigation'][$i];
 	}
 	$newNavigation[] = $data;
