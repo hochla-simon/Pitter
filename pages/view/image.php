@@ -48,6 +48,8 @@ if(isset($_GET["max_size"])){
         //echo 'new width '.$new_width.' new height '.$new_height;
 
         // Resample
+
+        ini_set('memory_limit', '1000M');
         $image_p = imagecreatetruecolor($new_width, $new_height);
         $image;
         if ($extension == 'jpeg') {
@@ -69,6 +71,7 @@ if(isset($_GET["max_size"])){
             imagepng($image_p);
         }
         imagedestroy($image_p);
+        imagedestroy($image);
     }
 } else {
     readfile($path);

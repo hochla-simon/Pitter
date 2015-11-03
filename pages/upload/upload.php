@@ -48,12 +48,16 @@ if ($uploadOk == 0) {
 
         rename ( $tmpTarget_file_name, $newTarget_file_name );
         echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
+        if(isset($_POST["albumId"])){
+            $insert_sql_string = 'INSERT INTO imagesToAlbums (albumId,imageId) VALUES ('.$_POST["albumId"].','.$last_id.');';
+            echo "Trying to upload with query: ".$insert_sql_string;
+            $db->query($insert_sql_string);
+        }
     } else {
         http_response_code(500);
         $db->query($delete_sql_string);
         echo "Sorry, there was an error uploading your file.";
     }
-
 }
 
 
