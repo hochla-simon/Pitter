@@ -1,14 +1,38 @@
 <?php
 $site['title'] = 'Photos';
 
-$sql = "SELECT id, filename, extension FROM images";
-$result = $db->query($sql);
+$albumId = $_GET['id'];
+$albumName;
 
-if (!empty($result)) {
-	echo '<div id="albums"></div>';
-	echo '<div id="upload"></div>';
+$sql = "SELECT parentAlbumId, id, name FROM albums";
+$albums = $db->query($sql);
+
+if (!empty($albums)) {
+	echo '<div id="albums"><ul>';
+	while($row = mysql_fetch_array($albums)) {
+		echo '<li><img src="/images/folder.png" alt=""/><a href="?id=' . $row[id] . '">' . $row[name] . '</a></li>';
+		if ($row['id'] == $albumId) {
+			$albumName = $row['name'];
+		}
+	}
+	echo '</ul></div>';
+}
+
+echo '<div id="albumView">';
+
+if (!$albumId) {
+	$sql = "SELECT id, filename, extension FROM images";
+} else {
+	echo '<div id="albumTitle"><img src="/images/folder.png" alt=""/><h2>' . $albumName . '</h2></div>';
+	$sql = "SELECT id, filename, extension FROM images, imagesToAlbums WHERE images.id = imagesToAlbums.imageId AND albumId = " . mysql_real_escape_string($albumId);
+}
+$images = $db->query($sql);
+
+echo '<div id="upload"></div>';
+
+if (!empty($images)) {
 	echo '<div id="photos">';
-	while($row = mysql_fetch_array($result)) {
+	while($row = mysql_fetch_array($images)) {
 		if (file_exists(dirname(__FILE__) . '/../../data/images/' . $row['id'] . '.' . $row['extension'])) {
 			echo '<div class="thumbnail"><span class="center_img"></span></span><a href="photoView.html?id=' . $row['id'] . '"><img src="image.html?id=' . $row['id'] . '&max_size=100"/></a></div>';
 		}
@@ -17,6 +41,7 @@ if (!empty($result)) {
 } else {
 	echo '<h2>No photos!</h2>';
 }
+echo '</div>';
 ?>
 
 <div>
