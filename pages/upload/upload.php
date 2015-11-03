@@ -9,10 +9,8 @@ $imageFileName = pathinfo($target_file,PATHINFO_FILENAME);
 if(isset($_POST["submit"])) {
     $check = getimagesize($_FILES["file"]["tmp_name"]);
     if($check !== false) {
-        echo "File is an image - " . $check["mime"] . ".";
         $uploadOk = 1;
     } else {
-        echo "File is not an image.";
         $uploadOk = 0;
     }
 }
@@ -47,12 +45,14 @@ if ($uploadOk == 0) {
 
 
         rename ( $tmpTarget_file_name, $newTarget_file_name );
-        echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
         if(isset($_POST["albumId"])){
             $insert_sql_string = 'INSERT INTO imagesToAlbums (albumId,imageId) VALUES ('.$_POST["albumId"].','.$last_id.');';
             echo "Trying to upload with query: ".$insert_sql_string;
             $db->query($insert_sql_string);
         }
+        header('Content-Type: application/json');
+        echo '{"lastId":'.$last_id.'}';
+
     } else {
         http_response_code(500);
         $db->query($delete_sql_string);

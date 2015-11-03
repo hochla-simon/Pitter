@@ -42,10 +42,14 @@ echo	'</form>
             dictInvalidFileType : "only jpg, jpeg, png and gif are accepted",
             acceptedFiles: "image/jpeg,image/png,image/gif",
             init: function() {
-                this.on("complete", function (file) {
+                this.on("error", function (file, errorMessage, XMLHttpRequestMessage) {
+                	$($(file.previewElement).find("div.dz-error-message")[0]).find("span").html("Error uploading");
+                });
+                this.on("success", function (file, response) {
                     if(file.accepted){
                         console.log(file)
                         this.removeFile(file);
+                        console.log(response);
                     }
                 });
             }
