@@ -52,7 +52,7 @@ echo '</div>';
 			<input type="button" value="Add new album" onclick="window.location='./albumCreate.html?parentId=1';">
 			<input type="button" value="Edit album" onclick="window.location='./albumEdit.html?id=1';">
 			<input type="button" value="Delete album" onclick="window.location='./albumDelete.html?id=1'">
-			<input type="button" value="Copy to" >
+			<input type="button" value="Copy to" onclick="window.location='./albumCopy.html?id=1';">
 			<input type="button" value="Move to" >
 			<ul>
 				<li> sous-album 1 </li>
