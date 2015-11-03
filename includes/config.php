@@ -1,7 +1,7 @@
 <?php
 $config = array(
 	'navigation' => array(
-		array('text' => 'Home', 'url' => '/common/home.html')
+		array('text' => 'Home', 'url' => '/common/home.html', 'position' => 0)
 	)
 );
 
