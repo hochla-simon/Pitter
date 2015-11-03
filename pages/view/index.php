@@ -43,7 +43,12 @@ echo '<script>
             acceptedFiles: "image/jpeg,image/png,image/gif",
             init: function() {
                 this.on("error", function (file, errorMessage, XMLHttpRequestMessage) {
-                	$($(file.previewElement).find("div.dz-error-message")[0]).find("span").html("Error uploading");
+                	debugger;
+                	if (XMLHttpRequestMessage===undefined){
+
+                	}else{
+                		$($(file.previewElement).find("div.dz-error-message")[0]).find("span").html("Error uploading");
+                	}
                 });
                 this.on("success", function (file, response) {
                     if(file.accepted){
