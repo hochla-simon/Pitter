@@ -12,10 +12,11 @@ if($config['installed']){
 }
 
 $page = (($_GET['page'] != '') ? $_GET['page'] : 'common/home.php');
-/*if(!file_exists(dirname(__FILE__).'/config.txt')){
-	$page = 'common/settings.php';
+if(!$config['installed']){
+	$config['navigation'] = array();
+	$page = 'administration/settings.php';
 }
-else */if(!file_exists(dirname(__FILE__).'/pages/'.$page)){
+else if(!file_exists(dirname(__FILE__).'/pages/'.$page)){
 	$page = 'common/error404.php';
 }
 
