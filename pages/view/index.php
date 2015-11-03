@@ -34,9 +34,9 @@ echo '<div id="upload">
       class="dropzone"
       id="myDropzone">';
 	if($albumId) echo '<input type="hidden" name="albumId" value="'.$albumId.'" />';
-echo	'</form>
+echo '</form>';
 
-<script>
+echo '<script>
 
         Dropzone.options.myDropzone = {
             dictInvalidFileType : "only jpg, jpeg, png and gif are accepted",
@@ -47,6 +47,9 @@ echo	'</form>
                 });
                 this.on("success", function (file, response) {
                     if(file.accepted){
+                    	debugger;
+                        htmlNewTag = \'<div class="thumbnail"><span class="center_img"></span><a href="photoView.html?id=\'+response.lastId+\'"><img src="image.html?id=\'+response.lastId+\'&max_size=100"></img></a></div>\';
+                        $("div#photos").append(htmlNewTag);
                         console.log(file)
                         this.removeFile(file);
                         console.log(response);

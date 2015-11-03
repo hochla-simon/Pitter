@@ -47,7 +47,6 @@ if ($uploadOk == 0) {
         rename ( $tmpTarget_file_name, $newTarget_file_name );
         if(isset($_POST["albumId"])){
             $insert_sql_string = 'INSERT INTO imagesToAlbums (albumId,imageId) VALUES ('.$_POST["albumId"].','.$last_id.');';
-            echo "Trying to upload with query: ".$insert_sql_string;
             $db->query($insert_sql_string);
         }
         header('Content-Type: application/json');
