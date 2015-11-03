@@ -140,6 +140,39 @@ b{
 	border-top: none;
 	overflow: hidden;
 }
+#albums {
+	display: inline-block;
+	width: 20%;
+	vertical-align: top;
+}
+#albums ul {
+	border: solid 1px black;
+	padding: 10px;
+}
+#albums li {
+	list-style: none;
+}
+#albums img {
+	height: 15px;
+	margin-right: 5px;
+}
+#albumView {
+	display: inline-block;
+	width: 80%;
+}
+#albumTitle {
+	margin: 10px;
+}
+#albumTitle img {
+	height: 30px;
+	margin-right: 10px;
+}
+#albumTitle h2 {
+	display: inline-block;
+}
+#upload {
+	margin: 10px;
+}
 .thumbnail {
 	margin: 10px;
 	display: inline-block;
