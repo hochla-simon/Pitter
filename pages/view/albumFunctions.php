@@ -23,24 +23,23 @@
 		return $path;
 	}
 	
-	function checkNoSon ($albumId, $parentAlbumId){
-		
+	function checkNoSon ($albumId, $parentAlbumId, $db){
 		while ($parentAlbumId != -1 && $parentAlbumId != $albumId){
-			$select_sql_string = "SELECT parentAlbumId FROM albums WHERE id=" . mysql_real_escape_string($parentAlbumId);
+			$select_sql_string = "SELECT parentAlbumId FROM albums WHERE id=" . $parentAlbumId;
 			$result = $db->query($select_sql_string);
 			if (!empty($result)){
 				$parentAlbum = mysql_fetch_array($result);
-				$parentAlbumId = $parentAlbum['id'];
+				$parentAlbumId = $parentAlbum['parentAlbumId'];
 			}
 			else{
-				return $false;
+				return false;
 			}
 		}
 		if ($parentAlbumId == -1){
-			return $true;
+			return true;
 		}
 		else{
-			return $false;
+			return false;
 		}
 	}
 	

@@ -13,7 +13,7 @@
 	}
 ?>
 
-<form action="./albumCopyBdd.html" method="POST">
+<form action="./albumMoveBdd.html" method="POST">
 		
 		<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
 		
