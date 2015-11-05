@@ -1,10 +1,14 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
-session_start();
-session_regenerate_id();
-include(dirname(__FILE__).'/includes/functions.php');
-include(dirname(__FILE__).'/includes/config.php');
-include(dirname(__FILE__).'/includes/database.php');
+
+if(!$phpunit['isTest']) {
+	session_start();
+	session_regenerate_id();
+}
+
+include_once(dirname(__FILE__).'/includes/functions.php');
+include_once(dirname(__FILE__).'/includes/config.php');
+include_once(dirname(__FILE__).'/includes/database.php');
 
 if($config['installed']){
 	$db = new Database();
@@ -25,5 +29,6 @@ ob_start();
 include(dirname(__FILE__).'/pages/'.$page);
 $site['content'] = ob_get_contents();
 ob_end_clean();
-
-include(dirname(__FILE__).'/pages/layout.php');
+if(!$phpunit['isTest']){
+	include(dirname(__FILE__).'/pages/layout.php');
+}

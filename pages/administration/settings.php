@@ -22,7 +22,6 @@ $fields = array(
 $message = '';
 if(isset($_POST['submit'])){
 	$errors = array();
-	$config['users'] = array();
 	foreach($_POST as $key => $val){
 		if($fields[$key] == ''){
 			unset($_POST[$key]);
@@ -36,6 +35,7 @@ if(isset($_POST['submit'])){
 	if(count($errors) == 0){
 		$testDB = new Database();
 		unset($_POST['submit']);
+
 		if(!$testDB->connect($_POST['databaseHost'], $_POST['databaseUser'], $_POST['databasePassword'], $_POST['databaseName'])){
 			$errors[] = 'Could not connect to database.';
 		}
@@ -49,8 +49,12 @@ if(isset($_POST['submit'])){
 	}
 	if(count($errors) == 0){
 		$newConfig = array_merge($config, $_POST);
-		unset($newConfig['navigation']);
-		$newConfig['installed'] = true;
+        unset($newConfig['navigation']);
+        unset($newConfig['modules']);
+        if($newConfig['databaseType'] == ''){
+            $newConfig['databaseType'] = 'mysql';
+        }
+        $newConfig['installed'] = true;
 		$open = fopen(dirname(__FILE__).'/../../data/configuration/config.txt', 'w+');
 		fwrite($open, json_encode($newConfig));
 		fclose($open);
@@ -62,6 +66,7 @@ if(isset($_POST['submit'])){
 			$message = createMessage('Installation successful. You will be redirected...', 'confirm');
 			echo '<meta http-equiv="refresh" content="2; url='.$newConfig['projectURL'].'">';
 		}
+		include(dirname(__FILE__).'/../../includes/config.php');
 	}
 	else{
 		$message = createMessage(implode('<br />', $errors));
