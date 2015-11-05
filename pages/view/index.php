@@ -11,12 +11,51 @@ $albums = $db->query($sql);
 
 if (!empty($albums)) {
 	echo '<div id="albumsContainer"><ul id="albums">';
+	$albumObjects = array();
 	while($row = mysql_fetch_array($albums)) {
-		echo '<li><img src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $row[id] . '">' . $row[name] . '</a></li>';
+		$albumObject = array(
+			'name' => $row['name'],
+			'parentAlbumId' => $row['parentAlbumId'],
+			'childAlbums' => array()
+		);
+		$albumObjects[$row['id']] = $albumObject;
 		if ($row['id'] == $albumId) {
 			$albumName = $row['name'];
 		}
 	}
+
+	$orderedAlbumObjects = array();
+
+	function orderAlbums($id, &$children) {
+		global $albumObjects;
+		foreach($albumObjects as $albumId => $album) {
+			if ($album['parentAlbumId'] == $id) {
+				$children[$albumId] = $album;
+				orderAlbums($albumId, $children[$albumId]['childAlbums']);
+			}
+		}
+	}
+
+	orderAlbums('-1', $orderedAlbumObjects);
+
+	function createAlbums($albums, $subNumber, $parentId) {
+		global $config;
+		$display;
+		if ($subNumber != 0) {
+			$display = 'none';
+		}
+		foreach ($albums as $albumId => $album) {
+			$visibility;
+			if (empty($album['childAlbums'])) {
+				$visibility = 'hidden';
+			}
+			echo '<li data-id ="' . $albumId . '" data-parentAlbumId="' . $parentId . '" style="margin-left: ' . $subNumber * 20 . 'px; display: ' . $display . '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId . '">' . $album[name] . '</a></li>';
+			createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
+		}
+	}
+
+	createAlbums($orderedAlbumObjects, 0, '-1');
+
 	echo '</ul></div>';
 }
 
@@ -82,7 +121,7 @@ if (!empty($images)) {
 echo '</div>';
 ?>
 
-<div>
+<!--<div>
 	<input type="button" value="Add new album" onclick="window.location='./albumCreate.html';">
 	<ul>
 		<li>
@@ -101,4 +140,4 @@ echo '</div>';
 			album 2
 		</li>
 	</ul>
-</div>
+</div>-->
