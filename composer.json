@@ -3,6 +3,7 @@
     "phpunit/phpunit": "4.8.16",
     "phpunit/dbunit": "1.4.1",
     "phpunit/phpunit-story": "*",
-    "squizlabs/php_codesniffer": "2.*"
+    "squizlabs/php_codesniffer": "2.*",
+    "phpunit/phpunit-selenium": "1.4.2"
   }
 }
