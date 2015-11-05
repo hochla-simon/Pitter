@@ -1,6 +1,8 @@
 <?php
 $site['title'] = 'Photos';
 
+echo '<script src="' . $config['projectURL'] . '/js/albumViewScripts.js" type="text/javascript"></script>';
+
 $albumId = $_GET['id'];
 $albumName;
 
@@ -8,9 +10,9 @@ $sql = "SELECT parentAlbumId, id, name FROM albums";
 $albums = $db->query($sql);
 
 if (!empty($albums)) {
-	echo '<div id="albums"><ul>';
+	echo '<div id="albumsContainer"><ul id="albums">';
 	while($row = mysql_fetch_array($albums)) {
-		echo '<li><img src="/images/folder.png" alt=""/><a href="?id=' . $row[id] . '">' . $row[name] . '</a></li>';
+		echo '<li><img src="/images/arrow_right.png" alt=""/><img src="/images/folder.png" alt=""/><a href="?id=' . $row[id] . '">' . $row[name] . '</a></li>';
 		if ($row['id'] == $albumId) {
 			$albumName = $row['name'];
 		}

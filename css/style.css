@@ -140,17 +140,10 @@ b{
 	border-top: none;
 	overflow: hidden;
 }
-#albums {
+#albumsContainer {
 	display: inline-block;
 	width: 20%;
 	vertical-align: top;
-}
-#albums ul {
-	border: solid 1px black;
-	padding: 10px;
-}
-#albums li {
-	list-style: none;
 }
 #albums img {
 	height: 15px;

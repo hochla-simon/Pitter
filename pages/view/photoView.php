@@ -7,7 +7,7 @@ if ($id != '') {
     $result = $db->query($sql);
     $row = mysql_fetch_array($result);
     if ($row) {
-        echo '<script src="' . $config['projectURL'] . '/js/scripts.js" type="text/javascript"></script>';
+        echo '<script src="' . $config['projectURL'] . '/js/photoViewScripts.js" type="text/javascript"></script>';
         echo '<img id="picView" src="image.html?id=' . $id .'" alt=""/>';
     } else {
         include(dirname(__FILE__) . '/../common/error404.php');
