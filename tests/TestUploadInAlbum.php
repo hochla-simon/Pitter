@@ -59,7 +59,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
         $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
         /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
-        $hiddenInput ->value('/home/daniel/Pictures/Pitufos/chevre.png');
+        $hiddenInput ->value(dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.jpg');
 
         $this->waitUntilNoProgressBar();
 
@@ -92,7 +92,9 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
         $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
         /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
-        $hiddenInput ->value("/home/daniel/Pictures/Pitufos/chevre.png"."\n"."/home/daniel/Pictures/Pitufos/chevre.png");
+        $pathFile1 = dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.jpg';
+        $pathFile2 = dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'hypo.jpg';
+        $hiddenInput ->value($pathFile1."\n".$pathFile2);
 
 
         $this->waitUntilNoProgressBar();
@@ -124,12 +126,12 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
         $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
         /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
-        $hiddenInput ->value("/home/daniel/Documents/televisionOnDemand.odt");
+        $hiddenInput ->value(dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.NEF');
 
 
         $this->moveto($this->byCssSelector('#myDropzone > div.dz-preview.dz-file-preview.dz-error.dz-complete > div.dz-details'));
 
-        usleep(100);
+        usleep(500);
 
         $messageError = $this->byCssSelector("#myDropzone > div.dz-preview.dz-file-preview.dz-error.dz-complete > div.dz-error-message > span")->text();
         $this->assertEquals("only jpg, jpeg, png and gif are accepted",$messageError );
