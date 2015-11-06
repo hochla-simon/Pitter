@@ -1,5 +1,7 @@
 <?php
-header("HTTP/1.0 404 Not Found");
+if(!$phpunit['isTest']) {
+    header("HTTP/1.0 404 Not Found");
+}
 $site['title'] = 'Not Found';
 ?>
 <h1><?=$site['title']?></h1>

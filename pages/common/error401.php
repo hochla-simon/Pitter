@@ -1,5 +1,7 @@
 <?php
-header("HTTP/1.0 401 Unauthorized");
+if(!$phpunit['isTest']) {
+    header("HTTP/1.0 401 Unauthorized");
+}
 $site['title'] = 'Unauthorized';
 ?>
 <h1><?=$site['title']?></h1>

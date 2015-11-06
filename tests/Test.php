@@ -1,6 +1,7 @@
 <?php
 
 require 'MyTestCase.php';
+require 'TestConfiguration.php';
 /**
  * Created by PhpStorm.
  * User: daniel
@@ -15,5 +16,13 @@ class Test extends PHPUnit_Framework_TestCase
         $mytestcase->testReadDatabase();
     }
 
+    public function testConfiguration() {
+        $test = new TestConfiguration();
+        $test->testInstallation();
+        $test->testSettings();
+    }
 
+    public function testDeleteTestConfiguration() {
+        unlink(dirname(__FILE__).'/../data/configuration/config.txt');
+    }
 }

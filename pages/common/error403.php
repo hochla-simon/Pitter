@@ -1,5 +1,7 @@
 <?php
-header("HTTP/1.0 403 Forbidden");
+if(!$phpunit['isTest']) {
+    header("HTTP/1.0 403 Forbidden");
+}
 $site['title'] = 'Forbidden';
 ?>
 <h1><?=$site['title']?></h1>
