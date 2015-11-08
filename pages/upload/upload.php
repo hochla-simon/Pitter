@@ -46,8 +46,11 @@ if ($uploadOk == 0) {
 
         rename ( $tmpTarget_file_name, $newTarget_file_name );
         if(isset($_POST["albumId"])){
-            $insert_sql_string = 'INSERT INTO imagesToAlbums (albumId,imageId) VALUES ('.$_POST["albumId"].','.$last_id.');';
-            $db->query($insert_sql_string);
+            $db->query('START TRANSACTION;');
+            $db->query('SELECT @maxPositionInAlbum := IFNULL(MAX(positionInAlbum),0) FROM imagesToAlbums WHERE albumId='.$_POST["albumId"].';');
+            $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES ('.$_POST["albumId"].','.$last_id.', @maxPositionInAlbum + 1);');
+            $db->query('COMMIT;');
+            $db->multiQuery($insert_sql_string);
         }
         header('Content-Type: application/json');
         echo '{"lastId":'.$last_id.'}';

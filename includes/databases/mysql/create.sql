@@ -36,6 +36,7 @@ CREATE TABLE imagesToAlbums
 (
 albumId    int NOT NULL,
 imageId    int NOT NULL,
+positionInAlbum    int NOT NULL,
 PRIMARY KEY (albumId, imageId)
 );
 

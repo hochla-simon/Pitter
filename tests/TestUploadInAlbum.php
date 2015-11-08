@@ -131,7 +131,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
         $this->moveto($this->byCssSelector('#myDropzone > div.dz-preview.dz-file-preview.dz-error.dz-complete > div.dz-details'));
 
-        usleep(500);
+        sleep(1);
 
         $messageError = $this->byCssSelector("#myDropzone > div.dz-preview.dz-file-preview.dz-error.dz-complete > div.dz-error-message > span")->text();
         $this->assertEquals("only jpg, jpeg, png and gif are accepted",$messageError );
