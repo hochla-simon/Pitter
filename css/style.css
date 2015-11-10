@@ -183,7 +183,7 @@ b{
 	display: inline-block;
 	height: 100%;
 }
-.thumbnail a img {
+.thumbnail img {
 	vertical-align: middle;
 }
 #picView {
