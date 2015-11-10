@@ -32,13 +32,13 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
         $this->setBrowser('chrome');
         $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
         $this->projectURL=$readedConfig['projectURL'];
-        $this->setBrowserUrl($this->projectURL.'/view/index.html?id=1/');
+        $this->setBrowserUrl($this->projectURL.'/view/index.html');
     }
 
     protected function waitUntilNoProgressBar()
     {
         while(count($this->elements($this->using('css selector')->value('#myDropzone > div.dz-preview.dz-file-preview')))!=0){
-            usleep(500);
+            usleep(800);
         }
 
     }

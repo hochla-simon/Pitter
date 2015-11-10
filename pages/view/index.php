@@ -101,10 +101,11 @@ $images = $db->query($sql);
 
 echo '<div id="upload">
 
-<form action="../upload/upload.html"
+<form action="'.$config['projectURL'].'/upload/upload.html"
       class="dropzone"
       id="myDropzone">';
 	if($albumId) echo '<input type="hidden" name="albumId" value="'.$albumId.'" />';
+	else echo '<input type="hidden" name="albumId" value="1" />';
 echo '</form>';
 
 echo '<script>

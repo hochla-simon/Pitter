@@ -16,11 +16,11 @@ class Test extends PHPUnit_Framework_TestCase
         $mytestcase->testReadDatabase();
     }
 
-    /*public function testConfiguration() {
+    public function testConfiguration() {
         $test = new TestConfiguration();
         $test->testInstallation();
         $test->testSettings();
-    }*/
+    }
 
     public function testDeleteTestConfiguration() {
         unlink(dirname(__FILE__).'/../data/configuration/config.txt');
