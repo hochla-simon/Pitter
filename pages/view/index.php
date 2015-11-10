@@ -1,6 +1,35 @@
 <?php
+
+function orderAlbums($id, &$children, $albumsToOrder) {
+	foreach($albumsToOrder as $albumId => $album) {
+		if ($album['parentAlbumId'] == $id) {
+			$children[$albumId] = $album;
+			orderAlbums($albumId, $children[$albumId]['childAlbums'], $albumsToOrder);
+		}
+	}
+}
+
+function createAlbums($albums, $subNumber, $parentId) {
+	global $config;
+	$display = '';
+	if ($subNumber != 0) {
+		$display = 'none';
+	}
+	foreach ($albums as $albumId => $album) {
+		$visibility = '';
+		if (empty($album['childAlbums'])) {
+			$visibility = 'hidden';
+		}
+		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-parentAlbumId="' . $parentId . '" style="margin-left: ' . $subNumber * 20 . 'px; display: ' . $display . '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId . '">' . $album[name] . '</a></li>';
+		createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
+	}
+}
+
 $site['title'] = 'Photos';
 
+echo '<link rel="stylesheet" href="' . $config['projectURL'] . '/css/jquery.contextMenu.css" type="text/css" />';
+echo '<script src="' . $config['projectURL'] . '/js/jquery.contextMenu.js" type="text/javascript"></script>';
+echo '<script src="' . $config['projectURL'] . '/js/jquery.ui.position.js" type="text/javascript"></script>';
 echo '<script src="' . $config['projectURL'] . '/js/albumViewScripts.js" type="text/javascript"></script>';
 
 $albumId = $_GET['id'];
@@ -26,17 +55,8 @@ if (!empty($albums)) {
 
 	$orderedAlbumObjects = array();
 
-	function orderAlbums($id, &$children) {
-		global $albumObjects;
-		foreach($albumObjects as $albumId => $album) {
-			if ($album['parentAlbumId'] == $id) {
-				$children[$albumId] = $album;
-				orderAlbums($albumId, $children[$albumId]['childAlbums']);
-			}
-		}
-	}
-
-	orderAlbums('-1', $orderedAlbumObjects);
+	orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
+		orderAlbums('-1', $orderedAlbumObjects);
 
     echo '<div id="albumsContainer">';
 
@@ -76,7 +96,7 @@ if (!$albumId) {
 	$sql = "SELECT id, filename, extension FROM images";
 } else {
 	echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><h2>' . $albumName . '</h2></div>';
-	$sql = "SELECT id, filename, extension FROM images, imagesToAlbums WHERE images.id = imagesToAlbums.imageId AND albumId = " . mysql_real_escape_string($albumId);
+	$sql = "SELECT id, filename, extension FROM images, imagesToAlbums WHERE images.id = imagesToAlbums.imageId AND albumId = " . mysql_real_escape_string($albumId) . " ORDER BY imagesToAlbums.positionInAlbum";
 }
 $images = $db->query($sql);
 
@@ -131,17 +151,3 @@ if (!empty($images)) {
 }
 echo '</div>';
 ?>
-
-
-<div>
-	If no album in bdd :
-	<a href="./albumCreate.html">Add new album</a>
-
-	links for each album, example done with id=1 :
-	<a href="./albumCreate.html?parentId=1">Add new album</a>
-	<a href="./albumEdit.html?id=1">Edit album</a>
-	<a href="./albumDelete.html?id=1">Delete album</a>
-	<a href="./albumCopy.html?id=1">Copy to</a>
-	<a href="./albumMove.html?id=1">Move to</a>
-
-</div>
