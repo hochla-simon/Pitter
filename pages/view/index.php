@@ -56,7 +56,6 @@ if (!empty($albums)) {
 	$orderedAlbumObjects = array();
 
 	orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
-		orderAlbums('-1', $orderedAlbumObjects);
 
     echo '<div id="albumsContainer">';
 

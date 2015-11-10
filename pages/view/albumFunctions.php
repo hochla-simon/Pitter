@@ -44,4 +44,46 @@
 		}
 	}
 
+	function orderAlbums($id, &$children, $albumObjects)
+	{
+		foreach ($albumObjects as $albumId => $album) {
+			if ($album['parentAlbumId'] == $id) {
+				$children[$albumId] = $album;
+				orderAlbums($albumId, $children[$albumId]['childAlbums'], $albumObjects);
+			}
+		}
+	}
+
+	function writeSelectAlbum ($albums, $subNumber, $parentId, &$selectAlbum){
+		foreach ($albums as $albumId => $album) {
+			$selectAlbum .= '<option value="' . $albumId . '" >' . str_repeat("&nbsp", $subNumber * 3) . $album[name] . '</option>';
+			writeSelectAlbum($album['childAlbums'], $subNumber + 1, $albumId, $selectAlbum);
+		}
+	}
+
+	function obtainSelectAlbum ($db){
+		$sql = "SELECT parentAlbumId, id, name FROM albums";
+		$albums = $db->query($sql);
+		$selectAlbum =  '<option value="-1" selected > </option>';
+		if (!empty($albums)) {
+
+			$albumObjects = array();
+			while ($row = mysql_fetch_array($albums)) {
+				$albumObject = array(
+					'name' => $row['name'],
+					'parentAlbumId' => $row['parentAlbumId'],
+					'childAlbums' => array()
+				);
+				$albumObjects[$row['id']] = $albumObject;
+			}
+
+			$orderedAlbumObjects = array();
+
+			orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
+
+			writeSelectAlbum($orderedAlbumObjects, 0, '-1', $selectAlbum);
+		}
+
+		return $selectAlbum;
+	}
 ?>
