@@ -72,7 +72,7 @@ if (!empty($albums)) {
             if (empty($album['childAlbums'])) {
                 $visibility = 'hidden';
             }
-            echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . 'display: ' . $display .
+            echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" display: ' . $display .
                 '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="'
                 . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' .
                 $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId .
@@ -150,3 +150,45 @@ if (!empty($images)) {
 }
 echo '</div>';
 ?>
+
+<!--
+<div id="albumsContainer">
+	<ul class="albums" data-parentAlbumId="-1">
+		<li class="context-menu-one box menu-1" data-id ="2">
+			<img class="toggleArrow" style="visibility: " src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
+			<img src="http://localhost/Pitter/images/folder.png" alt=""/>
+			<a href="?id=2">album2</a>
+			<ul class="albums" data-parentAlbumId="2">
+				<li class="context-menu-one box menu-1" data-id ="18">
+					<img class="toggleArrow" style="visibility: hidden" src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
+					<img src="http://localhost/Pitter/images/folder.png" alt=""/>
+					<a href="?id=18">Album1</a>
+					<ul class="albums" data-parentAlbumId="18">
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li class="context-menu-one box menu-1" data-id ="3">
+			<img class="toggleArrow" style="visibility: " src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
+			<img src="http://localhost/Pitter/images/folder.png" alt=""/>
+			<a href="?id=3">Album3</a>
+			<ul class="albums" data-parentAlbumId="3">
+				<li class="context-menu-one box menu-1" data-id ="9display: none">
+					<img class="toggleArrow" style="visibility: hidden" src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
+					<img src="http://localhost/Pitter/images/folder.png" alt=""/>
+					<a href="?id=9">Album4</a>
+					<ul class="albums" data-parentAlbumId="9">
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li class="context-menu-one box menu-1" data-id ="4display: ">
+			<img class="toggleArrow" style="visibility: hidden" src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
+			<img src="http://localhost/Pitter/images/folder.png" alt=""/>
+			<a href="?id=4">Album4</a>
+			<ul class="albums" data-parentAlbumId="4"></ul>
+		</li>
+	</ul>
+</div>
+
+-->

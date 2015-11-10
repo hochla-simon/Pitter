@@ -56,16 +56,31 @@ $(document).ready(function() {
 	});
 
 	$('.albums').sortable({
+            placeholder: "ui-state-highlight",
 			connectWith: ".albums",
-			//start: function( event, ui ) { $(".toggleArrow").click()},
-			/*update: function() {
-			 $(".toggleArrow").click();
-			 var order = $('#sortable').sortable('serialize');
-			 $.post('ajax.php',order);
-
-			 }*/
+			start: function( event, ui ) { /*$(".toggleArrow").click()*/},
+            update : function( event, ui ) {
+                var albumId = ui.item.attr('data-id');
+                var oldParentAlbumId = -1;
+                if (ui.sender){
+                    oldParentAlbumId = ui.sender.attr('data-parentAlbumId');
+                }
+                var newParentAlbumId = $(this).attr('data-parentAlbumId');
+                if (newParentAlbumId == oldParentAlbumId){
+                    $(this).sortable("cancel");
+                }
+                else {
+                    // if old parent Album empty, hide arrow
+                    // new parent album, set arrow
+                    $.ajax({
+                        url : './albumDragDropSave.html', // La ressource ciblée
+                        type : 'POST', // Le type de la requête HTTP.
+                        data : 'albumId=' + albumId + '&parentAlbumId=' + newParentAlbumId,
+                        dataType : 'html'
+                    });
+                    //$(".toggleArrow").click();
+                }
+            }
 		}
 	);
-
-	$(".albums").disableSelection();
 });
