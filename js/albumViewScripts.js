@@ -28,44 +28,59 @@ $(document).ready(function() {
 			closeSubAlbums(parentAlbumId, newImgSrc);
 		}
 	});
-$(function(){
-	$.contextMenu({
-		selector: '.context-menu-one',
-		callback: function(key, opt) {
-			var albumId = opt.$trigger.attr("data-id");
-			if (key === 'new') {
-				window.open('./albumCreate.html?parentId=' + albumId, '_self');
-			} else if (key === 'edit') {
-				window.open('./albumEdit.html?id=' + albumId, '_self');
-			} else if (key === 'delete') {
-				window.open('./albumDelete.html?id=' + albumId, '_self');
-			} else if (key === 'copy') {
-				window.open('./albumCopy.html?id=' + albumId, '_self');
-			} else if (key === 'move') {
-				window.open('./albumMove.html?id=' + albumId, '_self');
+	$(function(){
+		$.contextMenu({
+			selector: '.context-menu-one',
+			callback: function(key, opt) {
+				var albumId = opt.$trigger.attr("data-id");
+				if (key === 'new') {
+					window.open('./albumCreate.html?parentId=' + albumId, '_self');
+				} else if (key === 'edit') {
+					window.open('./albumEdit.html?id=' + albumId, '_self');
+				} else if (key === 'delete') {
+					window.open('./albumDelete.html?id=' + albumId, '_self');
+				} else if (key === 'copy') {
+					window.open('./albumCopy.html?id=' + albumId, '_self');
+				} else if (key === 'move') {
+					window.open('./albumMove.html?id=' + albumId, '_self');
+				}
+			},
+			items: {
+				'new': {name: 'Add new album'},
+				'edit': {name: 'Edit album'},
+				'delete': {name: 'Delete album'},
+				'copy': {name: 'Copy to...'},
+				'move': {name: 'Move to...'}
 			}
-		},
-		items: {
-			'new': {name: 'Add new album'},
-			'edit': {name: 'Edit album'},
-			'delete': {name: 'Delete album'},
-			'copy': {name: 'Copy to...'},
-			'move': {name: 'Move to...'}
-		}
+		});
 	});
-});
 
 	$('.albums').sortable({
+            placeholder: "ui-state-highlight",
 			connectWith: ".albums",
-			//start: function( event, ui ) { $(".toggleArrow").click()},
-			/*update: function() {
-			 $(".toggleArrow").click();
-			 var order = $('#sortable').sortable('serialize');
-			 $.post('ajax.php',order);
-
-			 }*/
+			start: function( event, ui ) { /*$(".toggleArrow").click()*/},
+            update : function( event, ui ) {
+                var albumId = ui.item.attr('data-id');
+                var oldParentAlbumId = -1;
+                if (ui.sender){
+                    oldParentAlbumId = ui.sender.attr('data-parentAlbumId');
+                }
+                var newParentAlbumId = $(this).attr('data-parentAlbumId');
+                if (newParentAlbumId == oldParentAlbumId){
+                    $(this).sortable("cancel");
+                }
+                else {
+                    // if old parent Album empty, hide arrow
+                    // new parent album, set arrow
+                    $.ajax({
+                        url : './albumDragDropSave.html', // La ressource ciblée
+                        type : 'POST', // Le type de la requête HTTP.
+                        data : 'albumId=' + albumId + '&parentAlbumId=' + newParentAlbumId,
+                        dataType : 'html'
+                    });
+                    //$(".toggleArrow").click();
+                }
+            }
 		}
 	);
-
-	$(".albums").disableSelection();
 });

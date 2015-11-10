@@ -11,6 +11,21 @@
 			$album = mysql_fetch_array($result);
 		}
 	}
+	if (isset ($_POST["Save"])) {
+		if ($_POST["name"] != '') {
+			$update_sql_string = 'UPDATE albums SET name="' . $_POST["name"] . '",modified=CURRENT_TIMESTAMP(),description="' . $_POST["description"] . '" WHERE id="' . $_POST["albumId"] . '" ';
+
+			$db->query($update_sql_string);
+
+			header('Location: ./index.html');
+			exit();
+		} else {
+			http_response_code(500);
+			$db->query($delete_sql_string);
+			$message  = createMessage("Sorry, there was an error editing your album.");
+		}
+	}
+	print($message);
 ?>
 
 <form action="./albumEditBdd.html" method="POST">

@@ -23,7 +23,7 @@ PRIMARY KEY (id)
 CREATE TABLE albums
 (
 id            int NOT NULL AUTO_INCREMENT,
-parentAlbumId        int DEFAULT '-1',
+parentAlbumId        int DEFAULT '1',
 ownerId        int NOT NULL,    
 name             varchar(255) NOT NULL,
 created        DATE NOT NULL,
@@ -56,4 +56,23 @@ imageId        int NOT NULL,
 name            varchar(255) NOT NULL,
 value            varchar(255) NOT NULL,
 PRIMARY KEY (id)
+);
+
+INSERT INTO albums
+(
+parentAlbumId,
+ownerId,    
+name,
+created,
+modified,
+description
+)
+VALUES
+(
+'-1',
+'0',
+'/',
+CURDATE(),
+CURDATE(),
+'This is the root album.'
 );
