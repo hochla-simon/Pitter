@@ -1,5 +1,10 @@
 <?php
 
+$site['title'] = 'Photos';
+$site['script'] = '<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.contextMenu.js"></script>
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/albumViewScripts.js"></script>';
+
 function orderAlbums($id, &$children, $albumsToOrder) {
 	foreach($albumsToOrder as $albumId => $album) {
 		if ($album['parentAlbumId'] == $id) {
@@ -20,17 +25,10 @@ function createAlbums($albums, $subNumber, $parentId) {
 		if (empty($album['childAlbums'])) {
 			$visibility = 'hidden';
 		}
-		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-parentAlbumId="' . $parentId . '" style="margin-left: ' . $subNumber * 20 . 'px; display: ' . $display . '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId . '">' . $album[name] . '</a></li>';
+		echo '<li class="context-menu-one box menu-1" data-path="' . $config['projectURL'] . '" data-id ="' . $albumId . '" data-parentAlbumId="' . $parentId . '" style="margin-left: ' . $subNumber * 20 . 'px; display: ' . $display . '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId . '">' . $album[name] . '</a></li>';
 		createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
 	}
 }
-
-$site['title'] = 'Photos';
-
-echo '<link rel="stylesheet" href="' . $config['projectURL'] . '/css/jquery.contextMenu.css" type="text/css" />';
-echo '<script src="' . $config['projectURL'] . '/js/jquery.contextMenu.js" type="text/javascript"></script>';
-echo '<script src="' . $config['projectURL'] . '/js/jquery.ui.position.js" type="text/javascript"></script>';
-echo '<script src="' . $config['projectURL'] . '/js/albumViewScripts.js" type="text/javascript"></script>';
 
 $albumId = $_GET['id'];
 $albumName;
@@ -72,7 +70,7 @@ if (!empty($albums)) {
             if (empty($album['childAlbums'])) {
                 $visibility = 'hidden';
             }
-            echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" display: ' . $display .
+            echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '" display: ' . $display .
                 '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="'
                 . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' .
                 $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId .
@@ -92,12 +90,10 @@ if (!empty($albums)) {
 echo '<div id="albumView">';
 
 if (!$albumId) {
-	$sql = "SELECT id, filename, extension FROM images";
-} else {
-	echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><h2>' . $albumName . '</h2></div>';
-	$sql = "SELECT id, filename, extension FROM images, imagesToAlbums WHERE images.id = imagesToAlbums.imageId AND albumId = " . mysql_real_escape_string($albumId) . " ORDER BY imagesToAlbums.positionInAlbum";
+	$albumId = '1';
+	$albumName = '/';
 }
-$images = $db->query($sql);
+echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><h2>' . $albumName . '</h2></div>';
 
 echo '<div id="upload">
 
@@ -138,11 +134,14 @@ echo '<script>
 </script>
 </div>';
 
+$sql = "SELECT id, filename, extension FROM images, imagesToAlbums WHERE images.id = imagesToAlbums.imageId AND albumId = " . mysql_real_escape_string($albumId) . " ORDER BY imagesToAlbums.positionInAlbum";
+$images = $db->query($sql);
+
 if (!empty($images)) {
 	echo '<div id="photos">';
 	while($row = mysql_fetch_array($images)) {
 		if (file_exists(dirname(__FILE__) . '/../../data/images/' . $row['id'] . '.' . $row['extension'])) {
-			echo '<div class="thumbnail"><span class="center_img"></span><a href="photoView.html?id=' . $row['id'] . '"><img src="image.html?id=' . $row['id'] . '&max_size=100"/></a></div>';
+			echo '<a href="photoView.html?id=' . $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] . '.' . $row['extension'] . '"><span class="center_img"></span><img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
 		}
 	}
 	echo '</div>';
