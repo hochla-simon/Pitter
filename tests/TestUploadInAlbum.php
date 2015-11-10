@@ -25,10 +25,14 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
         )
     );*/
 
+    public $projectURL;
+
     protected function setUp()
     {
         $this->setBrowser('chrome');
-        $this->setBrowserUrl('http://localhost//view/index.html?id=1/');
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $this->projectURL=$readedConfig['projectURL'];
+        $this->setBrowserUrl($this->projectURL.'/view/index.html?id=1/');
     }
 
     protected function waitUntilNoProgressBar()
@@ -41,7 +45,8 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testSingleFileUpload()
     {
-        $this->url('http://localhost//view/index.html');
+        $this->url($this->projectURL.'/view/index.html');
+
 
         //store current number of images
         $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
@@ -73,7 +78,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testMultipleFileUpload()
     {
-        $this->url('http://localhost//view/index.html');
+        $this->url($this->projectURL.'/view/index.html');
 
 //store current number of images
         $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
@@ -109,7 +114,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testWrongFileType()
     {
-        $this->url('http://localhost//view/index.html');
+        $this->url($this->projectURL.'/view/index.html');
 
 // check the value
         $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
