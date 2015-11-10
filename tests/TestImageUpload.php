@@ -2,33 +2,33 @@
 
 /**
  * Created by PhpStorm.
- * User: daniel
- * Date: 5/11/15
- * Time: 10:36
+ * User: Simon
+ * Date: 10. 11. 2015
+ * Time: 10:27
  */
-class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
+class TestImageUpload extends PHPUnit_Extensions_Selenium2TestCase
 {
     /*public static $browsers = array(
-        array(
-            'name'    => 'Linux Firefox',
-            'browser' => '*firefox',
-            'host'    => 'localhost',
-            'port'    => 4444,
-            'timeout' => 30000,
-        ),
-        array(
-            'name'    => 'Linux Chrome',
-            'browser' => '*chrome',
-            'host'    => 'localhost',
-            'port'    => 4444,
-            'timeout' => 30000,
-        )
-    );*/
+           array(
+               'name'    => 'Linux Firefox',
+               'browser' => '*firefox',
+               'host'    => 'localhost',
+               'port'    => 4444,
+               'timeout' => 30000,
+           ),
+           array(
+               'name'    => 'Linux Chrome',
+               'browser' => '*chrome',
+               'host'    => 'localhost',
+               'port'    => 4444,
+               'timeout' => 30000,
+           )
+       );*/
 
     protected function setUp()
     {
         $this->setBrowser('chrome');
-        $this->setBrowserUrl('http://localhost//view/index.html?id=1/');
+        $this->setBrowserUrl('http://localhost//view/index.html/');
     }
 
     protected function waitUntilNoProgressBar()
@@ -137,5 +137,3 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
         $this->assertEquals("only jpg, jpeg, png and gif are accepted",$messageError );
     }
 }
-
-
