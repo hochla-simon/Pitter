@@ -28,4 +28,30 @@ $(document).ready(function() {
 			closeSubAlbums(parentAlbumId, newImgSrc);
 		}
 	});
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one',
+		callback: function(key, opt) {
+			var albumId = opt.$trigger.attr("data-id");
+			if (key === 'new') {
+				window.open('./albumCreate.html?parentId=' + albumId, '_self');
+			} else if (key === 'edit') {
+				window.open('./albumEdit.html?id=' + albumId, '_self');
+			} else if (key === 'delete') {
+				window.open('./albumDelete.html?id=' + albumId, '_self');
+			} else if (key === 'copy') {
+				window.open('./albumCopy.html?id=' + albumId, '_self');
+			} else if (key === 'move') {
+				window.open('./albumMove.html?id=' + albumId, '_self');
+			}
+		},
+		items: {
+			'new': {name: 'Add new album'},
+			'edit': {name: 'Edit album'},
+			'delete': {name: 'Delete album'},
+			'copy': {name: 'Copy to...'},
+			'move': {name: 'Move to...'}
+		}
+	});
+});
 });
