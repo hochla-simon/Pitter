@@ -39,7 +39,7 @@ $sql = "SELECT parentAlbumId, id, name FROM albums";
 $albums = $db->query($sql);
 
 if (!empty($albums)) {
-	echo '<div id="albumsContainer"><ul id="albums">';
+
 	$albumObjects = array();
 	while($row = mysql_fetch_array($albums)) {
 		$albumObject = array(
@@ -56,10 +56,38 @@ if (!empty($albums)) {
 	$orderedAlbumObjects = array();
 
 	orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
+		orderAlbums('-1', $orderedAlbumObjects);
 
-	createAlbums($orderedAlbumObjects, 0, '-1');
+    echo '<div id="albumsContainer">';
 
-	echo '</ul></div>';
+    function createAlbumsBrothers ($albums, $subNumber, $parentId){
+        global $config;
+        $display=null;
+        if ($subNumber != 0) {
+            $display = 'none';
+        }
+
+        echo '<ul class="albums" data-parentAlbumId="' . $parentId . '">';
+        foreach ($albums as $albumId => $album) {
+            $visibility=null;
+            if (empty($album['childAlbums'])) {
+                $visibility = 'hidden';
+            }
+            echo '<li data-id ="' . $albumId . 'display: ' . $display .
+                '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="'
+                . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' .
+                $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId .
+                '">' . $album[name] . '</a>';
+
+            createAlbumsBrothers($album['childAlbums'], $subNumber+1, $albumId);
+
+            echo '</li>';
+        }
+        echo '</ul>';
+    }
+    createAlbumsBrothers($orderedAlbumObjects, 0, '-1');
+
+	echo '</div>';
 }
 
 echo '<div id="albumView">';
