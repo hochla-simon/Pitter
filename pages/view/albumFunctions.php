@@ -2,7 +2,8 @@
 	function get_path($firstParentAlbumId, $db)
 	{
 		if ($firstParentAlbumId != -1){
-			$parentAlbumId = $firstParentAlbumId;
+            $path = '';
+            $parentAlbumId = $firstParentAlbumId;
 			while( $parentAlbumId != -1 ){
 				$select_sql_string = "SELECT parentAlbumId, name FROM albums WHERE id=" . mysql_real_escape_string($parentAlbumId);
 				$result = $db->query($select_sql_string);
@@ -42,5 +43,5 @@
 			return false;
 		}
 	}
-	
+
 ?>

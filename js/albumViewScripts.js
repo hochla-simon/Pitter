@@ -12,7 +12,7 @@ function closeSubAlbums(parentAlbumId, newImgSrc) {
 
 $(document).ready(function() {
 
-	$("#albums").menu();
+	$(".albums").menu();
 
 	$(".toggleArrow").click(function(index, element) {
 		var parentAlbumId = $(this).parent('li').data('id');
@@ -28,4 +28,44 @@ $(document).ready(function() {
 			closeSubAlbums(parentAlbumId, newImgSrc);
 		}
 	});
+$(function(){
+	$.contextMenu({
+		selector: '.context-menu-one',
+		callback: function(key, opt) {
+			var albumId = opt.$trigger.attr("data-id");
+			if (key === 'new') {
+				window.open('./albumCreate.html?parentId=' + albumId, '_self');
+			} else if (key === 'edit') {
+				window.open('./albumEdit.html?id=' + albumId, '_self');
+			} else if (key === 'delete') {
+				window.open('./albumDelete.html?id=' + albumId, '_self');
+			} else if (key === 'copy') {
+				window.open('./albumCopy.html?id=' + albumId, '_self');
+			} else if (key === 'move') {
+				window.open('./albumMove.html?id=' + albumId, '_self');
+			}
+		},
+		items: {
+			'new': {name: 'Add new album'},
+			'edit': {name: 'Edit album'},
+			'delete': {name: 'Delete album'},
+			'copy': {name: 'Copy to...'},
+			'move': {name: 'Move to...'}
+		}
+	});
+});
+
+	$('.albums').sortable({
+			connectWith: ".albums",
+			//start: function( event, ui ) { $(".toggleArrow").click()},
+			/*update: function() {
+			 $(".toggleArrow").click();
+			 var order = $('#sortable').sortable('serialize');
+			 $.post('ajax.php',order);
+
+			 }*/
+		}
+	);
+
+	$(".albums").disableSelection();
 });
