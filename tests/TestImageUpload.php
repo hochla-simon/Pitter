@@ -2,37 +2,33 @@
 
 /**
  * Created by PhpStorm.
- * User: daniel
- * Date: 5/11/15
- * Time: 10:36
+ * User: Simon
+ * Date: 10. 11. 2015
+ * Time: 10:27
  */
-class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
+class TestImageUpload extends PHPUnit_Extensions_Selenium2TestCase
 {
     /*public static $browsers = array(
-        array(
-            'name'    => 'Linux Firefox',
-            'browser' => '*firefox',
-            'host'    => 'localhost',
-            'port'    => 4444,
-            'timeout' => 30000,
-        ),
-        array(
-            'name'    => 'Linux Chrome',
-            'browser' => '*chrome',
-            'host'    => 'localhost',
-            'port'    => 4444,
-            'timeout' => 30000,
-        )
-    );*/
-
-    public $projectURL;
+           array(
+               'name'    => 'Linux Firefox',
+               'browser' => '*firefox',
+               'host'    => 'localhost',
+               'port'    => 4444,
+               'timeout' => 30000,
+           ),
+           array(
+               'name'    => 'Linux Chrome',
+               'browser' => '*chrome',
+               'host'    => 'localhost',
+               'port'    => 4444,
+               'timeout' => 30000,
+           )
+       );*/
 
     protected function setUp()
     {
         $this->setBrowser('chrome');
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
-        $this->projectURL=$readedConfig['projectURL'];
-        $this->setBrowserUrl($this->projectURL.'/view/index.html?id=1/');
+        $this->setBrowserUrl('http://localhost//view/index.html/');
     }
 
     protected function waitUntilNoProgressBar()
@@ -45,8 +41,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testSingleFileUpload()
     {
-        $this->url($this->projectURL.'/view/index.html');
-
+        $this->url('http://localhost//view/index.html');
 
         //store current number of images
         $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
@@ -78,7 +73,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testMultipleFileUpload()
     {
-        $this->url($this->projectURL.'/view/index.html');
+        $this->url('http://localhost//view/index.html');
 
 //store current number of images
         $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
@@ -114,7 +109,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testWrongFileType()
     {
-        $this->url($this->projectURL.'/view/index.html');
+        $this->url('http://localhost//view/index.html');
 
 // check the value
         $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
@@ -142,5 +137,3 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
         $this->assertEquals("only jpg, jpeg, png and gif are accepted",$messageError );
     }
 }
-
-

@@ -72,7 +72,7 @@ if (!empty($albums)) {
             if (empty($album['childAlbums'])) {
                 $visibility = 'hidden';
             }
-            echo '<li data-id ="' . $albumId . 'display: ' . $display .
+            echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . 'display: ' . $display .
                 '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="'
                 . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' .
                 $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId .
@@ -141,7 +141,7 @@ if (!empty($images)) {
 	echo '<div id="photos">';
 	while($row = mysql_fetch_array($images)) {
 		if (file_exists(dirname(__FILE__) . '/../../data/images/' . $row['id'] . '.' . $row['extension'])) {
-			echo '<div class="thumbnail"><span class="center_img"></span></span><a href="photoView.html?id=' . $row['id'] . '"><img src="image.html?id=' . $row['id'] . '&max_size=100"/></a></div>';
+			echo '<div class="thumbnail"><span class="center_img"></span><a href="photoView.html?id=' . $row['id'] . '"><img src="image.html?id=' . $row['id'] . '&max_size=100"/></a></div>';
 		}
 	}
 	echo '</div>';

@@ -9,9 +9,6 @@ class DataBaseTesting extends FixtureTestCase {
 
     function testReadDatabase() {
 
-        $_GET = array(
-            'page' => 'administration/settings.php'
-        );
         $phpunit = array(
             'isTest' => true
         );
