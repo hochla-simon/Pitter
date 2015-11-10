@@ -1,6 +1,6 @@
 <?php
 
-require 'MyTestCase.php';
+require 'DataBaseTesting.php';
 require 'TestConfiguration.php';
 /**
  * Created by PhpStorm.
@@ -10,17 +10,17 @@ require 'TestConfiguration.php';
  */
 class Test extends PHPUnit_Framework_TestCase
 {
-    public function testMyTestCase()
+    public function testDataBase()
     {
-        $mytestcase = new MyTestCase();
+        $mytestcase = new DataBaseTesting();
         $mytestcase->testReadDatabase();
     }
 
-    public function testConfiguration() {
+    /*public function testConfiguration() {
         $test = new TestConfiguration();
         $test->testInstallation();
         $test->testSettings();
-    }
+    }*/
 
     public function testDeleteTestConfiguration() {
         unlink(dirname(__FILE__).'/../data/configuration/config.txt');

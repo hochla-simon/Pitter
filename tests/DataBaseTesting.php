@@ -1,7 +1,7 @@
 <?php
 require 'FixtureTestCase.php';
 
-class MyTestCase extends FixtureTestCase {
+class DataBaseTesting extends FixtureTestCase {
 
     public $fixtures = array(
         'users'
@@ -15,26 +15,14 @@ class MyTestCase extends FixtureTestCase {
         $phpunit = array(
             'isTest' => true
         );
-        $config['installed'] = false;
-        $_POST = array(
-            'submit' => true
-        );
-        include(dirname(__FILE__).'/../index.php');
 
         $config['installed'] = false;
-        $_POST = array(
-            'databaseHost' => 'localhost',
-            'databaseUser' => 'pitter',
-            'databasePassword' => 'pitter',
-            'databaseName' => 'pitter',
-            'projectName' => 'Example2',
-            'projectURL' => 'http://www.example.org2',
-            'slogan' => 'Example slogan2',
-            'copyright' => 'Example copyright2',
-            'homeContent' => 'Example home content2',
-            'submit' => true
-        );
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $dataToPost = array('submit' => true);
+        $_POST = array_merge($readedConfig, $dataToPost);
+
         include(dirname(__FILE__).'/../index.php');
+
 
         $this->assertContains('Installation successful.', $message);
         $this->assertEquals($config['installed'], true);

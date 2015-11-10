@@ -40,18 +40,11 @@ class TestConfiguration extends PHPUnit_Framework_TestCase {
 
         // Test correct installation
         $config['installed'] = false;
-        $_POST = array(
-            'databaseHost' => 'localhost',
-            'databaseUser' => 'pitter',
-            'databasePassword' => 'pitter',
-            'databaseName' => 'pitter',
-            'projectName' => 'Example2',
-            'projectURL' => 'http://www.example.org2',
-            'slogan' => 'Example slogan2',
-            'copyright' => 'Example copyright2',
-            'homeContent' => 'Example home content2',
-            'submit' => true
-        );
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $dataToPost = array('submit' => true);
+
+        $_POST = array_merge($readedConfig, $dataToPost);
+
         include(dirname(__FILE__).'/../index.php');
         $this->assertEquals(count($errors), 0);
         $this->assertContains('Installation successful.', $message);
@@ -101,18 +94,11 @@ class TestConfiguration extends PHPUnit_Framework_TestCase {
 
         // Test correct settings successful
         $config['installed'] = true;
-        $_POST = array(
-            'databaseHost' => 'localhost',
-            'databaseUser' => 'pitter',
-            'databasePassword' => 'pitter',
-            'databaseName' => 'pitter',
-            'projectName' => 'Example4',
-            'projectURL' => 'http://www.example.org4',
-            'slogan' => 'Example slogan4',
-            'copyright' => 'Example copyright4',
-            'homeContent' => 'Example home content4',
-            'submit' => true
-        );
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $dataToPost = array('submit' => true);
+
+        $_POST = array_merge($readedConfig, $dataToPost);
+
         include(dirname(__FILE__).'/../index.php');
         $this->assertEquals(count($errors), 0);
         $this->assertContains('Changes successfully saved.', $message);
