@@ -12,10 +12,11 @@ function closeSubAlbums(parentAlbumId, newImgSrc) {
 
 $(document).ready(function() {
 
-	$("#albums").menu();
+	$(".albums").menu();
 
 	$(".toggleArrow").click(function(index, element) {
-		var parentAlbumId = $(this).parent('li').data('id');
+
+		/*var parentAlbumId = $(this).parent('li').data('id');
 		var originalImgSrc = $(this).attr('src');
 		var lastSlashIndex = originalImgSrc.lastIndexOf('/') + 1;
 		var newImgSrc = '';
@@ -26,6 +27,21 @@ $(document).ready(function() {
 		} else {
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_right_image;
 			closeSubAlbums(parentAlbumId, newImgSrc);
-		}
+		}*/
+
 	});
+
+	$('.albums').sortable({
+			connectWith: ".albums",
+			//start: function( event, ui ) { $(".toggleArrow").click()},
+			/*update: function() {
+			 $(".toggleArrow").click();
+			 var order = $('#sortable').sortable('serialize');
+			 $.post('ajax.php',order);
+
+			 }*/
+		}
+	);
+
+	$(".albums").disableSelection();
 });

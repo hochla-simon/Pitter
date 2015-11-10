@@ -10,7 +10,7 @@ $sql = "SELECT parentAlbumId, id, name FROM albums";
 $albums = $db->query($sql);
 
 if (!empty($albums)) {
-	echo '<div id="albumsContainer"><ul id="albums">';
+
 	$albumObjects = array();
 	while($row = mysql_fetch_array($albums)) {
 		$albumObject = array(
@@ -38,25 +38,36 @@ if (!empty($albums)) {
 
 	orderAlbums('-1', $orderedAlbumObjects);
 
-	function createAlbums($albums, $subNumber, $parentId) {
-		global $config;
-		$display;
-		if ($subNumber != 0) {
-			$display = 'none';
-		}
-		foreach ($albums as $albumId => $album) {
-			$visibility;
-			if (empty($album['childAlbums'])) {
-				$visibility = 'hidden';
-			}
-			echo '<li data-id ="' . $albumId . '" data-parentAlbumId="' . $parentId . '" style="margin-left: ' . $subNumber * 20 . 'px; display: ' . $display . '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId . '">' . $album[name] . '</a></li>';
-			createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
-		}
-	}
+    echo '<div id="albumsContainer">';
 
-	createAlbums($orderedAlbumObjects, 0, '-1');
+    function createAlbumsBrothers ($albums, $subNumber, $parentId){
+        global $config;
+        $display=null;
+        if ($subNumber != 0) {
+            $display = 'none';
+        }
 
-	echo '</ul></div>';
+        echo '<ul class="albums" data-parentAlbumId="' . $parentId . '">';
+        foreach ($albums as $albumId => $album) {
+            $visibility=null;
+            if (empty($album['childAlbums'])) {
+                $visibility = 'hidden';
+            }
+            echo '<li data-id ="' . $albumId . 'display: ' . $display .
+                '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="'
+                . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' .
+                $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId .
+                '">' . $album[name] . '</a>';
+
+            createAlbumsBrothers($album['childAlbums'], $subNumber+1, $albumId);
+
+            echo '</li>';
+        }
+        echo '</ul>';
+    }
+    createAlbumsBrothers($orderedAlbumObjects, 0, '-1');
+
+	echo '</div>';
 }
 
 echo '<div id="albumView">';
@@ -121,23 +132,16 @@ if (!empty($images)) {
 echo '</div>';
 ?>
 
-<!--<div>
-	<input type="button" value="Add new album" onclick="window.location='./albumCreate.html';">
-	<ul>
-		<li>
-			album 1
-			<input type="button" value="Add new album" onclick="window.location='./albumCreate.html?parentId=1';">
-			<input type="button" value="Edit album" onclick="window.location='./albumEdit.html?id=1';">
-			<input type="button" value="Delete album" onclick="window.location='./albumDelete.html?id=1'">
-			<input type="button" value="Copy to" onclick="window.location='./albumCopy.html?id=1';">
-			<input type="button" value="Move to" onclick="window.location='./albumMove.html?id=1';">
-			<ul>
-				<li> sous-album 1 </li>
-				<li> sous-album 2 </li>
-			</ul>
-		</li>
-		<li>
-			album 2
-		</li>
-	</ul>
-</div>-->
+
+<div>
+	If no album in bdd :
+	<a href="./albumCreate.html">Add new album</a>
+
+	links for each album, example done with id=1 :
+	<a href="./albumCreate.html?parentId=1">Add new album</a>
+	<a href="./albumEdit.html?id=1">Edit album</a>
+	<a href="./albumDelete.html?id=1">Delete album</a>
+	<a href="./albumCopy.html?id=1">Copy to</a>
+	<a href="./albumMove.html?id=1">Move to</a>
+
+</div>
