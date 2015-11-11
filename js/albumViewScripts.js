@@ -3,7 +3,7 @@ var arrow_down_image = 'arrow_down.png';
 
 function closeSubAlbums(parentAlbumId, newImgSrc) {
 	$('li[data-id=' + parentAlbumId + ' ] .toggleArrow').attr('src', newImgSrc)
-	var albumsToBeClosed = $('li[data-parentAlbumId=' + parentAlbumId + ' ]');
+	var albumsToBeClosed = $('ul[data-parentAlbumId=' + parentAlbumId + ' ]');
 	albumsToBeClosed.css('display', 'none');
 	albumsToBeClosed.each(function() {
 		closeSubAlbums($(this).data('id'), newImgSrc);
@@ -12,15 +12,13 @@ function closeSubAlbums(parentAlbumId, newImgSrc) {
 
 $(document).ready(function() {
 
-	$(".albums").menu();
-
 	$(".toggleArrow").click(function(index, element) {
 		var parentAlbumId = $(this).parent('li').data('id');
 		var originalImgSrc = $(this).attr('src');
 		var lastSlashIndex = originalImgSrc.lastIndexOf('/') + 1;
 		var newImgSrc = '';
 		if (originalImgSrc.substring(lastSlashIndex) === arrow_right_image) {
-			$('li[data-parentAlbumId=' + parentAlbumId + ' ]').css('display', '');
+			$('ul[data-parentAlbumId=' + parentAlbumId + ' ]').css('display', '');
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
 			$(this).attr('src', newImgSrc);
 		} else {
@@ -55,9 +53,9 @@ $(document).ready(function() {
 		}
 	});
 
-	$('.albums').sortable({
+	$('.albums, .childAlbums').sortable({
             placeholder: "ui-state-highlight",
-			connectWith: ".albums",
+			connectWith: ".albums, .childAlbums",
 			start: function( event, ui ) { /*$(".toggleArrow").click()*/},
             update : function( event, ui ) {
                 var albumId = ui.item.attr('data-id');

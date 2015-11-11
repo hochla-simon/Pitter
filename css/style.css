@@ -145,9 +145,25 @@ b{
 	width: 20%;
 	vertical-align: top;
 }
+.albums {
+	margin: 0px;
+	padding: 10px;
+	border: solid black 1px;
+}
+.albums li {
+	list-style: none;
+	margin-bottom: 5px;
+	font-size: 20px;
+}
+.albums a {
+	text-decoration: none;
+}
 .albums img {
 	height: 15px;
 	margin-right: 5px;
+}
+.childAlbums {
+	margin: 5px 0px 0px 15px;
 }
 #albumView {
 	display: inline-block;
