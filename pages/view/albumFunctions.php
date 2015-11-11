@@ -64,7 +64,7 @@
 	function obtainSelectAlbum ($db){
 		$sql = "SELECT parentAlbumId, id, name FROM albums";
 		$albums = $db->query($sql);
-		$selectAlbum =  '<option value="-1" selected > </option>';
+		$selectAlbum =  '';
 		if (!empty($albums)) {
 
 			$albumObjects = array();
