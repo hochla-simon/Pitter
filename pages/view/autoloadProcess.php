@@ -7,7 +7,6 @@
  */
 include("config.php"); //include config file
 
-//echo 'response response response';
 if($_POST)
 {
     //sanitize post value
@@ -41,7 +40,6 @@ if($_POST)
                     '.' . $row['extension'] . '"><span class="center_img"></span><img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
             }
         }
-        echo '</div>';
     } else {
         echo '<h2>No photos!</h2>';
     }

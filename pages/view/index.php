@@ -8,9 +8,16 @@ $total_records = $row[0];
 $total_groups = ceil($total_records/$items_per_group);
 
 $site['title'] = 'Photos';
-$site['script'] = '<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.ui.position.js"></script>
+$site['script'] = '<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery-ui.min.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery-ui.structure.min.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery-ui.theme.min.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery.contextMenu.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/dropzone.css" type="text/css" />
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.contextMenu.js"></script>
-	<script type="text/javascript" src="' . $config['projectURL'] . 'js/albumViewScripts.js"></script>';
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/albumViewScripts.js"></script>
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/dropzone.js"></script>';
 
 function orderAlbums($id, &$children, $albumsToOrder) {
 	foreach($albumsToOrder as $albumId => $album) {
@@ -21,30 +28,34 @@ function orderAlbums($id, &$children, $albumsToOrder) {
 	}
 }
 
-function createAlbums ($albums, $subNumber, $parentId) {
+function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 	global $config;
 	$display = 'none';
 	if ($subNumber == 0) {
 		$display = '';
-		$albumClass = 'albums';
+		$albumListClass = 'albums';
 	} else {
-		$albumClass = 'childAlbums';
+		$albumListClass = 'childAlbums';
 	}
 
-	echo '<ul class="' . $albumClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
+	echo '<ul class="' . $albumListClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
 	foreach ($albums as $albumId => $album) {
 		$visibility = '';
 		if (empty($album['childAlbums'])) {
 			$visibility = 'hidden';
 		}
+		$albumClass = '';
+		if ($albumId == $activeAlbumId) {
+			$albumClass = 'active';
+		}
 		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '">
 			<img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/>
-			<a href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
+			<a class="' . $albumClass . '" href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
 				<img src="' . $config['projectURL'] . 'images/folder.png" alt=""/>
 				<span>' . $album[name] . '</span>
 			</a>';
 
-		createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
+		createAlbums($album['childAlbums'], $subNumber + 1, $albumId, $activeAlbumId);
 
 		echo '</li>';
 	}
@@ -52,7 +63,9 @@ function createAlbums ($albums, $subNumber, $parentId) {
 }
 
 $albumId = $_GET['id'];
-$albumName;
+if (!$albumId) {
+	$albumId = '1';
+}
 
 $sql = "SELECT parentAlbumId, id, name FROM albums ORDER BY name ASC";
 $albums = $db->query($sql);
@@ -78,18 +91,12 @@ if (!empty($albums)) {
 
 	echo '<div id="albumsContainer">';
 
-	createAlbums($orderedAlbumObjects, 0, '-1');
+	createAlbums($orderedAlbumObjects, 0, '-1', $albumId);
 
 	echo '</div>';
 }
 
 echo '<div id="albumView">';
-
-if (!$albumId) {
-	$albumId = '1';
-	$albumName = '/';
-}
-echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><h2>' . $albumName . '</h2></div>';
 
 echo '<div id="upload">
 
@@ -116,12 +123,9 @@ echo '<script>
                 });
                 this.on("success", function (file, response) {
                     if(file.accepted){
-                    	debugger;
                         htmlNewTag = \'<div class="thumbnail"><span class="center_img"></span><a href="photoView.html?id=\'+response.lastId+\'"><img src="image.html?id=\'+response.lastId+\'&max_size=100"></img></a></div>\';
                         $("div#photos").append(htmlNewTag);
-                        console.log(file)
                         this.removeFile(file);
-                        console.log(response);
                     }
                 });
             }
