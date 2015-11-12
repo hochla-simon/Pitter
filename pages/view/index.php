@@ -28,30 +28,34 @@ function orderAlbums($id, &$children, $albumsToOrder) {
 	}
 }
 
-function createAlbums ($albums, $subNumber, $parentId) {
+function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 	global $config;
 	$display = 'none';
 	if ($subNumber == 0) {
 		$display = '';
-		$albumClass = 'albums';
+		$albumListClass = 'albums';
 	} else {
-		$albumClass = 'childAlbums';
+		$albumListClass = 'childAlbums';
 	}
 
-	echo '<ul class="' . $albumClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
+	echo '<ul class="' . $albumListClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
 	foreach ($albums as $albumId => $album) {
 		$visibility = '';
 		if (empty($album['childAlbums'])) {
 			$visibility = 'hidden';
 		}
+		$albumClass = '';
+		if ($albumId == $activeAlbumId) {
+			$albumClass = 'active';
+		}
 		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '">
 			<img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/>
-			<a href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
+			<a class="' . $albumClass . '" href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
 				<img src="' . $config['projectURL'] . 'images/folder.png" alt=""/>
 				<span>' . $album[name] . '</span>
 			</a>';
 
-		createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
+		createAlbums($album['childAlbums'], $subNumber + 1, $albumId, $activeAlbumId);
 
 		echo '</li>';
 	}
@@ -59,7 +63,9 @@ function createAlbums ($albums, $subNumber, $parentId) {
 }
 
 $albumId = $_GET['id'];
-$albumName;
+if (!$albumId) {
+	$albumId = '1';
+}
 
 $sql = "SELECT parentAlbumId, id, name FROM albums ORDER BY name ASC";
 $albums = $db->query($sql);
@@ -85,18 +91,12 @@ if (!empty($albums)) {
 
 	echo '<div id="albumsContainer">';
 
-	createAlbums($orderedAlbumObjects, 0, '-1');
+	createAlbums($orderedAlbumObjects, 0, '-1', $albumId);
 
 	echo '</div>';
 }
 
 echo '<div id="albumView">';
-
-if (!$albumId) {
-	$albumId = '1';
-	$albumName = '/';
-}
-echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><h2>' . $albumName . '</h2></div>';
 
 echo '<div id="upload">
 

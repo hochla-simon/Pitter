@@ -97,5 +97,8 @@ $(document).ready(function() {
         }
     );
     $( '.albums, .childAlbums' ).disableSelection();
-	$(".toggleArrow:first").click();
+
+	$(".albums .active").parent('li').parents('li').each(function(index, element) {
+		$(element).children('.toggleArrow').click();
+	});
 });
