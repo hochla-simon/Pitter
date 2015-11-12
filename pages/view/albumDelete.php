@@ -20,12 +20,19 @@
 	}
 ?>
 
+<h2><?php echo $site['title'];?></h2>
+
 <form action="" method="POST">
 
-	Do you want to delete the album : <?php echo $album['name']; ?>
-	
 	<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
+
+	<div class="row">
+		<label>Album to delete:</label>
+		<p><?php echo $album['name']; ?></p>
+	</div>
 	
-	<input type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-	<input type="submit" name="Delete" value="Delete">
+	<div class="row">
+		<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
+		<input class="submit" type="submit" name="Delete" value="Delete">
+	</div>
 </form>

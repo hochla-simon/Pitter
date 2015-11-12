@@ -73,7 +73,7 @@ if(isset($_POST['submit'])){
 	}
 }
 ?>
-<h1><?php echo $site['title'];?></h1>
+<h2><?php echo $site['title'];?></h2>
 <?php echo $message;?>
 <form action="" method="post">
  <?php
@@ -91,7 +91,7 @@ if(isset($_POST['submit'])){
 }
  ?>
  <div class="row">
-  <input type="submit" name="submit" value="Save Settings" />
+  <input class="submit" type="submit" name="submit" value="Save Settings" />
  </div>
  <?php
  if(!$config['installed']){

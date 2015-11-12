@@ -3,10 +3,11 @@ var arrow_down_image = 'arrow_down.png';
 
 function closeSubAlbums(parentAlbumId, newImgSrc) {
 	$('li[data-id=' + parentAlbumId + ' ] .toggleArrow').attr('src', newImgSrc)
-	var albumsToBeClosed = $('ul[data-parentAlbumId=' + parentAlbumId + ' ]');
-	albumsToBeClosed.css('display', 'none');
-	albumsToBeClosed.each(function() {
-		closeSubAlbums($(this).data('id'), newImgSrc);
+	var albumListToBeClosed = $('ul[data-parentAlbumId=' + parentAlbumId + ' ]');
+	albumListToBeClosed.css('display', 'none');
+	var childAlbumsToBeClosed = albumListToBeClosed.children();
+	childAlbumsToBeClosed.each(function(index, element) {
+		closeSubAlbums($(element).data('id'), newImgSrc);
 	});
 }
 
@@ -81,4 +82,6 @@ $(document).ready(function() {
             }
 		}
 	);
+
+	$(".toggleArrow:first").click();
 });

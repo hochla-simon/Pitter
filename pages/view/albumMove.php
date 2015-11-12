@@ -31,21 +31,30 @@
 	}
 	print $message;
 ?>
+<h2><?php echo $site['title'];?> to...</h2>
 
 <form action="" method="POST">
-		
-		<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
-		
-		<label for="parentAlbumId">Where do you want to move the album <?php echo $album['name'];?> : </label>
+
+	<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
+
+	<div class="row">
+		<label>Album to move:</label>
+		<p><?php echo $album['name'];?></p>
+	</div>
+
+	<div class="row">
+		<label for="parentAlbumId">Destination:</label>
 
 		<select name="parentAlbumId" id="parentAlbumId">
 		<?php
 			echo obtainSelectAlbum ($db);
 		?>
 		</select>
+	</div>
 
+	<div class="row">
+		<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
+		<input class="submit" type="submit" name="Save" value="Save">
+	</div>
 
-		<input type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-		<input type="submit" name="Save" value="Save">
-		
 </form>
