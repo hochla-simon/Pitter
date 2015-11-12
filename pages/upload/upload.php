@@ -65,7 +65,6 @@ if($uploadOk == 1){
             $db->query('SELECT @maxPositionInAlbum := IFNULL(MAX(positionInAlbum),0) FROM imagesToAlbums WHERE albumId=' . $_POST["albumId"] . ';');
             $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES (' . $_POST["albumId"] . ',' . $last_id . ', @maxPositionInAlbum + 1);');
             $db->query('COMMIT;');
-            $db->multiQuery($insert_sql_string);
 
             header('Content-Type: application/json');
             echo '{"lastId":' . $last_id . '}';
