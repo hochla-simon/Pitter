@@ -8,9 +8,16 @@ $total_records = $row[0];
 $total_groups = ceil($total_records/$items_per_group);
 
 $site['title'] = 'Photos';
-$site['script'] = '<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.ui.position.js"></script>
+$site['script'] = '<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery-ui.min.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery-ui.structure.min.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery-ui.theme.min.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery.contextMenu.css" type="text/css" />
+	<link rel="stylesheet" href="' . $config['projectURL'] . 'css/dropzone.css" type="text/css" />
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.contextMenu.js"></script>
-	<script type="text/javascript" src="' . $config['projectURL'] . 'js/albumViewScripts.js"></script>';
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/albumViewScripts.js"></script>
+	<script type="text/javascript" src="' . $config['projectURL'] . 'js/dropzone.js"></script>';
 
 function orderAlbums($id, &$children, $albumsToOrder) {
 	foreach($albumsToOrder as $albumId => $album) {
