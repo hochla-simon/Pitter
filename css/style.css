@@ -148,7 +148,7 @@ b{
 .albums {
 	margin: 0px;
 	padding: 10px;
-	border: solid black 1px;
+	border: solid #5C5B5B 1px;
 }
 .albums li {
 	list-style: none;
@@ -163,7 +163,7 @@ b{
 	margin-right: 5px;
 }
 .childAlbums {
-	margin: 5px 0px 0px 15px;
+	margin: 5px 0px 0px 25px;
 }
 #albumView {
 	display: inline-block;
