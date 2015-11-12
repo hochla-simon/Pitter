@@ -93,7 +93,7 @@ echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.
 
 echo '<div id="upload">
 
-<form action="'.$config['projectURL'].'/upload/upload.html"
+<form action="'.$config['projectURL'].'upload/upload.html"
       class="dropzone"
       id="myDropzone">';
 	if($albumId) echo '<input type="hidden" name="albumId" value="'.$albumId.'" />';

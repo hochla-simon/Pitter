@@ -38,7 +38,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
     protected function waitUntilNoProgressBar()
     {
         while(count($this->elements($this->using('css selector')->value('#myDropzone > div.dz-preview.dz-file-preview')))!=0){
-            usleep(900);
+            sleep(1);
         }
 
     }

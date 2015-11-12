@@ -10,7 +10,7 @@
 		}
 	}
 
-	if (isset ($_POST["Save"])) {
+	if (isset ($_POST["Delete"])) {
 		$delete_sql_string = 'DELETE FROM albums WHERE id="' . $_POST["albumId"] . '" ';
 		$db->query($delete_sql_string);
 		$delete_sql_string = "DELETE FROM imagestoalbums WHERE albumId=" . mysql_real_escape_string($albumId);

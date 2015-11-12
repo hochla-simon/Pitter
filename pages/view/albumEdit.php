@@ -29,7 +29,7 @@
 ?>
 <h2><?php echo $site['title'];?></h2>
 
-<form action="./albumEditBdd.html" method="POST">
+<form action="" method="POST">
 		
 	<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
 		
