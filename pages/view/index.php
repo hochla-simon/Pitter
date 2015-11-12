@@ -1,5 +1,12 @@
 <?php
 
+include 'config.php';
+
+$result = mysql_query("SELECT COUNT(1) FROM images");
+$row = mysql_fetch_array($result);
+$total_records = $row[0];
+$total_groups = ceil($total_records/$items_per_group);
+
 $site['title'] = 'Photos';
 $site['script'] = '<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.ui.position.js"></script>
 	<script type="text/javascript" src="' . $config['projectURL'] . 'js/jquery.contextMenu.js"></script>
@@ -86,7 +93,7 @@ echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.
 
 echo '<div id="upload">
 
-<form action="'.$config['projectURL'].'/upload/upload.html"
+<form action="'.$config['projectURL'].'upload/upload.html"
       class="dropzone"
       id="myDropzone">';
 	if($albumId) echo '<input type="hidden" name="albumId" value="'.$albumId.'" />';
@@ -122,23 +129,57 @@ echo '<script>
 
 </script>
 </div>';
-
-$sql = "SELECT id, filename, extension FROM images, imagesToAlbums WHERE images.id = imagesToAlbums.imageId AND albumId = " . mysql_real_escape_string($albumId) . " ORDER BY imagesToAlbums.positionInAlbum";
-$images = $db->query($sql);
-
-if (!empty($images)) {
-	echo '<div id="photos">';
-	while($row = mysql_fetch_array($images)) {
-		if (file_exists(dirname(__FILE__) . '/../../data/images/' . $row['id'] . '.' . $row['extension'])) {
-			echo '<a href="photoView.html?id=' . $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] . '.' . $row['extension'] . '"><span class="center_img"></span><img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
-		}
-	}
-	echo '</div>';
-} else {
-	echo '<h2>No photos!</h2>';
-}
-echo '</div>';
 ?>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		var track_load = 0; //total loaded record group(s)
+		var loading  = false; //to prevents multipal ajax loads
+		var total_groups = <?php echo $total_groups; ?>; //total record group(s)
+		var album_id = <?php echo(json_encode($albumId)); ?>;
+
+		// /pages/view/autoload_process.php
+		$('#photos').load("http://localhost/view/autoloadProcess.html", {'group_no':track_load, 'album_id':album_id}, function() {track_load++;}); //load first group
+
+		$(window).scroll(function() { //detect page scroll
+
+			if($(window).scrollTop() + $(window).height() == $(document).height())  //user scrolled to bottom of the page?
+			{
+
+				if(track_load <= total_groups && loading==false) //there's more data to load
+				{
+					loading = true; //prevent further ajax loading
+					$('.animation_image').show(); //show loading image
+
+					//TODO paramter of host should be autoload_process.php
+//                        load data from the server using a HTTP POST request
+					$.post('http://localhost/view/autoloadProcess.html',{'group_no':track_load, 'album_id':album_id}, function(data){
+
+						$("#photos").append(data); //append received data into the element
+
+						//hide loading image
+						$('.animation_image').hide(); //hide loading image once data is received
+
+						track_load++; //loaded group increment
+						loading = false;
+
+					}).fail(function(xhr, ajaxOptions, thrownError) { //any errors?
+//                            getOutput(track_load);
+
+						alert(thrownError); //alert with HTTP error
+						$('.animation_image').hide(); //hide loading image
+						loading = false;
+
+					});
+				}
+			}
+		});
+	});
+</script>
+
+<div id="photos" class="images">
+<div class="animation_image" style="display:none" align="center"><img src="../../images/loader.gif"></div>
+
 
 <!--
 <div id="albumsContainer">

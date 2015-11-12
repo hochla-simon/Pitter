@@ -164,6 +164,7 @@ b{
 }
 .childAlbums {
 	margin: 5px 0px 0px 25px;
+	min-height: 5px;
 }
 #albumView {
 	display: inline-block;

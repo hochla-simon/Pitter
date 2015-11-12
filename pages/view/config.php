@@ -5,3 +5,5 @@ $moduleConfig = array(
 		'text' => 'View Photos'
 	)
 );
+$items_per_group = 30;
+?>
