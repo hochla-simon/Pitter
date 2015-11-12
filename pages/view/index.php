@@ -24,7 +24,7 @@ function createAlbums ($albums, $subNumber, $parentId) {
 		$albumClass = 'childAlbums';
 	}
 
-	echo '<ul class="' . $albumClass . '" data-parentAlbumId="' . $parentId . '" style="display: ' . $display . '">';
+	echo '<ul class="' . $albumClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
 	foreach ($albums as $albumId => $album) {
 		$visibility = '';
 		if (empty($album['childAlbums'])) {
@@ -32,7 +32,7 @@ function createAlbums ($albums, $subNumber, $parentId) {
 		}
 		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '">
 			<img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/>
-			<a href="?id=' . $albumId .'">
+			<a href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
 				<img src="' . $config['projectURL'] . 'images/folder.png" alt=""/>
 				<span>' . $album[name] . '</span>
 			</a>';
@@ -47,7 +47,7 @@ function createAlbums ($albums, $subNumber, $parentId) {
 $albumId = $_GET['id'];
 $albumName;
 
-$sql = "SELECT parentAlbumId, id, name FROM albums";
+$sql = "SELECT parentAlbumId, id, name FROM albums ORDER BY name ASC";
 $albums = $db->query($sql);
 
 if (!empty($albums)) {
