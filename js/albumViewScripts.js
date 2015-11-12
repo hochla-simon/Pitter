@@ -3,12 +3,31 @@ var arrow_down_image = 'arrow_down.png';
 
 function closeSubAlbums(parentAlbumId, newImgSrc) {
 	$('li[data-id=' + parentAlbumId + ' ] .toggleArrow').attr('src', newImgSrc)
-	var albumListToBeClosed = $('ul[data-parentAlbumId=' + parentAlbumId + ' ]');
+	var albumListToBeClosed = $('ul[data-albumId=' + parentAlbumId + ' ]');
 	albumListToBeClosed.css('display', 'none');
 	var childAlbumsToBeClosed = albumListToBeClosed.children();
 	childAlbumsToBeClosed.each(function(index, element) {
 		closeSubAlbums($(element).data('id'), newImgSrc);
 	});
+}
+
+function sortSubAlbums(){
+	var albums = $('.albums ul');
+	for(var i = 0; i < albums.length; i++){
+		var subAlbums = $('>li', albums[i]);
+		for(var j = 0; j < subAlbums.length; j++){
+			for(var k = 0; k < subAlbums.length - 1; k++){
+				if($('span', subAlbums[k]).text() > $('span', subAlbums[k + 1]).text()){
+					var tmp = subAlbums[k];
+					subAlbums[k] = subAlbums[k + 1];
+					subAlbums[k + 1] = tmp;
+				}
+			}
+		}
+		for(var j = 0; j < subAlbums.length; j++){
+			$(albums[i]).append(subAlbums[j]);
+		}
+	}
 }
 
 $(document).ready(function() {
@@ -19,7 +38,7 @@ $(document).ready(function() {
 		var lastSlashIndex = originalImgSrc.lastIndexOf('/') + 1;
 		var newImgSrc = '';
 		if (originalImgSrc.substring(lastSlashIndex) === arrow_right_image) {
-			$('ul[data-parentAlbumId=' + parentAlbumId + ' ]').css('display', '');
+			$('ul[data-albumId=' + parentAlbumId + ' ]').css('display', '');
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
 			$(this).attr('src', newImgSrc);
 		} else {
@@ -53,80 +72,6 @@ $(document).ready(function() {
 			'move': {name: 'Move to...'}
 		}
 	});
-/*
-	var oldList;
-	$('.albums .childAlbums').sortable({
-            placeholder: "ui-state-highlight",
-			connectWith: ".albums .childAlbums",
-			start: function( event, ui ) {
-				oldList = ui.item.parent();
-
-				/*var albumChild = document.getElementsByName("ul");
-				for(var i = 0; i < albumChild.length; i++){
-					albumChild[i].css('display', '');
-				}*/
-
-				//$(".childAlbums").css('display', '');
-
-				//$('ul').css('display', '');
-				//$('ul[data-parentAlbumId=' + parentAlbumId + ' ]').css('display', '');
-				/*var toggleArrow = document.getElementsByClassName(".toggleArrow");
-				for(var i = 0; i < toggleArrow.length; i++){
-					if (toggleArrow[i].attr('src').substring($(this).attr('src').lastIndexOf('/') + 1) === arrow_right_image) {
-						toggleArrow[i].click();
-					}
-				}*/
-			//},
-			/* beforeStop: function (event, ui){
-				var albumId = ui.item.attr('data-id');
-				var oldParentAlbumId = 1;
-				if (ui.sender){
-					oldParentAlbumId = ui.sender.attr('data-parentalbumid');
-					var newParentAlbumId = $(this).attr('data-parentalbumid');
-					if (newParentAlbumId == oldParentAlbumId){
-						$(this).sortable("cancel");
-					}
-				}
-				else{
-					$(this).sortable("cancel");
-				}
-
-
-			}, */
-            /*update : function( event, ui ) {
-                var albumId = ui.item.attr('data-id');
-                var oldParentAlbumId = oldList.attr('data-parentalbumid');
-                var newParentAlbumId = $(this).attr('data-parentalbumid');
-                if (oldParentAlbumId === newParentAlbumId){
-                    $(this).sortable("cancel");
-                }
-				else{
-                    $.ajax({
-                        url : './albumDragDropSave.html', // La ressource ciblée
-                        type : 'POST', // Le type de la requête HTTP.
-                        data : 'albumId=' + albumId + '&parentAlbumId=' + newParentAlbumId,
-                        dataType : 'html'
-                    });
-				}
-
-               //var newParentAlbumId = $(this).attr('data-parentalbumid');
-                /*if (newParentAlbumId === oldParentAlbumId){
-                    $(this).sortable("cancel");
-                }
-                else {*/
-                    // if old parent Album empty, hide arrow
-                    // new parent album, set arrow
-                    /*$.ajax({
-                        url : './albumDragDropSave.html', // La ressource ciblée
-                        type : 'POST', // Le type de la requête HTTP.
-                        data : 'albumId=' + albumId + '&parentAlbumId=' + newParentAlbumId,
-                        dataType : 'html'
-                    });*/
-                    //$(".toggleArrow").click();
-                //}
-          //  }
-		//}
-	//);*/
     var oldList;
     $('.childAlbums').sortable({
             placeholder: "ui-state-highlight",
@@ -135,44 +80,19 @@ $(document).ready(function() {
                 $(".childAlbums").css('display', '');
                 oldList = ui.item.parent();
             },
-            /*beforestop : function( event, ui ) {
+            stop : function( event, ui ) {
                 var albumId = ui.item.attr('data-id');
-                var oldParentAlbumId = oldList.attr('data-parentAlbumId');
-                var newParentAlbumId = $(this).attr('data-parentAlbumId');
-                if (oldParentAlbumId == newParentAlbumId) {
-                    $(this).sortable("cancel");
-                }
-            },*/
-            update : function( event, ui ) {
-                var albumId = ui.item.attr('data-id');
-                var oldParentAlbumId = oldList.attr('data-parentAlbumId');
-                var newParentAlbumId = $(this).attr('data-parentAlbumId');
-                if (oldParentAlbumId == newParentAlbumId) {
-                     $(this).sortable("cancel");
-                }
-                else {
+				var newParentAlbumId = $(ui.item).closest('ul').attr('data-albumId');
+				sortSubAlbums();
+
                     // if old parent Album empty, hide arrow
                     // new parent album, set arrow
                     $.ajax({
                         url : './albumDragDropSave.html', // La ressource ciblée
                         type : 'POST', // Le type de la requête HTTP.
                         data : 'albumId=' + albumId + '&parentAlbumId=' + newParentAlbumId,
-                        dataType : 'html'/*,
-                        success : function(code_html, statut){ // code_html contient le HTML renvoyé
-                            //$('.childAlbums').sortable( "refresh" );
-                            $('.childAlbums').sortable( "refreshPositions" );
-                        },
-                        complete: function(code_html, statut){ // code_html contient le HTML renvoyé
-                            //$('.childAlbums').sortable( "refresh" );
-                            $('.childAlbums').sortable( "refreshPositions" );
-                             }*/
+                        dataType : 'html'
                     });
-                    //$(".toggleArrow").click();
-                }
-            },
-            stop : function( event, ui ) {
-                $('.albums').sortable( "refreshPositions" );
-                $('.albums').sortable( "refresh" );
             }
         }
     );

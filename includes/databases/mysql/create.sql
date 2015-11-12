@@ -58,21 +58,4 @@ value            varchar(255) NOT NULL,
 PRIMARY KEY (id)
 );
 
-INSERT INTO albums
-(
-parentAlbumId,
-ownerId,    
-name,
-created,
-modified,
-description
-)
-VALUES
-(
-'-1',
-'0',
-'/',
-CURDATE(),
-CURDATE(),
-'This is the root album.'
-);
+INSERT INTO albums(parentAlbumId, ownerId, name, created, modified, description) VALUES('-1', '0', 'ROOT', CURDATE(), CURDATE(), 'This is the root album.');

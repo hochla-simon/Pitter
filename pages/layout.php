@@ -5,14 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <link rel="icon" href="<?php echo $config['projectURL'];?>images/favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="<?php echo $config['projectURL'];?>css/style.css" type="text/css" />
-  <link rel="stylesheet" href="<?php echo $config['projectURL'];?>css/dropzone.css" type="text/css" />
-  <link rel="stylesheet" href="<?php echo $config['projectURL'];?>css/jquery-ui.min.css" type="text/css" />
-  <link rel="stylesheet" href="<?php echo $config['projectURL'];?>css/jquery-ui.structure.min.css" type="text/css" />
-  <link rel="stylesheet" href="<?php echo $config['projectURL'];?>css/jquery-ui.theme.min.css" type="text/css" />
-  <link rel="stylesheet" href="<?php echo $config['projectURL'];?>css/jquery.contextMenu.css" type="text/css" />
   <script src="<?php echo $config['projectURL'];?>js/jquery.min.js" type="text/javascript"></script>
-  <script src="<?php echo $config['projectURL'];?>js/jquery-ui.min.js" type="text/javascript"></script>
-  <script src="<?php echo $config['projectURL'];?>js/dropzone.js"></script>
   <?php echo $site['script'];?>
  </head>
  <body>
