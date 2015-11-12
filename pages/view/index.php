@@ -14,20 +14,34 @@ function orderAlbums($id, &$children, $albumsToOrder) {
 	}
 }
 
-function createAlbums($albums, $subNumber, $parentId) {
+function createAlbums ($albums, $subNumber, $parentId) {
 	global $config;
-	$display = '';
-	if ($subNumber != 0) {
-		$display = 'none';
+	$display = 'none';
+	if ($subNumber == 0) {
+		$display = '';
+		$albumClass = 'albums';
+	} else {
+		$albumClass = 'childAlbums';
 	}
+
+	echo '<ul class="' . $albumClass . '" data-parentAlbumId="' . $parentId . '" style="display: ' . $display . '">';
 	foreach ($albums as $albumId => $album) {
 		$visibility = '';
 		if (empty($album['childAlbums'])) {
 			$visibility = 'hidden';
 		}
-		echo '<li class="context-menu-one box menu-1" data-path="' . $config['projectURL'] . '" data-id ="' . $albumId . '" data-parentAlbumId="' . $parentId . '" style="margin-left: ' . $subNumber * 20 . 'px; display: ' . $display . '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId . '">' . $album[name] . '</a></li>';
+		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '">
+			<img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/>
+			<a href="?id=' . $albumId .'">
+				<img src="' . $config['projectURL'] . 'images/folder.png" alt=""/>
+				<span>' . $album[name] . '</span>
+			</a>';
+
 		createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
+
+		echo '</li>';
 	}
+	echo '</ul>';
 }
 
 $albumId = $_GET['id'];
@@ -55,34 +69,9 @@ if (!empty($albums)) {
 
 	orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
 
-    echo '<div id="albumsContainer">';
+	echo '<div id="albumsContainer">';
 
-    function createAlbumsBrothers ($albums, $subNumber, $parentId){
-        global $config;
-        $display=null;
-        if ($subNumber != 0) {
-            $display = 'none';
-        }
-
-        echo '<ul class="albums" data-parentAlbumId="' . $parentId . '">';
-        foreach ($albums as $albumId => $album) {
-            $visibility=null;
-            if (empty($album['childAlbums'])) {
-                $visibility = 'hidden';
-            }
-            echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '" display: ' . $display .
-                '"><img class="toggleArrow" style="visibility: ' . $visibility . '" src="'
-                . $config['projectURL'] . 'images/arrow_right.png" alt=""/><img src="' .
-                $config['projectURL'] . 'images/folder.png" alt=""/><a href="?id=' . $albumId .
-                '">' . $album[name] . '</a>';
-
-            createAlbumsBrothers($album['childAlbums'], $subNumber+1, $albumId);
-
-            echo '</li>';
-        }
-        echo '</ul>';
-    }
-    createAlbumsBrothers($orderedAlbumObjects, 0, '-1');
+	createAlbums($orderedAlbumObjects, 0, '-1');
 
 	echo '</div>';
 }

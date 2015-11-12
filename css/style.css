@@ -145,9 +145,25 @@ b{
 	width: 20%;
 	vertical-align: top;
 }
+.albums {
+	margin: 0px;
+	padding: 10px;
+	border: solid black 1px;
+}
+.albums li {
+	list-style: none;
+	margin-bottom: 5px;
+	font-size: 20px;
+}
+.albums a {
+	text-decoration: none;
+}
 .albums img {
 	height: 15px;
 	margin-right: 5px;
+}
+.childAlbums {
+	margin: 5px 0px 0px 15px;
 }
 #albumView {
 	display: inline-block;
@@ -205,6 +221,40 @@ b{
 	background:#B7252C;
 }
 
+form .row {
+	margin-bottom: 10px;
+	font-size: 20px;
+}
+
+form .row label {
+	display: inline-block;
+	width: 20%;
+	vertical-align: top;
+	padding: 5px;
+}
+
+form .row p {
+	display: inline-block;
+}
+
+form .row select, form .row textarea, form .row input {
+	border: solid #5C5B5B 1px;
+	padding: 5px;
+}
+
+form .row .mce-tinymce {
+	display: inline-block;
+	width: 78%;
+}
+
+form .row .submit, form .row .cancel {
+	border: solid #5C5B5B 1px;
+	padding: 5px;
+}
+
+form .row .submit:hover, form .row .cancel:hover {
+	cursor: pointer;
+}
 @media screen and (max-width: 500px){
 	body{
 		font-size: 70%;
