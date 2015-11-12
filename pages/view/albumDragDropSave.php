@@ -7,5 +7,5 @@
         $db->query($delete_sql_string);
         $message = createMessage("Sorry, there was an error moving your album.");
     }
-
+    die();
 ?>
