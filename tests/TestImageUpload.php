@@ -19,7 +19,17 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
             'isTest' => true
         );
 
-        $config['installed'] = true;
+        $config['installed'] = false;
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $dataToPost = array('submit' => true);
+        $_POST = array_merge($readedConfig, $dataToPost);
+
+        include(dirname(__FILE__).'/../index.php');
+
+
+        $this->assertContains('Installation successful.', $message);
+        $this->assertEquals($config['installed'], true);
+
 
         $_FILES = array(
             'file' => array(
@@ -33,7 +43,7 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
 
         // Error because of not set album
         $_POST = array();
-        include(dirname(__FILE__).'/../index.php');
+        include(dirname(__FILE__).'/../pages/upload/upload.php');
 
         $this->assertEquals($uploadOk, 0);
         $this->assertEquals($response_code, 500);
@@ -42,7 +52,7 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         $_POST = array(
             'albumId' => -2
         );
-        include(dirname(__FILE__).'/../index.php');
+        include(dirname(__FILE__).'/../pages/upload/upload.php');
 
         $this->assertEquals($uploadOk, 0);
         $this->assertEquals($response_code, 500);
@@ -51,9 +61,10 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         $_POST = array(
             'albumId' => 1
         );
-        include(dirname(__FILE__).'/../index.php');
+        include(dirname(__FILE__).'/../pages/upload/upload.php');
 
         $this->assertEquals($uploadOk, 1);
+        echo $last_id;
         $this->assertTrue(file_exists(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg'));
 
         @unlink(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg');
