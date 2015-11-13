@@ -1,139 +1,84 @@
 <?php
 
+#include settings.php
 /**
  * Created by PhpStorm.
  * User: Simon
- * Date: 10. 11. 2015
- * Time: 10:27
+ * Date: 12. 11. 2015
+ * Time: 23:01
  */
-class TestImageUpload extends PHPUnit_Extensions_Selenium2TestCase
+class TestImageUpload extends PHPUnit_Framework_TestCase
 {
-    /*public static $browsers = array(
-           array(
-               'name'    => 'Linux Firefox',
-               'browser' => '*firefox',
-               'host'    => 'localhost',
-               'port'    => 4444,
-               'timeout' => 30000,
-           ),
-           array(
-               'name'    => 'Linux Chrome',
-               'browser' => '*chrome',
-               'host'    => 'localhost',
-               'port'    => 4444,
-               'timeout' => 30000,
-           )
-       );*/
+    /**
+     * @var Upload
+     */
+    protected $_object;
 
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
     protected function setUp()
     {
-        $this->setBrowser('chrome');
-        $this->setBrowserUrl('http://localhost//view/index.html/');
+        // Initialization
+        $_GET = array(
+            'page' => 'administration/settings.php'
+        );
+        $phpunit = array(
+            'isTest' => true
+        );
+
+        $config['installed'] = true;
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $dataToPost = array('submit' => true);
+
+        $_POST = array_merge($readedConfig, $dataToPost);
+
+
+        $_FILES = array(
+            'file' => array(
+                'name' => 'flamingos.jpg',
+                'type' => 'image/jpeg',
+                'size' => 542,
+                'tmp_name' => 'data/images',
+                'error' => 0
+            )
+        );
+        $_POST["albumId"] = '1';
+
+        include('../pages/upload/upload.php');
+
+//        $this->_object = new upload(__DIR__ . '/_files/');
     }
 
-    protected function waitUntilNoProgressBar()
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown()
     {
-        while(count($this->elements($this->using('css selector')->value('#myDropzone > div.dz-preview.dz-file-preview')))!=0){
-            usleep(500);
-        }
-
+        unset($_FILES);
+        unset($this->_object);
+        @unlink(__DIR__ . 'data/images/flamingos.jpg');
     }
 
-    public function testSingleFileUpload()
+    /**
+     * @covers Upload::receive
+     */
+    public function testReceive()
     {
-        $this->url('http://localhost//view/index.html');
-
-        //store current number of images
-        $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
-
-        // check the value
-        $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
-
-        /*Transforming the hidden field in something that can be seen in order to be able interact with it with Selenium*/
-        $javaScriptCode = "var elemForm = $.find('input.dz-hidden-input')[0];elemForm.style.visibility='visible';elemForm.style.height=\"100px\"; elemForm.style.width=\"100px\";";
-        $this->execute(    array(
-            'script' => $javaScriptCode,
-            'args'   => array()
-        ));
-
-
-        $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
-        /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
-        $hiddenInput ->value(dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.jpg');
-
-        $this->waitUntilNoProgressBar();
-
-        //getting new number of tags
-        $new_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
-        $this->assertEquals($new_number_photos,$current_number_photos+1);
-
-        //checking that there is nothing left in dropzone
-        $this->assertEquals(0,count($this->elements($this->using('css selector')->value('#myDropzone > div.dz-preview.dz-file-preview'))));
+        $this->assertTrue($this->_object->receive('test'));
     }
 
-    public function testMultipleFileUpload()
+    function is_uploaded_file($filename)
     {
-        $this->url('http://localhost//view/index.html');
-
-//store current number of images
-        $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
-        echo "current number: ".$current_number_photos;
-
-// check the value
-        $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
-
-        /*Transforming the hidden field in something that can be seen in order to be able interact with it with Selenium*/
-        $javaScriptCode = "var elemForm = $.find('input.dz-hidden-input')[0];elemForm.style.visibility='visible';elemForm.style.height=\"100px\"; elemForm.style.width=\"100px\";";
-        $this->execute(    array(
-            'script' => $javaScriptCode,
-            'args'   => array()
-        ));
-
-
-        $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
-        /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
-        $pathFile1 = dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.jpg';
-        $pathFile2 = dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'hypo.jpg';
-        $hiddenInput ->value($pathFile1."\n".$pathFile2);
-
-
-        $this->waitUntilNoProgressBar();
-
-//getting new number of tags
-        $new_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
-        $this->assertEquals($current_number_photos+2, $new_number_photos);
-
-//checking that there is nothing left in dropzone
-        $this->assertEquals(0,count($this->elements($this->using('css selector')->value('#myDropzone > div.dz-preview.dz-file-preview'))));
+        //Check only if file exists
+        return file_exists($filename);
     }
 
-    public function testWrongFileType()
+    function move_uploaded_file($filename, $destination)
     {
-        $this->url('http://localhost//view/index.html');
-
-// check the value
-        $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
-
-        /*Transforming the hidden field in something that can be seen in order to be able interact with it with Selenium*/
-        $javaScriptCode = "var elemForm = $.find('input.dz-hidden-input')[0];elemForm.style.visibility='visible';elemForm.style.height=\"100px\"; elemForm.style.width=\"100px\";";
-        $this->execute(    array(
-            'script' => $javaScriptCode,
-            'args'   => array()
-        ));
-
-
-
-
-        $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
-        /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
-        $hiddenInput ->value(dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.NEF');
-
-
-        $this->moveto($this->byCssSelector('#myDropzone > div.dz-preview.dz-file-preview.dz-error.dz-complete > div.dz-details'));
-
-        sleep(3);
-
-        $messageError = $this->byCssSelector("#myDropzone > div.dz-preview.dz-file-preview.dz-error.dz-complete > div.dz-error-message > span")->text();
-        $this->assertEquals("only jpg, jpeg, png and gif are accepted",$messageError );
+        //Copy file
+        return copy($filename, $destination);
     }
 }
