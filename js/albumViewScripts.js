@@ -2,7 +2,7 @@ var arrow_right_image = 'arrow_right.png';
 var arrow_down_image = 'arrow_down.png';
 
 function closeSubAlbums(parentAlbumId, newImgSrc) {
-	$('li[data-id=' + parentAlbumId + ' ] .toggleArrow').attr('src', newImgSrc)
+	$('li[data-id=' + parentAlbumId + ' ] .toggleArrow').attr('src', newImgSrc);
 	var albumListToBeClosed = $('ul[data-albumId=' + parentAlbumId + ' ]');
 	albumListToBeClosed.css('display', 'none');
 	var childAlbumsToBeClosed = albumListToBeClosed.children();
@@ -28,6 +28,21 @@ function sortSubAlbums(){
 			$(albums[i]).append(subAlbums[j]);
 		}
 	}
+}
+
+function addFirstChildAlbum(parentAlbumId){
+    var arrow = $('li[data-id=' + parentAlbumId + ' ] .toggleArrow:first');
+    var originalImgSrc = arrow.attr('src').substring(0, arrow.attr('src').lastIndexOf('/') + 1);
+
+    arrow.attr('src', originalImgSrc + arrow_down_image);
+    arrow.css('visibility', '');
+}
+
+function deleteLastChildAlbum(parentAlbumId){
+    if ($('ul[data-albumId=' + parentAlbumId + ' ] li').length === 0){
+        var arrow = $('li[data-id=' + parentAlbumId + ' ] .toggleArrow:first');
+        arrow.css('visibility', 'hidden');
+    }
 }
 
 $(document).ready(function() {
@@ -72,21 +87,27 @@ $(document).ready(function() {
 			'move': {name: 'Move to...'}
 		}
 	});
-    var oldList;
+
+    var oldParentAlbumId;
     $('.childAlbums').sortable({
             placeholder: "ui-state-highlight",
             connectWith: ".childAlbums",
             start: function( event, ui ) {
                 $(".childAlbums").css('display', '');
-                oldList = ui.item.parent();
+                $('img[style="visibility: "].toggleArrow').each(function(){
+                    var originalImgSrc = $(this).attr('src');
+                    var lastSlashIndex = originalImgSrc.lastIndexOf('/') + 1;
+                    var newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
+                    $(this).attr('src', newImgSrc);
+                });
+                oldParentAlbumId = $(ui.item).closest('ul').attr('data-albumId');
             },
             stop : function( event, ui ) {
                 var albumId = ui.item.attr('data-id');
 				var newParentAlbumId = $(ui.item).closest('ul').attr('data-albumId');
 				sortSubAlbums();
-
-                    // if old parent Album empty, hide arrow
-                    // new parent album, set arrow
+                addFirstChildAlbum(newParentAlbumId);
+                deleteLastChildAlbum(oldParentAlbumId);
                     $.ajax({
                         url : './albumDragDropSave.html', // La ressource ciblée
                         type : 'POST', // Le type de la requête HTTP.
@@ -97,5 +118,10 @@ $(document).ready(function() {
         }
     );
     $( '.albums, .childAlbums' ).disableSelection();
-	$(".toggleArrow:first").click();
+    sortSubAlbums();
+
+	$(".albums .active").parent('li').parents('li').each(function(index, element) {
+		$(element).children('.toggleArrow').click();
+	});
+
 });

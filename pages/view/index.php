@@ -28,30 +28,34 @@ function orderAlbums($id, &$children, $albumsToOrder) {
 	}
 }
 
-function createAlbums ($albums, $subNumber, $parentId) {
+function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 	global $config;
 	$display = 'none';
 	if ($subNumber == 0) {
 		$display = '';
-		$albumClass = 'albums';
+		$albumListClass = 'albums';
 	} else {
-		$albumClass = 'childAlbums';
+		$albumListClass = 'childAlbums';
 	}
 
-	echo '<ul class="' . $albumClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
+	echo '<ul class="' . $albumListClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
 	foreach ($albums as $albumId => $album) {
 		$visibility = '';
 		if (empty($album['childAlbums'])) {
 			$visibility = 'hidden';
 		}
+		$albumClass = '';
+		if ($albumId == $activeAlbumId) {
+			$albumClass = 'active';
+		}
 		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '">
 			<img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/>
-			<a href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
+			<a class="' . $albumClass . '" href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
 				<img src="' . $config['projectURL'] . 'images/folder.png" alt=""/>
 				<span>' . $album[name] . '</span>
 			</a>';
 
-		createAlbums($album['childAlbums'], $subNumber + 1, $albumId);
+		createAlbums($album['childAlbums'], $subNumber + 1, $albumId, $activeAlbumId);
 
 		echo '</li>';
 	}
@@ -59,7 +63,9 @@ function createAlbums ($albums, $subNumber, $parentId) {
 }
 
 $albumId = $_GET['id'];
-$albumName;
+if (!$albumId) {
+	$albumId = '1';
+}
 
 $sql = "SELECT parentAlbumId, id, name FROM albums ORDER BY name ASC";
 $albums = $db->query($sql);
@@ -85,18 +91,12 @@ if (!empty($albums)) {
 
 	echo '<div id="albumsContainer">';
 
-	createAlbums($orderedAlbumObjects, 0, '-1');
+	createAlbums($orderedAlbumObjects, 0, '-1', $albumId);
 
 	echo '</div>';
 }
 
 echo '<div id="albumView">';
-
-if (!$albumId) {
-	$albumId = '1';
-	$albumName = '/';
-}
-echo '<div id="albumTitle"><img src="' . $config['projectURL'] . 'images/folder.png" alt=""/><h2>' . $albumName . '</h2></div>';
 
 echo '<div id="upload">
 
@@ -183,46 +183,3 @@ echo '<script>
 
 <div id="photos" class="images">
 <div class="animation_image" style="display:none" align="center"><img src="../../images/loader.gif"></div>
-
-
-<!--
-<div id="albumsContainer">
-	<ul class="albums" data-parentAlbumId="-1">
-		<li class="context-menu-one box menu-1" data-id ="2">
-			<img class="toggleArrow" style="visibility: " src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
-			<img src="http://localhost/Pitter/images/folder.png" alt=""/>
-			<a href="?id=2">album2</a>
-			<ul class="albums" data-parentAlbumId="2">
-				<li class="context-menu-one box menu-1" data-id ="18">
-					<img class="toggleArrow" style="visibility: hidden" src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
-					<img src="http://localhost/Pitter/images/folder.png" alt=""/>
-					<a href="?id=18">Album1</a>
-					<ul class="albums" data-parentAlbumId="18">
-					</ul>
-				</li>
-			</ul>
-		</li>
-		<li class="context-menu-one box menu-1" data-id ="3">
-			<img class="toggleArrow" style="visibility: " src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
-			<img src="http://localhost/Pitter/images/folder.png" alt=""/>
-			<a href="?id=3">Album3</a>
-			<ul class="albums" data-parentAlbumId="3">
-				<li class="context-menu-one box menu-1" data-id ="9display: none">
-					<img class="toggleArrow" style="visibility: hidden" src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
-					<img src="http://localhost/Pitter/images/folder.png" alt=""/>
-					<a href="?id=9">Album4</a>
-					<ul class="albums" data-parentAlbumId="9">
-					</ul>
-				</li>
-			</ul>
-		</li>
-		<li class="context-menu-one box menu-1" data-id ="4display: ">
-			<img class="toggleArrow" style="visibility: hidden" src="http://localhost/Pitter/images/arrow_right.png" alt=""/>
-			<img src="http://localhost/Pitter/images/folder.png" alt=""/>
-			<a href="?id=4">Album4</a>
-			<ul class="albums" data-parentAlbumId="4"></ul>
-		</li>
-	</ul>
-</div>
-
--->

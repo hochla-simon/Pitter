@@ -154,9 +154,25 @@ b{
 	list-style: none;
 	margin-bottom: 5px;
 	font-size: 20px;
+
+}
+.albums .toggleArrow:hover {
+	cursor: pointer;
 }
 .albums a {
 	text-decoration: none;
+}
+.albums a:link {
+    color: black;
+}
+.albums a:visited {
+    color: black;
+}
+.albums a:hover {
+	color: red;
+}
+.albums .active {
+    color: red !important;
 }
 .albums img {
 	height: 15px;
@@ -170,18 +186,8 @@ b{
 	display: inline-block;
 	width: 80%;
 }
-#albumTitle {
-	margin: 10px;
-}
-#albumTitle img {
-	height: 30px;
-	margin-right: 10px;
-}
-#albumTitle h2 {
-	display: inline-block;
-}
 #upload {
-	margin: 10px;
+	margin-left: 10px;
 }
 .thumbnail {
 	margin: 10px;
