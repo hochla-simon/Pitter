@@ -6,6 +6,8 @@ $result = mysql_query("SELECT COUNT(1) FROM images");
 $row = mysql_fetch_array($result);
 $total_records = $row[0];
 $total_groups = ceil($total_records/$items_per_group);
+$projectUrl =  $config['projectURL'];
+
 
 $site['title'] = 'Photos';
 $site['script'] = '<link rel="stylesheet" href="' . $config['projectURL'] . 'css/jquery-ui.min.css" type="text/css" />
@@ -141,9 +143,9 @@ echo '<script>
 		var loading  = false; //to prevents multipal ajax loads
 		var total_groups = <?php echo $total_groups; ?>; //total record group(s)
 		var album_id = <?php echo(json_encode($albumId)); ?>;
+		var projectUrl = <?php echo(json_encode($projectUrl));?>//;
 
-		// /pages/view/autoload_process.php
-		$('#photos').load("http://localhost/view/autoloadProcess.html", {'group_no':track_load, 'album_id':album_id}, function() {track_load++;}); //load first group
+		$('#photos').load(projectUrl + "view/autoloadProcess.html", {'group_no':track_load, 'album_id':album_id}, function() {track_load++;}); //load first group
 
 		$(window).scroll(function() { //detect page scroll
 
@@ -157,7 +159,7 @@ echo '<script>
 
 					//TODO paramter of host should be autoload_process.php
 //                        load data from the server using a HTTP POST request
-					$.post('http://localhost/view/autoloadProcess.html',{'group_no':track_load, 'album_id':album_id}, function(data){
+					$.post(projectUrl + "view/autoloadProcess.html",{'group_no':track_load, 'album_id':album_id}, function(data){
 
 						$("#photos").append(data); //append received data into the element
 
