@@ -9,76 +9,53 @@
  */
 class TestImageUpload extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Upload
-     */
-    protected $_object;
-
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    function testUpload()
     {
         // Initialization
         $_GET = array(
-            'page' => 'administration/settings.php'
+            'page' => 'upload/upload.php'
         );
         $phpunit = array(
             'isTest' => true
         );
 
         $config['installed'] = true;
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
-        $dataToPost = array('submit' => true);
-
-        $_POST = array_merge($readedConfig, $dataToPost);
-
 
         $_FILES = array(
             'file' => array(
                 'name' => 'flamingos.jpg',
                 'type' => 'image/jpeg',
                 'size' => 542,
-                'tmp_name' => 'data/images',
+                'tmp_name' => dirname(__FILE__).'/data/uploadTest/flamingos.jpg',
                 'error' => 0
             )
         );
-        $_POST["albumId"] = '1';
 
-        include('../pages/upload/upload.php');
+        // Error because of not set album
+        $_POST = array();
+        include(dirname(__FILE__).'/../index.php');
 
-//        $this->_object = new upload(__DIR__ . '/_files/');
-    }
+        $this->assertEquals($uploadOk, 0);
+        $this->assertEquals($response_code, 500);
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-        unset($_FILES);
-        unset($this->_object);
-        @unlink(__DIR__ . 'data/images/flamingos.jpg');
-    }
+        // Error because of not existing album
+        $_POST = array(
+            'albumId' => -2
+        );
+        include(dirname(__FILE__).'/../index.php');
 
-    /**
-     * @covers Upload::receive
-     */
-    public function testReceive()
-    {
-        $this->assertTrue($this->_object->receive('test'));
-    }
+        $this->assertEquals($uploadOk, 0);
+        $this->assertEquals($response_code, 500);
 
-    function is_uploaded_file($filename)
-    {
-        //Check only if file exists
-        return file_exists($filename);
-    }
+        // Correct upload
+        $_POST = array(
+            'albumId' => 1
+        );
+        include(dirname(__FILE__).'/../index.php');
 
-    function move_uploaded_file($filename, $destination)
-    {
-        //Copy file
-        return copy($filename, $destination);
+        $this->assertEquals($uploadOk, 1);
+        $this->assertTrue(file_exists(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg'));
+
+        @unlink(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg');
     }
 }
