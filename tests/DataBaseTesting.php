@@ -1,7 +1,7 @@
 <?php
 require 'FixtureTestCase.php';
 
-class DataBaseTesting extends FixtureTestCase {
+class DataBaseTesting extends PHPUnit_Framework_TestCase {
 
     public $fixtures = array(
         'users'
