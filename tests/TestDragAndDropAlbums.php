@@ -8,14 +8,20 @@
  */
 class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
 {
+
     protected function setUp()
     {
+        global $config;
+
         $this->setBrowser('chrome');
-        $this->setBrowserUrl('http://localhost/view/index.html?id=1/');
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $this->projectURL=$readedConfig['projectURL'];
+        $this->setBrowserUrl($this->projectURL.'/view/index.html');
     }
 
     public function testMakeSiblingAlbumFromChildAlbum() {
-        $this->url('http://localhost//view/index.html');
+
+        $this->url($this->projectURL.'/view/index.html');
 
         $siblingAlbumsCount = count($this->elements($this->using('css selector')->value(
             '#albumsContainer > ul > li > ul > li')));
@@ -43,7 +49,9 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
     }
 
     public function testMakeChildAlbumFromSiblingAlbum() {
-        $this->url('http://localhost//view/index.html');
+        global $config;
+
+        $this->url($this->projectURL.'view/index.html');
 
         $siblingAlbumsCount = count($this->elements($this->using('css selector')->value(
             '#albumsContainer > ul > li > ul > li')));
