@@ -46,7 +46,6 @@ if($uploadOk == 1){
 
         $tmp_id = 'r'.rand();
         $tmpTarget_file_name = $target_dir . $tmp_id . '.' . $imageFileType;
-        var_dump($_FILES["file"]["tmp_name"], $tmpTarget_file_name);
         if (copy($_FILES["file"]["tmp_name"], $tmpTarget_file_name)) {
             $insert_sql_string = 'INSERT INTO images (ownerId,filename, extension, created) VALUES (0,\'' . $imageFileName . '\',\'' . $imageFileType . '\', CURRENT_TIMESTAMP());';
 
