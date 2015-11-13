@@ -30,7 +30,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
     protected function setUp()
     {
         $this->setBrowser('chrome');
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'./../data/configuration/config.txt'), true);
         $this->projectURL=$readedConfig['projectURL'];
         $this->setBrowserUrl($this->projectURL.'/view/index.html');
     }
