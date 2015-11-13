@@ -127,7 +127,6 @@ echo '<script>
                     if(file.accepted){
                         htmlNewTag = \'<div class="thumbnail"><span class="center_img"></span><a href="photoView.html?id=\'+response.lastId+\'"><img src="image.html?id=\'+response.lastId+\'&max_size=100"></img></a></div>\';
                         $("div#photos").append(htmlNewTag);
-                        this.removeFile(file);
                     }
                 });
             }
