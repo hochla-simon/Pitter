@@ -77,11 +77,7 @@ if($uploadOk == 1){
         }
     }
 }else{
-    $response_code=500;
     echo "Sorry, there was an error uploading your file.";
-}
-
-if($uploadOk==0){
     http_response_code($response_code);
 }
 

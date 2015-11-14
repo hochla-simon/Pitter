@@ -45,8 +45,8 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         $_POST = array();
         include(dirname(__FILE__).'/../pages/upload/upload.php');
 
-        $this->assertEquals($uploadOk, 0);
-        $this->assertEquals($response_code, 500);
+        $this->assertEquals(0, $uploadOk);
+        $this->assertEquals(404, $response_code);
 
         // Error because of not existing album
         $_POST = array(
@@ -54,8 +54,8 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         );
         include(dirname(__FILE__).'/../pages/upload/upload.php');
 
-        $this->assertEquals($uploadOk, 0);
-        $this->assertEquals($response_code, 500);
+        $this->assertEquals(0, $uploadOk);
+        $this->assertEquals(401, $response_code);
 
         // Correct upload
         $_POST = array(
@@ -63,7 +63,7 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         );
         include(dirname(__FILE__).'/../pages/upload/upload.php');
 
-        $this->assertEquals($uploadOk, 1);
+        $this->assertEquals(1, $uploadOk);
         echo $last_id;
         $this->assertTrue(file_exists(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg'));
 
