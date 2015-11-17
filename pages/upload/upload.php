@@ -9,9 +9,8 @@ $imageFileName = pathinfo($target_file,PATHINFO_FILENAME);
 
 $response_code=200;
 if(isset($_POST["albumId"])) {
-    $sql = "SELECT parentAlbumId, id, name FROM albums WHERE id=" . $_POST["albumId"];
-    $albums = $db->query($sql);
-
+    $sql = "SELECT parentAlbumId, id, name FROM albums WHERE id='" . mysql_real_escape_string($_POST["albumId"])."'";
+    $albums = mysql_fetch_assoc($db->query($sql));
     if (!empty($albums)) {
         $checkFile = getimagesize($_FILES["file"]["tmp_name"]);
         if ($checkFile !== false) {
@@ -47,7 +46,7 @@ if($uploadOk == 1){
 
         $tmp_id = 'r'.rand();
         $tmpTarget_file_name = $target_dir . $tmp_id . '.' . $imageFileType;
-        if (move_uploaded_file($_FILES["file"]["tmp_name"], $tmpTarget_file_name)) {
+        if (copy($_FILES["file"]["tmp_name"], $tmpTarget_file_name)) {
             $insert_sql_string = 'INSERT INTO images (ownerId,filename, extension, created) VALUES (0,\'' . $imageFileName . '\',\'' . $imageFileType . '\', CURRENT_TIMESTAMP());';
 
 
@@ -66,7 +65,9 @@ if($uploadOk == 1){
             $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES (' . $_POST["albumId"] . ',' . $last_id . ', @maxPositionInAlbum + 1);');
             $db->query('COMMIT;');
 
-            header('Content-Type: application/json');
+            if(!$phpunit['isTest']) {
+                header('Content-Type: application/json');
+            }
             echo '{"lastId":' . $last_id . '}';
 
         } else {
@@ -76,15 +77,10 @@ if($uploadOk == 1){
         }
     }
 }else{
-    $response_code=500;
     echo "Sorry, there was an error uploading your file.";
-}
-
-if($uploadOk==0){
     http_response_code($response_code);
 }
 
-
-
-
-die();
+if(!$phpunit['isTest']) {
+    die();
+}

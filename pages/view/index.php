@@ -183,7 +183,6 @@ echo '<script>
 	});
 </script>
 
-<?php
-echo '<div id="photos" class="images"/>';
-echo '<div class="animation_image" style="display:none" align="center"><img src="' . $config['projectURL'] . 'images/loader.gif"></div>';
-?>
+<div id="photos" class="images"/><div class="animation_image" style="display:none" align="center"><img src="<?php echo $config['projectURL'];?>images/loader.gif"></div>
+</div>
+</div>

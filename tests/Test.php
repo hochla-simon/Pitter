@@ -2,6 +2,7 @@
 
 require 'DataBaseTesting.php';
 require 'TestConfiguration.php';
+require 'TestImageUpload.php';
 /**
  * Created by PhpStorm.
  * User: daniel
@@ -20,6 +21,11 @@ class Test extends PHPUnit_Framework_TestCase
         $test = new TestConfiguration();
         $test->testInstallation();
         $test->testSettings();
+    }
+
+    public function testUpload() {
+        $test = new TestImageUpload();
+        $test->testUpload();
     }
 
     public function testDeleteTestConfiguration() {
