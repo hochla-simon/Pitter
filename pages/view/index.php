@@ -138,15 +138,46 @@ echo '<script>
 ?>
 
 <script type="text/javascript">
+    var track_load = 0; //total loaded record group(s)
+    var loading  = false; //to prevents multipal ajax loads
+    var total_groups = <?php echo $total_groups; ?>; //total record group(s)
+    var album_id = <?php echo(json_encode($albumId)); ?>;
+    var projectUrl = <?php echo(json_encode($projectUrl));?>;
+
+    function loadFirstElements() {
+        track_load = 0;
+        loading  = false;
+        var orderingField;
+        switch ($("input.field_order_option.checked")[0].value){
+            case "filename":
+                orderingField="fileName";
+                break;
+            case "upload order":
+                orderingField="position";
+                break;
+            case "capture date":
+                orderingField="date";
+                break;
+            default :
+                orderingField="position";
+                break;
+        }
+        var orderingOrder;
+        switch ($("input.ordering_option.checked")[0].value){
+            case "ascending":
+                orderingOrder="ASC";
+                break;
+            case "descending":
+                orderingOrder="DESC";
+                break;
+            default :
+                orderingOrder="ASC";
+                break;
+        }
+        $('#photos').load(projectUrl + "view/autoloadProcess.html", {'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function() {track_load++;}); //load first group
+    }
 	$(document).ready(function() {
-		var track_load = 0; //total loaded record group(s)
-		var loading  = false; //to prevents multipal ajax loads
-		var total_groups = <?php echo $total_groups; ?>; //total record group(s)
-		var album_id = <?php echo(json_encode($albumId)); ?>;
-		var projectUrl = <?php echo(json_encode($projectUrl));?>//;
-
-		$('#photos').load(projectUrl + "view/autoloadProcess.html", {'group_no':track_load, 'album_id':album_id}, function() {track_load++;}); //load first group
-
+        loadFirstElements();
 		$(window).scroll(function() { //detect page scroll
 
 			if($(window).scrollTop() + $(window).height() == $(document).height())  //user scrolled to bottom of the page?
@@ -159,7 +190,37 @@ echo '<script>
 
 					//TODO paramter of host should be autoload_process.php
 //                        load data from the server using a HTTP POST request
-					$.post(projectUrl + "view/autoloadProcess.html",{'group_no':track_load, 'album_id':album_id}, function(data){
+
+                    var orderingField;
+                    switch ($("input.field_order_option.checked")[0].value){
+                        case "filename":
+                            orderingField="fileName";
+                            break;
+                        case "upload order":
+                            orderingField="position";
+                            break;
+                        case "capture date":
+                            orderingField="date";
+                            break;
+                        default :
+                            orderingField="position";
+                            break;
+                    }
+                    var orderingOrder;
+                    switch ($("input.ordering_option.checked")[0].value){
+                        case "ascending":
+                            orderingOrder="ASC";
+                            break;
+                        case "descending":
+                            orderingOrder="DESC";
+                            break;
+                        default :
+                            orderingOrder="ASC";
+                            break;
+                    }
+
+
+                    $.post(projectUrl + "view/autoloadProcess.html",{'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function(data){
 
 						$("#photos").append(data); //append received data into the element
 
@@ -182,7 +243,34 @@ echo '<script>
 		});
 	});
 </script>
+<div class="ordering_menu_container">
+    <form class="field_order_menu">
+        <input class="field_order_option checked" type="button" value="upload order">
+        <input class="field_order_option" type="button" value="filename">
+        <input class="field_order_option" type="button" value="capture date">
+    </form>
+    <form class="ordering_menu">
+        <input class="ordering_option checked" type="button" value="ascending">
+        <input class="ordering_option" type="button" value="descending">
+    </form>
+</div>
 
+<script>
+    $(function() {
+        $("input.field_order_option").on('click', function() {
+            // ajax process
+            $("input.field_order_option").removeClass("checked");
+            $(this).addClass("checked");
+            loadFirstElements();
+        });
+        $("input.ordering_option").on('click', function() {
+            // ajax process
+            $("input.ordering_option").removeClass("checked");
+            $(this).addClass("checked");
+            loadFirstElements();
+        });
+    });
+</script>
 <div id="photos" class="images"/><div class="animation_image" style="display:none" align="center"><img src="<?php echo $config['projectURL'];?>images/loader.gif"></div>
 </div>
 </div>

@@ -28,9 +28,28 @@ if($_POST)
     //get current starting point of records
     $position = ($group_number * $items_per_group);
 
+    $sql_ordering_field = " imagesToAlbums.positionInAlbum ";
+    if(isset($_POST['ord_field'])){
+        if($_POST['ord_field']=='date'){
+            $sql_ordering_function=" images.created ";
+        } elseif ($_POST['ord_field']=='position'){
+            $sql_ordering_field = " imagesToAlbums.positionInAlbum ";
+        } elseif ($_POST['ord_field']=='fileName'){
+            $sql_ordering_field = " images.filename ";
+        }
+    }
+
+    $sql_ordering_function = " ASC ";
+    if(isset($_POST['ordering'])){
+        if($_POST['ordering']=='DESC'){
+            $sql_ordering_function=" DESC ";
+        }
+    }
+
+    $sql_ordering_instruction = " ORDER BY  ".$sql_ordering_field." ".$sql_ordering_function;
     //Limit our results within a specified range.
     $sql = "SELECT id, filename, extension FROM images, imagesToAlbums WHERE images.id = imagesToAlbums.imageId AND albumId =
-    " . mysql_real_escape_string($album_id) . " ORDER BY imagesToAlbums.positionInAlbum ASC LIMIT $position, $items_per_group";
+    " . mysql_real_escape_string($album_id) . $sql_ordering_instruction. " LIMIT $position, $items_per_group";
 
     $images = $db->query($sql);
     if (!empty($images)) {

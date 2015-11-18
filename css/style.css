@@ -286,3 +286,40 @@ form .row .submit:hover, form .row .cancel:hover {
 		padding: 5px;
 	}
 }
+
+form.ordering_menu{
+    display: inline-block;
+    float: right
+}
+
+form.field_order_menu{
+    display: inline-block;
+}
+
+div.ordering_menu_container{
+    display: block;
+    clear: both;
+    float: left;
+    width: 100%
+}
+
+.field_order_option, .ordering_option {
+	-webkit-border-radius: 3;
+	-moz-border-radius: 3;
+	border-radius: 3px;
+	color: #ffffff;
+	font-size: 20px;
+    text-decoration: none;
+	background: #242424;
+	padding: 10px 20px 10px 20px;
+	text-decoration: none;
+}
+.field_order_option.checked, .ordering_option.checked {
+    background: #8a8a8a;
+    border: solid #000000 2px;
+}
+
+.field_order_option:hover, .ordering_option:hover {
+	background: #6b6b6b;
+	text-decoration: none;
+}

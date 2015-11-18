@@ -24,7 +24,7 @@ header('Content-Type: image/' . $extension);
 
 
 if(isset($_GET["max_size"])){
-    header("Pragma: cache");
+    /*header("Pragma: cache");*/
     header("Cache-Control: max-age=" . 24*60*60);
     $time_last_modification = filemtime($path);
     header("Last-Modified: " . date("F d Y H:i:s.", $time_last_modification));
