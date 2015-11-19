@@ -292,6 +292,22 @@ form.ordering_menu{
     float: right
 }
 
+form.view_menu{
+    display: inline-block;
+}
+
+a.view_menu_option{
+    -webkit-border-radius: 3;
+    -moz-border-radius: 3;
+    border-radius: 3px;
+    color: #ffffff;
+    font-size: 13px;
+    text-decoration: none;
+    background: #242424;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
 form.field_order_menu{
     display: inline-block;
 }
@@ -308,7 +324,7 @@ div.ordering_menu_container{
 	-moz-border-radius: 3;
 	border-radius: 3px;
 	color: #ffffff;
-	font-size: 20px;
+	font-size: 13px;
     text-decoration: none;
 	background: #242424;
 	padding: 10px 20px 10px 20px;
@@ -340,25 +356,57 @@ div.container
 }
 
 div.slideshow{
-	height:95%;
+	height:100%;
 	width:100%;
 	margin:auto;
 	text-align:center;
+    vertical-align: middle;
 }
 
-img.slideshow{
-	max-height: 100%;
-	max-width: 100%;
+
+img.slideshow
+{
+    position: absolute;
+    max-height: 100%;
+    max-width: 100%;
 }
+
+img.slideshow:empty
+{
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+@media screen and (orientation: portrait) {
+    img.slideshow {
+        max-height: 100%;
+        max-width: 100%;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    img.slideshow {
+        max-height: 100%;
+        max-width: 100%;
+    }
+}
+
 
 img.command_icon{
 	height: 100%;
 }
 
 div.slideshow_commands {
-	height:5%;
-	width:100%;
-	background-color:#000000;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 5%;
+	background-color:rgba(0,0,0,0.3);
 	margin:auto;
 	text-align:center;
 	color:#FFFFFF;

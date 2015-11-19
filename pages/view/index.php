@@ -244,6 +244,9 @@ echo '<script>
 	});
 </script>
 <div class="ordering_menu_container">
+    <form class="view_menu">
+        <a class="view_menu_option" href=<?php echo $config['projectURL'] ?>slideshow/index.html?album=<?php echo $albumId?>>Slideshow</a>
+    </form>
     <form class="field_order_menu">
         <input class="field_order_option checked" type="button" value="upload order">
         <input class="field_order_option" type="button" value="filename">

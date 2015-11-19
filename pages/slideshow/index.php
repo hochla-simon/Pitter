@@ -50,12 +50,13 @@ if(!isset($_GET['album'])){
                         <script>
                             var currentImage = 0;
                             var totalNumberImages = <?php echo $count?>;
+                            var reduced=true;
                             $("img#" + currentImage).load(function () {
                                 $(this).removeClass("hidden");
                             });
                             var tid = setInterval(transition_right, 2000);
                             function transition_right() {
-                                $("img#" + currentImage).addClass("hidden");
+                                $("img.slideshow").addClass("hidden");
                                 currentImage = currentImage + 1;
                                 if (currentImage >= totalNumberImages) {
                                     currentImage = totalNumberImages - 1;
@@ -63,7 +64,7 @@ if(!isset($_GET['album'])){
                                 $("img#" + currentImage).removeClass("hidden");
                             }
                             function transition_left() {
-                                $("img#" + currentImage).addClass("hidden");
+                                $("img.slideshow").addClass("hidden");
                                 currentImage = currentImage - 1;
                                 if (currentImage < 0) {
                                     currentImage = 0;
@@ -78,15 +79,23 @@ if(!isset($_GET['album'])){
                                 tid = setInterval(transition_right, 2000);
                             }
                         </script>
-                        <div class="slideshow_commands">
+                        <div class="slideshow_commands hidden">
+                            <a href="<?php echo $config['projectURL'] ?>view/index.html?id=<?php echo $album_id?>">
+                                <img id="slideshow_exit" class="command_icon"
+                                     src="<?php echo $config['projectURL'] ?>images/icons/exit.svg" alt="exit icon">
+                            </a>
                             <img id="slideshow_previous" class="command_icon"
-                                 src="<?php echo $config['projectURL'] ?>images/caret-left.svg" alt="previous icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/caret-left.svg" alt="previous icon">
                             <img id="slideshow_pause" class="command_icon"
-                                 src="<?php echo $config['projectURL'] ?>images/media-pause.svg" alt="pause icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/media-pause.svg" alt="pause icon">
                             <img id="slideshow_play" class="command_icon hidden"
-                                 src="<?php echo $config['projectURL'] ?>images/media-play.svg" alt="play icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/media-play.svg" alt="play icon">
                             <img id="slideshow_next" class="command_icon"
-                                 src="<?php echo $config['projectURL'] ?>images/caret-right.svg" alt="next icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/caret-right.svg" alt="next icon">
+                            <img id="fullscreen_enter" class="command_icon"
+                                 src="<?php echo $config['projectURL'] ?>images/icons/fullscreen-enter.svg" alt="enter fullscreen">
+                            <img id="fullscreen_exit" class="command_icon hidden"
+                                 src="<?php echo $config['projectURL'] ?>images/icons/fullscreen-exit.svg" alt="exit fullscreen">
                         </div>
 
                         <script>
@@ -111,6 +120,63 @@ if(!isset($_GET['album'])){
                                 $("#slideshow_play").removeClass("hidden");
                                 $('#slideshow_pause').addClass("hidden");
                                 transition_left();
+                            });
+                            function launchIntoFullscreen(element) {
+                                if(element.requestFullscreen) {
+                                    element.requestFullscreen();
+                                } else if(element.mozRequestFullScreen) {
+                                    element.mozRequestFullScreen();
+                                } else if(element.webkitRequestFullscreen) {
+                                    element.webkitRequestFullscreen();
+                                } else if(element.msRequestFullscreen) {
+                                    element.msRequestFullscreen();
+                                }
+                            }
+                            $("#fullscreen_enter").click(function () {
+                                $("#fullscreen_exit").removeClass("hidden");
+                                $('#fullscreen_enter').addClass("hidden");
+                                launchIntoFullscreen(document.documentElement)
+                            });
+                            function exitFullscreen() {
+                                if(document.exitFullscreen) {
+                                    document.exitFullscreen();
+                                } else if(document.mozCancelFullScreen) {
+                                    document.mozCancelFullScreen();
+                                } else if(document.webkitExitFullscreen) {
+                                    document.webkitExitFullscreen();
+                                }
+                            }
+                            $("#fullscreen_exit").click(function () {
+                                $("#fullscreen_enter").removeClass("hidden");
+                                $('#fullscreen_exit').addClass("hidden");
+                                exitFullscreen();
+                            });
+
+                            var reduceTimer;
+                            function showCommands(){
+                                if(reduced) {
+                                    $('.slideshow_commands').removeClass("hidden");
+                                    reduced = false;
+                                    reduceTimer = setTimeout(function(){
+                                        $('.slideshow_commands').addClass("hidden");
+                                        reduced = true;
+                                    },2000)
+                                }else{
+                                    clearTimeout(reduceTimer);
+                                    reduceTimer = setTimeout(function(){
+                                        $('.slideshow_commands').addClass("hidden");
+                                        reduced = true;
+                                    },2000)
+                                }
+                            }
+                            $('.slideshow').mousemove(function( event ) {
+                                showCommands();
+                            });
+                            $('.slideshow_commands').hover(function( event ) {
+                                showCommands();
+                            });
+                            $('.slideshow').on("tap",function(){
+                                showCommands();
                             });
                         </script>
                         <?php
