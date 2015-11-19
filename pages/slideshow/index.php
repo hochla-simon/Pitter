@@ -50,12 +50,13 @@ if(!isset($_GET['album'])){
                         <script>
                             var currentImage = 0;
                             var totalNumberImages = <?php echo $count?>;
+                            var reduced=true;
                             $("img#" + currentImage).load(function () {
                                 $(this).removeClass("hidden");
                             });
                             var tid = setInterval(transition_right, 2000);
                             function transition_right() {
-                                $("img#" + currentImage).addClass("hidden");
+                                $("img.slideshow").addClass("hidden");
                                 currentImage = currentImage + 1;
                                 if (currentImage >= totalNumberImages) {
                                     currentImage = totalNumberImages - 1;
@@ -63,7 +64,7 @@ if(!isset($_GET['album'])){
                                 $("img#" + currentImage).removeClass("hidden");
                             }
                             function transition_left() {
-                                $("img#" + currentImage).addClass("hidden");
+                                $("img.slideshow").addClass("hidden");
                                 currentImage = currentImage - 1;
                                 if (currentImage < 0) {
                                     currentImage = 0;
@@ -78,7 +79,7 @@ if(!isset($_GET['album'])){
                                 tid = setInterval(transition_right, 2000);
                             }
                         </script>
-                        <div class="slideshow_commands">
+                        <div class="slideshow_commands hidden">
                             <img id="slideshow_previous" class="command_icon"
                                  src="<?php echo $config['projectURL'] ?>images/caret-left.svg" alt="previous icon">
                             <img id="slideshow_pause" class="command_icon"
@@ -111,6 +112,23 @@ if(!isset($_GET['album'])){
                                 $("#slideshow_play").removeClass("hidden");
                                 $('#slideshow_pause').addClass("hidden");
                                 transition_left();
+                            });
+                            var reduceTimer;
+                            $('.slideshow').mousemove(function( event ) {
+                                if(reduced) {
+                                    $('.slideshow_commands').removeClass("hidden");
+                                    reduced = false;
+                                    reduceTimer = setTimeout(function(){
+                                        $('.slideshow_commands').addClass("hidden");
+                                        reduced = true;
+                                    },2000)
+                                }else{
+                                    clearTimeout(reduceTimer);
+                                    reduceTimer = setTimeout(function(){
+                                        $('.slideshow_commands').addClass("hidden");
+                                        reduced = true;
+                                    },2000)
+                                }
                             });
                         </script>
                         <?php
