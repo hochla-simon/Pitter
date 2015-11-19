@@ -292,6 +292,22 @@ form.ordering_menu{
     float: right
 }
 
+form.view_menu{
+    display: inline-block;
+}
+
+a.view_menu_option{
+    -webkit-border-radius: 3;
+    -moz-border-radius: 3;
+    border-radius: 3px;
+    color: #ffffff;
+    font-size: 13px;
+    text-decoration: none;
+    background: #242424;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+}
+
 form.field_order_menu{
     display: inline-block;
 }
@@ -308,7 +324,7 @@ div.ordering_menu_container{
 	-moz-border-radius: 3;
 	border-radius: 3px;
 	color: #ffffff;
-	font-size: 20px;
+	font-size: 13px;
     text-decoration: none;
 	background: #242424;
 	padding: 10px 20px 10px 20px;
@@ -347,13 +363,6 @@ div.slideshow{
     vertical-align: middle;
 }
 
-/*img.slideshow{
-	max-height: 100%;
-	max-width: 100%;
-    margin: auto;
-    text-align: center;
-    vertical-align: middle;
-}*/
 
 img.slideshow
 {

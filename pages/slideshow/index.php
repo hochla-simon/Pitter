@@ -80,6 +80,10 @@ if(!isset($_GET['album'])){
                             }
                         </script>
                         <div class="slideshow_commands hidden">
+                            <a href="<?php echo $config['projectURL'] ?>view/index.html?id=<?php echo $album_id?>">
+                                <img id="slideshow_exit" class="command_icon"
+                                     src="<?php echo $config['projectURL'] ?>images/exit.svg" alt="exit icon">
+                            </a>
                             <img id="slideshow_previous" class="command_icon"
                                  src="<?php echo $config['projectURL'] ?>images/caret-left.svg" alt="previous icon">
                             <img id="slideshow_pause" class="command_icon"
