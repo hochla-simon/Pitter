@@ -82,20 +82,20 @@ if(!isset($_GET['album'])){
                         <div class="slideshow_commands hidden">
                             <a href="<?php echo $config['projectURL'] ?>view/index.html?id=<?php echo $album_id?>">
                                 <img id="slideshow_exit" class="command_icon"
-                                     src="<?php echo $config['projectURL'] ?>images/exit.svg" alt="exit icon">
+                                     src="<?php echo $config['projectURL'] ?>images/icons/exit.svg" alt="exit icon">
                             </a>
                             <img id="slideshow_previous" class="command_icon"
-                                 src="<?php echo $config['projectURL'] ?>images/caret-left.svg" alt="previous icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/caret-left.svg" alt="previous icon">
                             <img id="slideshow_pause" class="command_icon"
-                                 src="<?php echo $config['projectURL'] ?>images/media-pause.svg" alt="pause icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/media-pause.svg" alt="pause icon">
                             <img id="slideshow_play" class="command_icon hidden"
-                                 src="<?php echo $config['projectURL'] ?>images/media-play.svg" alt="play icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/media-play.svg" alt="play icon">
                             <img id="slideshow_next" class="command_icon"
-                                 src="<?php echo $config['projectURL'] ?>images/caret-right.svg" alt="next icon">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/caret-right.svg" alt="next icon">
                             <img id="fullscreen_enter" class="command_icon"
-                                 src="<?php echo $config['projectURL'] ?>images/fullscreen-enter.svg" alt="enter fullscreen">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/fullscreen-enter.svg" alt="enter fullscreen">
                             <img id="fullscreen_exit" class="command_icon hidden"
-                                 src="<?php echo $config['projectURL'] ?>images/fullscreen-exit.svg" alt="exit fullscreen">
+                                 src="<?php echo $config['projectURL'] ?>images/icons/fullscreen-exit.svg" alt="exit fullscreen">
                         </div>
 
                         <script>
