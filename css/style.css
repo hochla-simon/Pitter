@@ -344,12 +344,49 @@ div.slideshow{
 	width:100%;
 	margin:auto;
 	text-align:center;
+    vertical-align: middle;
 }
 
-img.slideshow{
+/*img.slideshow{
 	max-height: 100%;
 	max-width: 100%;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+}*/
+
+img.slideshow
+{
+    position: absolute;
+    max-height: 100%;
+    max-width: 100%;
 }
+
+img.slideshow:empty
+{
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+@media screen and (orientation: portrait) {
+    img.slideshow {
+        max-height: 100%;
+        max-width: 100%;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    img.slideshow {
+        max-height: 100%;
+        max-width: 100%;
+    }
+}
+
 
 img.command_icon{
 	height: 100%;

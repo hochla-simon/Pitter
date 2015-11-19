@@ -88,6 +88,10 @@ if(!isset($_GET['album'])){
                                  src="<?php echo $config['projectURL'] ?>images/media-play.svg" alt="play icon">
                             <img id="slideshow_next" class="command_icon"
                                  src="<?php echo $config['projectURL'] ?>images/caret-right.svg" alt="next icon">
+                            <img id="fullscreen_enter" class="command_icon"
+                                 src="<?php echo $config['projectURL'] ?>images/fullscreen-enter.svg" alt="enter fullscreen">
+                            <img id="fullscreen_exit" class="command_icon hidden"
+                                 src="<?php echo $config['projectURL'] ?>images/fullscreen-exit.svg" alt="exit fullscreen">
                         </div>
 
                         <script>
@@ -113,8 +117,39 @@ if(!isset($_GET['album'])){
                                 $('#slideshow_pause').addClass("hidden");
                                 transition_left();
                             });
+                            function launchIntoFullscreen(element) {
+                                if(element.requestFullscreen) {
+                                    element.requestFullscreen();
+                                } else if(element.mozRequestFullScreen) {
+                                    element.mozRequestFullScreen();
+                                } else if(element.webkitRequestFullscreen) {
+                                    element.webkitRequestFullscreen();
+                                } else if(element.msRequestFullscreen) {
+                                    element.msRequestFullscreen();
+                                }
+                            }
+                            $("#fullscreen_enter").click(function () {
+                                $("#fullscreen_exit").removeClass("hidden");
+                                $('#fullscreen_enter').addClass("hidden");
+                                launchIntoFullscreen(document.documentElement)
+                            });
+                            function exitFullscreen() {
+                                if(document.exitFullscreen) {
+                                    document.exitFullscreen();
+                                } else if(document.mozCancelFullScreen) {
+                                    document.mozCancelFullScreen();
+                                } else if(document.webkitExitFullscreen) {
+                                    document.webkitExitFullscreen();
+                                }
+                            }
+                            $("#fullscreen_exit").click(function () {
+                                $("#fullscreen_enter").removeClass("hidden");
+                                $('#fullscreen_exit').addClass("hidden");
+                                exitFullscreen();
+                            });
+
                             var reduceTimer;
-                            $('.slideshow').mousemove(function( event ) {
+                            function showCommands(){
                                 if(reduced) {
                                     $('.slideshow_commands').removeClass("hidden");
                                     reduced = false;
@@ -129,6 +164,15 @@ if(!isset($_GET['album'])){
                                         reduced = true;
                                     },2000)
                                 }
+                            }
+                            $('.slideshow').mousemove(function( event ) {
+                                showCommands();
+                            });
+                            $('.slideshow_commands').hover(function( event ) {
+                                showCommands();
+                            });
+                            $('.slideshow').on("tap",function(){
+                                showCommands();
                             });
                         </script>
                         <?php
