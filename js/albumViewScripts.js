@@ -125,7 +125,8 @@ $(document).ready(function() {
 	});
 
 	$("#photos").sortable({
-		//placeholder: 'ui-state-highlight',
+		placeholder: 'ui-state-highlight',
+		forcePlaceholderSize: true,
 		update: function() {
 			var order = $('#photos').sortable('serialize');
 			$.ajax({
@@ -137,5 +138,4 @@ $(document).ready(function() {
 		}
 	});
 
-	$( '#sortable' ).disableSelection();
 });
