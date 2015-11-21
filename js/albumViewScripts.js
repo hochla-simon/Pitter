@@ -109,8 +109,8 @@ $(document).ready(function() {
                 addFirstChildAlbum(newParentAlbumId);
                 deleteLastChildAlbum(oldParentAlbumId);
                     $.ajax({
-                        url : './albumDragDropSave.html', // La ressource ciblée
-                        type : 'POST', // Le type de la requête HTTP.
+                        url : './albumDragDropSave.html',
+                        type : 'POST',
                         data : 'albumId=' + albumId + '&parentAlbumId=' + newParentAlbumId,
                         dataType : 'html'
                     });
@@ -124,4 +124,18 @@ $(document).ready(function() {
 		$(element).children('.toggleArrow').click();
 	});
 
+	$("#photos").sortable({
+		//placeholder: 'ui-state-highlight',
+		update: function() {
+			var order = $('#photos').sortable('serialize');
+			$.ajax({
+				url : './photoOrderSave.html',
+				type : 'POST',
+				data : order  + '&parentAlbumId=' + $(this).attr('data-albumId'),
+				dataType : 'html'
+			});
+		}
+	});
+
+	$( '#sortable' ).disableSelection();
 });

@@ -125,7 +125,7 @@ echo '<script>
                 });
                 this.on("success", function (file, response) {
                     if(file.accepted){
-                        htmlNewTag = \'<div class="thumbnail"><span class="center_img"></span><a href="photoView.html?id=\'+response.lastId+\'"><img src="image.html?id=\'+response.lastId+\'&max_size=100"></img></a></div>\';
+                        htmlNewTag = \'<a href="photoView.html?id=\'+response.lastId+\'" id="image_\'+ response.lastId + \'"><div class="thumbnail" title=""><span class="center_img"></span><img src="image.html?id=\'+response.lastId+\'&max_size=100" /></div></a>\';
                         $("div#photos").append(htmlNewTag);
                         this.removeFile(file);
                     }
@@ -274,6 +274,6 @@ echo '<script>
         });
     });
 </script>
-<div id="photos" class="images"/><div class="animation_image" style="display:none" align="center"><img src="<?php echo $config['projectURL'];?>images/loader.gif"></div>
+<div id="photos" class="images" data-albumId="1"/><div class="animation_image" style="display:none" align="center"><img src="<?php echo $config['projectURL'];?>images/loader.gif"></div>
 </div>
 </div>
