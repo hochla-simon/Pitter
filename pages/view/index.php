@@ -125,7 +125,7 @@ echo '<script>
                 });
                 this.on("success", function (file, response) {
                     if(file.accepted){
-                        htmlNewTag = \'<a href="photoView.html?id=\'+response.lastId+\'" id="image_\'+ response.lastId + \'"><div class="thumbnail" title=""><span class="center_img"></span><img src="image.html?id=\'+response.lastId+\'&max_size=100" /></div></a>\';
+                        htmlNewTag = \'<a href="photoView.html?id=\' + response.lastId + \'"><div class="thumbnail" title="\' +file.name+\'"><span class="center_img"></span><img src="image.html?id=\' + response.lastId+ \'&max_size=100"/></div></a>\';
                         $("div#photos").append(htmlNewTag);
                         this.removeFile(file);
                     }
