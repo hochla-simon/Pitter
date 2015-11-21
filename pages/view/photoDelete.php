@@ -15,7 +15,7 @@
             $select_sql_string = 'SELECT albumId FROM imagesToAlbums WHERE imageId=' . mysql_real_escape_string($imageId) ;
             $result = $db->query($select_sql_string);
             if (empty($result)){
-                $delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($albumId) ;
+                $delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId) ;
                 $db->query($delete_sql_string);
                 //delete image from folder ?
             }
@@ -28,7 +28,7 @@
 
 <form action="" method="POST">
 
-	<input type="hidden" name="photoId" id="albumId" value="<?php echo $photoId; ?>" >
+	<input type="hidden" name="photoId" id="albumId" value="<?php echo $imageId; ?>" >
 
     <label>From which album do you want to delete this photo ? </label>
     <input type="checkbox" name="selectAll" id="selectAll" />
