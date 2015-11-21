@@ -55,7 +55,7 @@ if($_POST)
     if (!empty($images)) {
         while($row = mysql_fetch_array($images)) {
             if (file_exists(dirname(__FILE__) . '/../../data/images/' . $row['id'] . '.' . $row['extension'])) {
-                echo '<a href="photoView.html?id=' . $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] .
+                echo '<a href="photoView.html?id=' . $row['id'] . '" id="image_'. $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] .
                     '.' . $row['extension'] . '"><span class="center_img"></span><img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
             }
         }
