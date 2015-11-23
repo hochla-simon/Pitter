@@ -12,17 +12,11 @@
         }
     }
 	if (isset ($_POST["Save"])) {
-        if ($_POST["name"] != '') {
-            $update_sql_string = 'UPDATE images SET name="' . $_POST["name"] . '",description="' . $_POST["description"] . '" WHERE id="' . $_POST["imageId"] . '" ';
-            $db->query($update_sql_string);
+        $update_sql_string = 'UPDATE images SET name="' . $_POST["name"] . '",description="' . $_POST["description"] . '" WHERE id="' . $_POST["imageId"] . '" ';
+        $db->query($update_sql_string);
 
-            header('Location: ./index.html');
-            exit();
-        } else {
-            http_response_code(500);
-            $db->query($delete_sql_string);
-            $message  = createMessage("Sorry, there was an error editing your album.");
-        }
+        header('Location: ./index.html');
+        exit();
     }
 	print($message);
 ?>
@@ -30,7 +24,7 @@
 
 <form action="" method="POST">
 
-    <input type="hidden" name="imageId" id="albumId" value="<?php echo $image['id']; ?>" >
+    <input type="hidden" name="imageId" id="imageId" value="<?php echo $image['id']; ?>" >
 
     <div class="row">
         <label for="name">Name :</label>

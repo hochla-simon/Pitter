@@ -65,7 +65,7 @@ $(document).ready(function() {
 	$.contextMenu({
 		selector: '.context-menu-one',
 		callback: function(key, opt) {
-			var albumId = opt.$trigger.attr("data-id");
+			var albumId = opt.$trigger.attr("id");
 			var path = opt.$trigger.attr("data-path");
 			if (key === 'new') {
 				window.open(path + 'view/albumCreate.html?parentId=' + albumId, '_self');
@@ -83,6 +83,28 @@ $(document).ready(function() {
 			'new': {name: 'Add new album'},
 			'edit': {name: 'Edit album'},
 			'delete': {name: 'Delete album'},
+			'copy': {name: 'Copy to...'},
+			'move': {name: 'Move to...'}
+		}
+	});
+
+	$.contextMenu({
+		selector: '.thumbnail',
+		callback: function(key, opt) {
+			var photoId = opt.$trigger.parent().attr("id").substring(6);
+			if (key === 'edit') {
+				window.open('photoEdit.html?id=' + photoId, '_self');
+			} else if (key === 'delete') {
+				window.open('photoDelete.html?id=' + photoId, '_self');
+			} else if (key === 'copy') {
+				window.open('photoCopy.html?id=' + photoId, '_self');
+			} else if (key === 'move') {
+				window.open('photoMove.html?id=' + photoId, '_self');
+			}
+		},
+		items: {
+			'edit': {name: 'Edit photo'},
+			'delete': {name: 'Delete photo'},
 			'copy': {name: 'Copy to...'},
 			'move': {name: 'Move to...'}
 		}
