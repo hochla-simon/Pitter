@@ -31,6 +31,11 @@ class TestConfiguration extends PHPUnit_Framework_TestCase {
             'slogan' => 'Example slogan',
             'copyright' => 'Example copyright',
             'homeContent' => 'Example home content',
+            'adminFirstName' => 'John',
+            'adminLastName' => 'Doe',
+            'adminEmail' => 'john@example.org',
+            'adminPassword' => 'test',
+            'adminPassword2' => 'test',
             'submit' => true
         );
         include(dirname(__FILE__).'/../index.php');
@@ -43,15 +48,29 @@ class TestConfiguration extends PHPUnit_Framework_TestCase {
         $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
         $dataToPost = array('submit' => true);
 
-        $_POST = array_merge($readedConfig, $dataToPost);
+        $_POST = array_merge($readedConfig, $dataToPost, array(
+            'adminFirstName' => 'John',
+            'adminLastName' => 'Doe',
+            'adminEmail' => 'john@example.org',
+            'adminPassword' => 'test',
+            'adminPassword2' => 'test')
+        );
 
         include(dirname(__FILE__).'/../index.php');
         $this->assertEquals(count($errors), 0);
         $this->assertContains('Installation successful.', $message);
         $this->assertEquals($config['installed'], true);
         foreach($fields as $key => $field) {
-            $this->assertEquals($config[$key], $_POST[$key]);
+            if(substr($key, 0, 5) != 'admin') {
+                $this->assertEquals($config[$key], $_POST[$key]);
+            }
         }
+
+        $admin = mysql_fetch_assoc($db->query("select * from users where id = '1'"));
+        $this->assertEquals($admin['firstName'], $_POST['adminFirstName']);
+        $this->assertEquals($admin['lastName'], $_POST['adminLastName']);
+        $this->assertEquals($admin['email'], $_POST['adminEmail']);
+        $this->assertEquals($admin['password'], crypt($_POST['adminPassword'], $admin['password']));
     }
 
     public function testSettings(){

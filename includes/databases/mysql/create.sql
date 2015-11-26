@@ -5,6 +5,9 @@ firstName        varchar(50) NOT NULL,
 lastName        varchar(50) NOT NULL,
 email            varchar(254) NOT NULL UNIQUE,
 password        varchar(255) NOT NULL,
+registered		int,
+enabled			int(1) DEFAULT 0,
+isAdmin		int(1) DEFAULT 0,
 PRIMARY KEY (id)
 );
 

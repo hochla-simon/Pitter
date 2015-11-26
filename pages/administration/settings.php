@@ -19,6 +19,14 @@ $fields = array(
 	'homeContent' => array('name' => 'Home page', 'isHTML' => true)
 );
 
+if(!$config['installed']){
+	$fields['adminFirstName'] = array('name' => 'Administrator\'s First Name');
+	$fields['adminLastName'] = array('name' => 'Administrator\'s Last Name');
+	$fields['adminEmail'] = array('name' => 'Administrator\'s E-Mail');
+	$fields['adminPassword'] = array('name' => 'Administrator\'s Password', 'isPassword' => true);
+	$fields['adminPassword2'] = array('name' => 'Administrator\'s Password (repeat)', 'isPassword' => true);
+}
+
 $message = '';
 if(isset($_POST['submit'])){
 	$errors = array();
@@ -32,10 +40,14 @@ if(isset($_POST['submit'])){
 			$errors[] = 'Please provide the <i>'.$field['name'].'</i>.';
 		}
 	}
+	if(!$config['installed']){
+		if($_POST['adminPassword'] != $_POST['adminPassword2']){
+			$errors[] = 'The administrator\'s passwords do not match.';
+		}
+	}
 	if(count($errors) == 0){
 		$testDB = new Database();
 		unset($_POST['submit']);
-
 		if(!$testDB->connect($_POST['databaseHost'], $_POST['databaseUser'], $_POST['databasePassword'], $_POST['databaseName'])){
 			$errors[] = 'Could not connect to database.';
 		}
@@ -48,10 +60,16 @@ if(isset($_POST['submit'])){
 		}
 	}
 	if(count($errors) == 0){
+		$db->query("insert into users set firstName = '".mysql_real_escape_string($_POST['adminFirstName'])."', lastName = '".mysql_real_escape_string($_POST['adminLastName'])."', email = '".mysql_real_escape_string($_POST['adminEmail'])."', password = '".mysql_real_escape_string(crypt($_POST['adminPassword']))."', registered = '".time()."', enabled = '1', isAdmin = '1'");
 		$newConfig = array_merge($config, $_POST);
         unset($newConfig['navigation']);
         unset($newConfig['modules']);
-        if($newConfig['databaseType'] == ''){
+		unset($newConfig['adminFirstName']);
+		unset($newConfig['adminLastName']);
+		unset($newConfig['adminEmail']);
+		unset($newConfig['adminPassword']);
+		unset($newConfig['adminPassword2']);
+		if($newConfig['databaseType'] == ''){
             $newConfig['databaseType'] = 'mysql';
         }
         $newConfig['installed'] = true;
