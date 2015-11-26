@@ -1,26 +1,45 @@
 <?php
+class TestAlbum extends PHPUnit_Framework_TestCase {
+    public function testCreation(){
 
-class TestAlbum extends PHPUnit_Extensions_Selenium2TestCase
-{
-    public $projectURL;
+        // Initialization
+        $_GET = array(
+            'page' => 'view/albumCreate.php',
+            'parentId' => ''
+        );
+        $phpunit = array(
+            'isTest' => true
+        );
 
-    protected function setUp(){
-        $this->setBrowser('chrome');
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'./../data/configuration/config.txt'), true);
-        $this->projectURL=$readedConfig['projectURL'];
-        $this->setBrowserUrl($this->projectURL.'/view/index.html');
-    }
+        $config['installed'] = false;
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
+        $dataToPost = array('submit' => true);
+        $_POST = array_merge($readedConfig, $dataToPost);
+        include(dirname(__FILE__).'/../index.php');
 
-    public function testCreateAlbum()
-    {
-        $this->url($this->projectURL.'/view/index.html');
-        $this->assertEquals(true, true);
+        //Test album with empty name
+        $_POST = array(
+            'save' => true,
+        );
 
-        //store current number of albums
-        //$current_number_album = count($this->byClassName("context-menu-one"));
-        //$this->byClassName("context-menu-one")->click(PHPUnit_Extensions_Selenium2TestCase_SessionCommand_Click::RIGHT);
+        $results = $db->query('SELECT * FROM albums');
+        $initialNumber = mysql_num_rows($results);
+        include(dirname(__FILE__).'/../pages/view/albumCreate.php');
+        $results = $db->query('SELECT * FROM albums');
+        $this->assertEquals($initialNumber,mysql_num_rows($results));
 
+        //Test album with name test
+
+        $_POST = array(
+            'save' => true,
+            'name' => 'test',
+            'parentAlbumId' => '1',
+            'description' => ''
+        );
+        $results = $db->query('SELECT * FROM albums WHERE name="test"');
+        $initialNumber = mysql_num_rows($results);
+        include(dirname(__FILE__).'/../pages/view/albumCreate.php');
+        $results = $db->query('SELECT * FROM albums WHERE name="test"');
+        $this->assertEquals($initialNumber+1,mysql_num_rows($results));
     }
 }
-
-
