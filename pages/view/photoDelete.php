@@ -12,12 +12,18 @@
                 $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="'. $imageId . '"';
                 $db->query($delete_sql_string);
             }
-            $select_sql_string = 'SELECT albumId FROM imagesToAlbums WHERE imageId=' . mysql_real_escape_string($imageId) ;
+            $select_sql_string = 'SELECT * FROM imagesToAlbums WHERE imageId=' . $imageId ;
             $result = $db->query($select_sql_string);
-            if (empty($result)){
+            if (mysql_num_rows($result)==0){
+                //delete from folder
+                $select_sql_string = 'SELECT * FROM images WHERE id=' . $imageId ;
+                $result = $db->query($select_sql_string);
+                $row = mysql_fetch_array($result);
+                unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images'. DIRECTORY_SEPARATOR . $row['id'].".".$row['extension']);
+                $delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId) ;
+                $db->query($delete_sql_string);
                 $delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId) ;
                 $db->query($delete_sql_string);
-                //delete image from folder ?
             }
         }
         header('Location: ./index.html');
