@@ -257,9 +257,6 @@ form .row .mce-tinymce {
 form .row .submit, form .row .cancel {
 	border: solid #5C5B5B 1px;
 	padding: 5px;
-}
-
-form .row .submit:hover, form .row .cancel:hover {
 	cursor: pointer;
 }
 @media screen and (max-width: 500px){
@@ -411,4 +408,30 @@ div.slideshow_commands {
 	text-align:center;
 	color:#FFFFFF;
 }
-
+.administrationTable{
+	background:#cfcfcf;
+}
+.administrationTable td{
+	padding:3px;
+}
+.administrationTable .even{
+	background:#fff;
+}
+.administrationTable .odd{
+	background:#efefef;
+}
+.administrationTable .disabled{
+	background:#ede46f;
+}
+.searchForm{
+	display:inline;
+}
+.searchForm input[name="keywords"]{
+	border: solid #5C5B5B 1px;
+	padding: 5px;
+}
+.searchForm input[type="submit"]{
+	border: solid #5C5B5B 1px;
+	padding: 5px;
+	cursor:pointer;
+}
