@@ -1,29 +1,29 @@
 <?php
+if (!function_exists(get_path)) {
 	function get_path($firstParentAlbumId, $db)
 	{
-		if ($firstParentAlbumId != 1){
-            $path = '';
-            $parentAlbumId = $firstParentAlbumId;
-			while( $parentAlbumId != 1 ){
+		if ($firstParentAlbumId != 1) {
+			$path = '';
+			$parentAlbumId = $firstParentAlbumId;
+			while ($parentAlbumId != 1) {
 				$select_sql_string = "SELECT parentAlbumId, name FROM albums WHERE id=" . mysql_real_escape_string($parentAlbumId);
 				$result = $db->query($select_sql_string);
-				if (!empty($result)){
+				if (!empty($result)) {
 					$parentAlbum = mysql_fetch_array($result);
 					$path = $parentAlbum['name'] . "/" . $path;
 					$parentAlbumId = $parentAlbum['parentAlbumId'];
-				}
-				else{
+				} else {
 					$path = "/";
 					$parentAlbumId = -1;
 				}
 			}
-		}
-		else{
+		} else {
 			$path = "/";
 		}
 		return $path;
 	}
-	
+}
+if (!function_exists(checkNoSon)) {
 	function checkNoSon ($albumId, $parentAlbumId, $db){
 		while ($parentAlbumId != -1 && $parentAlbumId != $albumId){
 			$select_sql_string = "SELECT parentAlbumId FROM albums WHERE id=" . $parentAlbumId;
@@ -43,7 +43,9 @@
 			return false;
 		}
 	}
+}
 
+if (!function_exists(orderAlbums)) {
 	function orderAlbums($id, &$children, $albumObjects)
 	{
 		foreach ($albumObjects as $albumId => $album) {
@@ -53,18 +55,22 @@
 			}
 		}
 	}
-
-	function writeSelectAlbum ($albums, $subNumber, $parentId, &$selectAlbum){
+}
+if (!function_exists(writeSelectAlbum)) {
+	function writeSelectAlbum($albums, $subNumber, $parentId, &$selectAlbum)
+	{
 		foreach ($albums as $albumId => $album) {
 			$selectAlbum .= '<option value="' . $albumId . '" >' . str_repeat("&nbsp", $subNumber * 3) . $album[name] . '</option>';
 			writeSelectAlbum($album['childAlbums'], $subNumber + 1, $albumId, $selectAlbum);
 		}
 	}
-
-	function obtainSelectAlbum ($db){
+}
+if (!function_exists(obtainSelectAlbum)) {
+	function obtainSelectAlbum($db)
+	{
 		$sql = "SELECT parentAlbumId, id, name FROM albums";
 		$albums = $db->query($sql);
-		$selectAlbum =  '';
+		$selectAlbum = '';
 		if (!empty($albums)) {
 
 			$albumObjects = array();
@@ -86,4 +92,5 @@
 
 		return $selectAlbum;
 	}
+}
 ?>

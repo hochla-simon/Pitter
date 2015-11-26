@@ -65,7 +65,7 @@ $(document).ready(function() {
 	$.contextMenu({
 		selector: '.context-menu-one',
 		callback: function(key, opt) {
-			var albumId = opt.$trigger.attr("id");
+			var albumId = opt.$trigger.attr("data-id");
 			var path = opt.$trigger.attr("data-path");
 			if (key === 'new') {
 				window.open(path + 'view/albumCreate.html?parentId=' + albumId, '_self');
