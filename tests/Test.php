@@ -15,6 +15,7 @@ class Test extends PHPUnit_Framework_TestCase
     {
         $mytestcase = new DataBaseTesting();
         $mytestcase->testReadDatabase();
+        $this->testDeleteTestConfiguration();
     }
 
     public function testConfiguration() {
