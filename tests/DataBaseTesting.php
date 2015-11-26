@@ -16,7 +16,13 @@ class DataBaseTesting extends PHPUnit_Framework_TestCase {
         $config['installed'] = false;
         $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
         $dataToPost = array('submit' => true);
-        $_POST = array_merge($readedConfig, $dataToPost);
+        $_POST = array_merge($readedConfig, $dataToPost, array(
+                        'adminFirstName' => 'John',
+                        'adminLastName' => 'Doe',
+                        'adminEmail' => 'john@example.org',
+                        'adminPassword' => 'test',
+                        'adminPassword2' => 'test')
+       );
 
         include(dirname(__FILE__).'/../index.php');
 
@@ -26,7 +32,7 @@ class DataBaseTesting extends PHPUnit_Framework_TestCase {
         $this->assertNotNull($db);
 
         $results = $db->query('SELECT * FROM users');
-        $this->assertEquals(mysql_num_rows($results),0);
+        $this->assertEquals(mysql_num_rows($results),1);
 
         $this->setUp();
 
@@ -44,7 +50,7 @@ class DataBaseTesting extends PHPUnit_Framework_TestCase {
         }
 
         $results = $db->query('SELECT * FROM users');
-        $this->assertEquals(mysql_num_rows($results),2);
+        $this->assertEquals(mysql_num_rows($results),3);
 
 
 
