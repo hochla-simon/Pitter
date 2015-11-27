@@ -29,7 +29,6 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
             'adminPassword' => 'test',
             'adminPassword2' => 'test')
         );
-
         include(dirname(__FILE__).'/../index.php');
 
 
@@ -49,7 +48,7 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
 
         // Error because of not set album
         $_POST = array();
-        include(dirname(__FILE__).'/../pages/upload/upload.php');
+        include(dirname(__FILE__).'/../index.php');
 
         $this->assertEquals(0, $uploadOk);
         $this->assertEquals(404, $response_code);
@@ -58,7 +57,7 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         $_POST = array(
             'albumId' => -2
         );
-        include(dirname(__FILE__).'/../pages/upload/upload.php');
+        include(dirname(__FILE__).'/../index.php');
 
         $this->assertEquals(0, $uploadOk);
         $this->assertEquals(401, $response_code);
@@ -67,7 +66,7 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         $_POST = array(
             'albumId' => 1
         );
-        include(dirname(__FILE__).'/../pages/upload/upload.php');
+        include(dirname(__FILE__).'/../index.php');
 
         $this->assertEquals(1, $uploadOk);
         echo $last_id;

@@ -16,8 +16,8 @@ $fields = array(
 	'projectURL' => array('name' => 'Project URL'),
 	'slogan' => array('name' => 'Project Slogan', 'isHTML' => true),
 	'copyright' => array('name' => 'Copyright', 'isHTML' => true),
-	'homeContent' => array('name' => 'Home page', 'isHTML' => true),
-	'userActivationRequired' => array('name' => 'User Activiation Required', 'isRadio' => true)
+	'homeContent' => array('name' => 'Home page', 'isHTML' => true)
+	//'userActivationRequired' => array('name' => 'User Activiation Required', 'isRadio' => true)
 );
 
 if(!$config['installed']){
@@ -47,11 +47,18 @@ if(isset($_POST['submit'])){
 		}
 	}
 	if(count($errors) == 0){
+		if($config['databaseType'] == ''){
+			$config['databaseType'] = 'mysql';
+		}
+		include_once(dirname(__FILE__).'/../../includes/database.php');
 		$testDB = new Database();
 		unset($_POST['submit']);
 		if(!$testDB->connect($_POST['databaseHost'], $_POST['databaseUser'], $_POST['databasePassword'], $_POST['databaseName'])){
 			$errors[] = 'Could not connect to database.';
 		}
+        else{
+            $db = $testDB;
+        }
 	}
 	if(count($errors) == 0 and !$config['installed']){
 		$db = new Database();
