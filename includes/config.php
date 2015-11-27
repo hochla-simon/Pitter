@@ -5,24 +5,13 @@ $config = array(
 	)
 );
 
-$openModules = opendir(dirname(__FILE__).'/../pages/');
-while($module = readdir($openModules)){
-	if($module != '.' and $module != '..' and is_dir(dirname(__FILE__).'/../pages/'.$module) and file_exists(dirname(__FILE__).'/../pages/'.$module.'/config.php')){
-		include(dirname(__FILE__).'/../pages/'.$module.'/config.php');
-		$config['modules'][$module] = $moduleConfig;
-		addModuleNavigation($module, $moduleConfig['navigation']);
-	}
-}
-
-
-
 $tmpConfig = json_decode(@file_get_contents(dirname(__FILE__).'/../data/configuration/config.txt'), true);
 if(count($tmpConfig) == 0){
 	$tmpConfig = array(
 		'databaseType' => 'mysql',
 		'projectName' => 'Pitter',
 		'slogan' => 'Manage your pictures privately',
-		'copyright' => 'Copyright 2015 by <a href="https://github.com/hochla-simon/Pitter" target="_blank">Pitter</a>',
+		'copyright' => '&copy; Copyright 2015 by <a href="https://github.com/hochla-simon/Pitter" target="_blank">Pitter</a>',
 		'homeContent' => '<h2>What is Pitter?</h2>
 			<p>Pitter is a private photo gallery where you can store your private photos securely in your own server.
 			It is implemented by using the most supported technologies so it is easy to install. Using the software is also very easy.
@@ -39,3 +28,30 @@ if(count($tmpConfig) == 0){
 }
 
 $config = array_merge($config, (array)$tmpConfig);
+
+if($config['installed']){
+	include_once(dirname(__FILE__).'/database.php');
+	$db = new Database();
+	$db->connect($config['databaseHost'], $config['databaseUser'], $config['databasePassword'], $config['databaseName']);
+	if($_SESSION['id'] != ''){
+		$currentUser = mysql_fetch_assoc($db->query("select * from users where id = '".mysql_real_escape_string($_SESSION['id'])."'"));
+		if($currentUser['id'] == ''){
+			$_SESSION['id'] = '';
+			@session_destroy();
+		}
+	}
+}
+
+$openModules = opendir(dirname(__FILE__).'/../pages/');
+while($module = readdir($openModules)){
+	if($module != '.' and $module != '..' and is_dir(dirname(__FILE__).'/../pages/'.$module) and file_exists(dirname(__FILE__).'/../pages/'.$module.'/config.php')){
+		include(dirname(__FILE__).'/../pages/'.$module.'/config.php');
+		$config['modules'][$module] = $moduleConfig;
+		if(isset($moduleConfig['navigation'])){
+			foreach($moduleConfig['navigation'] as $element){
+				addModuleNavigation($module, $element);
+			}
+		}
+	}
+}
+?>

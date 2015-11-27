@@ -14,7 +14,13 @@ function destroySession(){
 }
 function addModuleNavigation($module, $data){
 	global $config;
-	$data['url'] = $module.'/index.html';
+	$data['url'] = $module.'/';
+	if($data['file'] != ''){
+		$data['url'] .= $data['file'];
+	}
+	else{
+		$data['url'] .= 'index.html';
+	}
 	$newNavigation = array();
 	$i = 0;
 	for( ; $i < $data['position'] && $i < count($config['navigation']) && $config['navigation'][$i]['position'] < $data['position']; $i++){
