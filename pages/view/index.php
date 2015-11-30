@@ -48,11 +48,11 @@ function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 		}
 		$albumClass = '';
 		if ($albumId == $activeAlbumId) {
-			$albumClass = 'active';
+			$albumClass = ' active';
 		}
 		echo '<li class="context-menu-one box menu-1" data-id ="' . $albumId . '" data-path="' . $config['projectURL'] . '">
 			<img class="toggleArrow" style="visibility: ' . $visibility . '" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/>
-			<a class="' . $albumClass . '" href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
+			<a class="droppableAlbum' . $albumClass . '" href="' . $config['projectURL'] . 'view/index.html?id=' . $albumId .'">
 				<img src="' . $config['projectURL'] . 'images/folder.png" alt=""/>
 				<span>' . $album[name] . '</span>
 			</a>';

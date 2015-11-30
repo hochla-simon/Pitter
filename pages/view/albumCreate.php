@@ -53,7 +53,7 @@
 
 		<div class="row">
 			<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-			<input class="submit" type="submit" name="Save" value="save">
+			<input class="submit" type="submit" name="Save" value="Save">
 		</div>
 
 	</form>

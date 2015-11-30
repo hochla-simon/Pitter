@@ -160,4 +160,22 @@ $(document).ready(function() {
 		}
 	});
 
+	$(".droppableAlbum").droppable({
+		accept: ".draggablePhoto",
+		hoverClass: "ui-state-hover",
+		drop: function(event, ui) {
+			var path = $(this).closest("li").attr("data-path");
+			var imageId = $(ui.draggable).attr("data-id");
+			var albumId = $(".droppableAlbum.active").closest("li").attr("data-id");
+			var newAlbumId = $(this).closest("li").attr("data-id");
+			$.ajax({
+				url : path + 'view/photoMove.html',
+				type : 'POST',
+				data : 'path=' + path + '&imageId=' + imageId + '&albumId=' + albumId + '&newAlbumId=' + newAlbumId,
+				dataType : 'html'
+			});
+			$(ui.helper).remove();
+			$(ui.draggable).remove();
+		}
+	})
 });
