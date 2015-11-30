@@ -1,9 +1,10 @@
 <?php
-
 require 'DataBaseTesting.php';
 require 'TestConfiguration.php';
 require 'TestImageUpload.php';
 require 'TestUserAdministration.php';
+require 'TestAlbum.php';
+
 /**
  * Created by PhpStorm.
  * User: daniel
@@ -49,6 +50,15 @@ class Test extends PHPUnit_Framework_TestCase
     public function testUserAdministration() {
         $test = new TestUserAdministration();
         $test->testCreateUser();
+        $test->testEditUser();
+        $test->testEnableUser();
+        $test->testDeleteUser();
+    }
+
+    public function testAlbum() {
+        $test = new TestAlbum();
+        $test->testCreation();
+        $test->testEdit();
     }
 
     public function testFinalDeletionOfConfiguration() {
