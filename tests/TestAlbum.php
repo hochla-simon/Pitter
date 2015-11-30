@@ -11,10 +11,6 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
             'isTest' => true
         );
 
-        $config['installed'] = false;
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
-        $dataToPost = array('submit' => true);
-        $_POST = array_merge($readedConfig, $dataToPost);
         include(dirname(__FILE__).'/../index.php');
 
         //Test album with empty name
@@ -53,10 +49,6 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
             'isTest' => true
         );
 
-        $config['installed'] = false;
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
-        $dataToPost = array('submit' => true);
-        $_POST = array_merge($readedConfig, $dataToPost);
         include(dirname(__FILE__).'/../index.php');
 
         $results = $db->query('SELECT * FROM albums');

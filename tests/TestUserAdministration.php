@@ -191,4 +191,41 @@ class TestUserAdministration extends PHPUnit_Framework_TestCase {
         $deletedUser = mysql_fetch_assoc($db->query("select * from users where email = 'jane.doe@example.org'"));
         $this->assertEquals($deletedUser['id'], null);
     }
+
+    public function testLogin(){
+
+        // Initialization
+        $phpunit = array(
+            'isTest' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
+        $db->query("update users set enabled = '0' where email = 'jane.doe@example.org'");
+
+        $_GET = array(
+            'page' => 'administration/users.php',
+            'action' => 'login'
+        );
+
+        // Test without specifying the user
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("An error occurred", $site['content']);
+
+        // Test enabling of already enabled user (administrator)
+        $_GET['id'] = 1;
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("An error occurred", $site['content']);
+
+        // Test enabling of not existing user
+        $_GET['id'] = 10000;
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("An error occurred", $site['content']);
+
+        // Successful enabling
+        $user = mysql_fetch_assoc($db->query("select * from users where email = 'jane.doe@example.org'"));
+        $_GET['id'] = $user['id'];
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("successfully enabled", $site['content']);
+        $user = mysql_fetch_assoc($db->query("select * from users where email = 'jane.doe@example.org'"));
+        $this->assertEquals($user['enabled'], 1);
+    }
 }

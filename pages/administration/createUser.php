@@ -29,7 +29,7 @@ if(isset($_POST['submit'])){
 	if(count($errors) == 0){
 		$password = substr(md5(microtime()), 0, 10);
 		$db->query("insert into users set firstName = '".mysql_real_escape_string($_POST['firstName'])."', lastName = '".mysql_real_escape_string($_POST['lastName'])."', email = '".mysql_real_escape_string($_POST['email'])."', password = '".mysql_real_escape_string(crypt($password))."', registered = '".time()."', enabled = '1'");
-		mail($_POST['email'], $config['projectName'].': Your account has been created', "Hi,\n\nthe administrator of ".$config['projectName']." has created a new account for you. Please use the following credentials to log in (the password can be changed in your profile settings).\n".$config['projectURL']."\users\login.html\nE-Mail: ".$_POST['email']."\nPassword: ".$password, 'Content-Type: text/plain\n');
+		@mail($_POST['email'], $config['projectName'].': Your account has been created', "Hi,\n\nthe administrator of ".$config['projectName']." has created a new account for you. Please use the following credentials to log in (the password can be changed in your profile settings).\n".$config['projectURL']."\users\login.html\nE-Mail: ".$_POST['email']."\nPassword: ".$password, 'Content-Type: text/plain\n');
 		$message = createMessage('New user successfully created. An email containing the credentials has been sent to the user.', 'confirm');
 		unset($_POST);
 	}

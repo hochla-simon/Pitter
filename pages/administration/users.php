@@ -17,7 +17,7 @@ else if($_GET['action'] == 'enable'){
     $user = mysql_fetch_assoc($db->query("select * from users where id = '".mysql_real_escape_string($_GET['id'])."'"));
 	if($user['id'] != '' and $user['enabled'] != '1'){
 		mysql_query("update users set enabled = '1' where id = '".mysql_real_escape_string($_GET['id'])."'") or die(mysql_error());
-		mail($user['email'], $config['projectName'].': Your account has been activated', "Hi,\n\nyour account on ".$config['projectName']." has been activated some seconds ago. You can now log in and use the service:\n".$config['projectURL']."\users\login.html", 'Content-Type: text/plain\n');
+		@mail($user['email'], $config['projectName'].': Your account has been activated', "Hi,\n\nyour account on ".$config['projectName']." has been activated some seconds ago. You can now log in and use the service:\n".$config['projectURL']."\users\login.html", 'Content-Type: text/plain\n');
 		echo createMessage('The user was successfully enabled.', 'confirm');
 	}
 	else{
@@ -28,7 +28,9 @@ else if($_GET['action'] == 'login'){
 	$user = mysql_fetch_assoc($db->query("select * from users where id = '".mysql_real_escape_string($_GET['id'])."'"));
 	if($user['id'] != '' and $user['enabled'] != '1'){
 		$_SESSION['id'] = $user['id'];
-		redirect_to($config['projectURl'].'users/profile.html');
+        if(!$phpUnit['test']) {
+            redirect_to($config['projectURl'] . 'users/profile.html');
+        }
 	}
 	else{
 		echo make_error('An error occurred.');

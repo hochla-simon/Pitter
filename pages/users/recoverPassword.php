@@ -27,7 +27,7 @@ if(isset($_POST['login'])){
 	if(count($errors) == 0){
 		$password = substr(md5(microtime()), 0, 10);
 		$db->query("update users set password = '".mysql_real_escape_string(crypt($password))."' where id = '".$user['id']."'");
-		mail($user['email'], $config['projectName'].': Your new password', "Hi,\n\na new password has been requested for your account on ".$config['projectName'].". Please use the following credentials to log in (the password can be changed in your profile settings).\n".$config['projectURL']."\users\login.html\nE-Mail: ".$user['email']."\nPassword: ".$password, 'Content-Type: text/plain\n');
+		@mail($user['email'], $config['projectName'].': Your new password', "Hi,\n\na new password has been requested for your account on ".$config['projectName'].". Please use the following credentials to log in (the password can be changed in your profile settings).\n".$config['projectURL']."\users\login.html\nE-Mail: ".$user['email']."\nPassword: ".$password, 'Content-Type: text/plain\n');
 		$message = createMessage('Your new password has been successfully sent via email.', 'confirm');
 	}
 	else{
