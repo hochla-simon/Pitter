@@ -19,29 +19,12 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
             'isTest' => true
         );
 
-        $config['installed'] = false;
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
-        $dataToPost = array('submit' => true);
-        $_POST = array_merge($readedConfig, $dataToPost, array(
-            'adminFirstName' => 'John',
-            'adminLastName' => 'Doe',
-            'adminEmail' => 'john@example.org',
-            'adminPassword' => 'test',
-            'adminPassword2' => 'test')
-        );
-        include(dirname(__FILE__).'/../index.php');
-
-
-        $this->assertContains('Installation successful.', $message);
-        $this->assertEquals($config['installed'], true);
-
-
         $_FILES = array(
             'file' => array(
-                'name' => 'flamingos.jpg',
-                'type' => 'image/jpeg',
+                'name' => 'hypo.nef',
+                'type' => 'application/nef',
                 'size' => 542,
-                'tmp_name' => dirname(__FILE__).'/data/uploadTest/flamingos.jpg',
+                'tmp_name' => dirname(__FILE__).'/data/uploadTest/hypo.NEF',
                 'error' => 0
             )
         );
@@ -49,7 +32,6 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         // Error because of not set album
         $_POST = array();
         include(dirname(__FILE__).'/../index.php');
-
         $this->assertEquals(0, $uploadOk);
         $this->assertEquals(404, $response_code);
 
@@ -62,16 +44,31 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $uploadOk);
         $this->assertEquals(401, $response_code);
 
-        // Correct upload
+        // Unsupported format
         $_POST = array(
             'albumId' => 1
         );
         include(dirname(__FILE__).'/../index.php');
 
+        $this->assertEquals(400, $response_code);
+        $this->assertEquals(0, $uploadOk);
+
+        // Correct upload of JPEG
+        $_FILES = array(
+            'file' => array(
+                'name' => 'flamingos.jpg',
+                'type' => 'image/jpeg',
+                'size' => 542,
+                'tmp_name' => dirname(__FILE__).'/data/uploadTest/flamingos.jpg',
+                'error' => 0
+            )
+        );
+        include(dirname(__FILE__).'/../index.php');
+
         $this->assertEquals(1, $uploadOk);
-        echo $last_id;
         $this->assertTrue(file_exists(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg'));
 
+        // Delete uploaded foto
         @unlink(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg');
     }
 }

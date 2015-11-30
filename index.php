@@ -8,7 +8,7 @@ if(!$phpunit['isTest']) {
 }
 
 include_once(dirname(__FILE__).'/includes/functions.php');
-include_once(dirname(__FILE__).'/includes/config.php');
+include(dirname(__FILE__).'/includes/config.php');
 
 $page = (($_GET['page'] != '') ? $_GET['page'] : 'common/home.php');
 if(!$config['installed']){

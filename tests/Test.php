@@ -3,6 +3,7 @@
 require 'DataBaseTesting.php';
 require 'TestConfiguration.php';
 require 'TestImageUpload.php';
+require 'TestUserAdministration.php';
 /**
  * Created by PhpStorm.
  * User: daniel
@@ -11,14 +12,30 @@ require 'TestImageUpload.php';
  */
 class Test extends PHPUnit_Framework_TestCase
 {
+    /*public function testAll(){
+        @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
+        $test = new DataBaseTesting();
+        $test->testReadDatabase();
+        $test = new TestConfiguration();
+        $test->testInstallation();
+        $test->testSettings();
+        $test = new TestImageUpload();
+        $test->testUpload();
+        @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
+    }*/
+
+    public function testInitialDeletionOfConfiguration() {
+        @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
+    }
+
     public function testDataBase()
     {
         $mytestcase = new DataBaseTesting();
         $mytestcase->testReadDatabase();
-        $this->testDeleteTestConfiguration();
     }
 
     public function testConfiguration() {
+        @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
         $test = new TestConfiguration();
         $test->testInstallation();
         $test->testSettings();
@@ -29,7 +46,12 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testUpload();
     }
 
-    public function testDeleteTestConfiguration() {
-        unlink(dirname(__FILE__).'/../data/configuration/config.txt');
+    public function testUserAdministration() {
+        $test = new TestUserAdministration();
+        $test->testCreateUser();
+    }
+
+    public function testFinalDeletionOfConfiguration() {
+        @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
     }
 }

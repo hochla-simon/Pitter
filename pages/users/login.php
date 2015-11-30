@@ -28,7 +28,7 @@ if(isset($_POST['login'])){
 	if(count($errors) == 0){
 		$_SESSION['id'] = $user['id'];
 		if($_POST['redirect'] == ''){
-			$_POST['redirect'] = $config['projectURL'].'users/index.html';
+			$_POST['redirect'] = $config['projectURL'].'users/profile.html';
 		}
         header('Location: '.$_POST['redirect']);
         die();

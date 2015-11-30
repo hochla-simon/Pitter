@@ -36,7 +36,7 @@ else if($_GET['action'] == 'login'){
 }
 ?>
 <p>
- <a href="<?php echo $config['projectURl'];?>administration/createUser.html">Create new user</a>
+ <a href="<?php echo $config['projectURL'];?>administration/createUser.html">Create new user</a>
 </p>
 <?php
 $v = $_GET['v'];
@@ -67,7 +67,7 @@ echo $site_handler;
           <td><b><?php echo $row['firstName'];?></b></td>
           <td><b><?php echo $row['lastName'];?></b></td>
           <td><a href="mailto:<?php echo $row['email'];?>"><?php echo $row['email'];?></a></td>
-          <td><a href="<?php echo $config['projectURl'];?>administration/editUser.html?id=<?php echo $row['id'];?>">edit user</a><?php if($row['enabled'] != '1'):?> | <a href="<?php echo $config['projectURl'];?>administration/users.html?action=enable&amp;id=<?php echo $row['id'];?>" onclick="return confirm('Do you want to enable this user?');">enable user</a><?php endif;?><?php if($row['isAdmin'] != '1'):?> | <a href="<?php echo $config['projectURl'];?>administration/users.html?action=delete&amp;id=<?php echo $row['id'];?>" onclick="return confirm('Do you really want to delete this user?');">delete user</a> | <a href="<?php echo $config['projectURl'];?>administration/users.html?action=login&amp;id=<?php $row['id'];?>">log in as user</a><?php endif;?></td>
+          <td><a href="<?php echo $config['projectURL'];?>administration/editUser.html?id=<?php echo $row['id'];?>">edit user</a><?php if($row['enabled'] != '1'):?> | <a href="<?php echo $config['projectURL'];?>administration/users.html?action=enable&amp;id=<?php echo $row['id'];?>" onclick="return confirm('Do you want to enable this user?');">enable user</a><?php endif;?><?php if($row['isAdmin'] != '1'):?> | <a href="<?php echo $config['projectURL'];?>administration/users.html?action=delete&amp;id=<?php echo $row['id'];?>" onclick="return confirm('Do you really want to delete this user?');">delete user</a> | <a href="<?php echo $config['projectURL'];?>administration/users.html?action=login&amp;id=<?php $row['id'];?>">log in as user</a><?php endif;?></td>
          </tr>
          <?php
          $i++;
