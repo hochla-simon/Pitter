@@ -11,12 +11,12 @@
 	}
 
 	$message='';
-	if (isset ($_POST["save"])) {
+	if (isset ($_POST["Save"])) {
 		if ($_POST["name"] != '') {
 			$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $_POST["parentAlbumId"] . '", 0,"' . $_POST["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $_POST["description"] . '" )';
 			$db->query($insert_sql_string);
 
-			if (!$phpunit['isTest']) {
+			if ( ! isset ($phpunit['isTest']) ) {
 				header('Location: ./index.html');
 				exit();
 			}
