@@ -17,6 +17,7 @@ $fields = array(
 	'slogan' => array('name' => 'Project Slogan', 'isHTML' => true),
 	'copyright' => array('name' => 'Copyright', 'isHTML' => true),
 	'homeContent' => array('name' => 'Home page', 'isHTML' => true)
+	//'userActivationRequired' => array('name' => 'User Activiation Required', 'isRadio' => true)
 );
 
 if(!$config['installed']){
@@ -46,11 +47,18 @@ if(isset($_POST['submit'])){
 		}
 	}
 	if(count($errors) == 0){
+		if($config['databaseType'] == ''){
+			$config['databaseType'] = 'mysql';
+		}
+		include_once(dirname(__FILE__).'/../../includes/database.php');
 		$testDB = new Database();
 		unset($_POST['submit']);
 		if(!$testDB->connect($_POST['databaseHost'], $_POST['databaseUser'], $_POST['databasePassword'], $_POST['databaseName'])){
 			$errors[] = 'Could not connect to database.';
 		}
+        else{
+            $db = $testDB;
+        }
 	}
 	if(count($errors) == 0 and !$config['installed']){
 		$db = new Database();
@@ -99,10 +107,12 @@ if(isset($_POST['submit'])){
 	?>
 	<div class="row">
 		<label for="setting_<?=$key?>"><?=$field['name']?>:</label>
-		<?php if(!$field['isHTML']){ ?>
-			<input type="<?=(($field['isPassword']) ? 'password' : 'text')?>" id="setting_<?=$key?>" name="<?=$key?>" value="<?=((isset($_POST[$key])) ? $_POST[$key] : $config[$key])?>" />
-		<?php } else { ?>
+		<?php if($field['isHTML']){ ?>
 			<textarea id="setting_<?=$key?>" name="<?=$key?>"><?=((isset($_POST[$key])) ? $_POST[$key] : $config[$key])?></textarea>
+		<?php } elseif($field['isRadio']) { ?>
+			<label><input type="radio" id="setting_<?=$key?>" name="<?=$key?>" value="1" <?=((((isset($_POST[$key])) ? $_POST[$key] : $config[$key]) == '1') ? 'checked="checked"' : '')?> /> Yes</label> <label><input type="radio" id="setting_<?=$key?>" name="<?=$key?>" value="0" <?=((((isset($_POST[$key])) ? $_POST[$key] : $config[$key]) != '1') ? 'checked="checked"' : '')?> /> No</label>
+		<?php } else { ?>
+			<input type="<?=(($field['isPassword']) ? 'password' : 'text')?>" id="setting_<?=$key?>" name="<?=$key?>" value="<?=((isset($_POST[$key])) ? $_POST[$key] : $config[$key])?>" />
 		<?php } ?>
 	</div>
 	<?php

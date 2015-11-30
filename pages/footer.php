@@ -1,3 +1,3 @@
   <div id="footer">
-   &copy; <?php echo $config['copyright']?>
+   <?php echo $config['copyright']?>
   </div>

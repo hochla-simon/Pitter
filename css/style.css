@@ -18,11 +18,13 @@ body {
 	background: #E0DCDC;
 	font-family: Georgia, serif;
 }
-a:hover {
-	text-decoration: none;
-}
 a {
 	text-decoration: underline;
+	color:#333;
+}
+a:hover {
+	text-decoration: none;
+	color:#57A3DF;
 }
 br.clearfix {
 	clear: both;
@@ -162,10 +164,7 @@ b{
 .albums a {
 	text-decoration: none;
 }
-.albums a:link {
-    color: black;
-}
-.albums a:visited {
+.albums a {
     color: black;
 }
 .albums a:hover {
@@ -434,4 +433,16 @@ div.slideshow_commands {
 	border: solid #5C5B5B 1px;
 	padding: 5px;
 	cursor:pointer;
+}
+.administrationMenu{
+	width:130px;
+	border:1px solid #aaa;
+	border-radius:7px;
+	text-align:center;
+	float:left;
+	padding:15px 10px;
+	margin-right:3px;
+}
+.administrationMenu:hover, .administrationMenu:active{
+	border:1px solid #57A3DF;
 }

@@ -60,7 +60,9 @@ if(!isset($_GET['album'])){
                                 currentImage = currentImage + 1;
                                 if (currentImage >= totalNumberImages) {
                                     currentImage = totalNumberImages - 1;
+                                    $("#slideshow_next").addClass("hidden");
                                 }
+                                $("#slideshow_previous").removeClass("hidden");
                                 $("img#" + currentImage).removeClass("hidden");
                             }
                             function transition_left() {
@@ -68,7 +70,9 @@ if(!isset($_GET['album'])){
                                 currentImage = currentImage - 1;
                                 if (currentImage < 0) {
                                     currentImage = 0;
+                                    $("#slideshow_previous").addClass("hidden");
                                 }
+                                $("#slideshow_next").removeClass("hidden");
                                 $("img#" + currentImage).removeClass("hidden");
                             }
                             function pauseTimer() { // to be called when you want to stop the timer
@@ -84,7 +88,7 @@ if(!isset($_GET['album'])){
                                 <img id="slideshow_exit" class="command_icon"
                                      src="<?php echo $config['projectURL'] ?>images/icons/exit.svg" alt="exit icon">
                             </a>
-                            <img id="slideshow_previous" class="command_icon"
+                            <img id="slideshow_previous" class="command_icon hidden"
                                  src="<?php echo $config['projectURL'] ?>images/icons/caret-left.svg" alt="previous icon">
                             <img id="slideshow_pause" class="command_icon"
                                  src="<?php echo $config['projectURL'] ?>images/icons/media-pause.svg" alt="pause icon">

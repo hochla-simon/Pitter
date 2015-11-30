@@ -30,11 +30,22 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
     protected function setUp()
     {
         $this->setBrowser('chrome');
-        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'./../data/configuration/config.txt'), true);
+        $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
         $this->projectURL=$readedConfig['projectURL'];
         $this->setBrowserUrl($this->projectURL.'/view/index.html');
     }
 
+
+    protected function waitUntilFullyLoad(){
+
+        $isdone = $this->execute(array('script' => "return document.readyState", 'args'   => array()));
+        var_dump($isdone);
+        while(!$isdone){
+            usleep(500);
+            $isdone = $this->execute(array('script' => "return document.readyState", 'args'   => array()));
+            var_dump($isdone);
+        }
+    }
     protected function waitUntilNoProgressBar()
     {
         while(count($this->elements($this->using('css selector')->value('#myDropzone > div.dz-preview.dz-file-preview')))!=0){
@@ -45,11 +56,14 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testSingleFileUpload()
     {
+
+
         $this->url($this->projectURL.'/view/index.html');
+        $webdriver = $this;
 
 
         //store current number of images
-        $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
+        $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > a')));
 
         // check the value
         $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
@@ -66,10 +80,12 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
         /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
         $hiddenInput ->value(dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.jpg');
 
+        sleep(2);
         $this->waitUntilNoProgressBar();
+        sleep(2);
 
         //getting new number of tags
-        $new_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
+        $new_number_photos = count($this->elements($this->using('css selector')->value('#photos > a')));
         $this->assertEquals($new_number_photos,$current_number_photos+1);
 
         //checking that there is nothing left in dropzone
@@ -78,16 +94,19 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testMultipleFileUpload()
     {
+
+
         $this->url($this->projectURL.'/view/index.html');
 
+
 //store current number of images
-        $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
+        $current_number_photos = count($this->elements($this->using('css selector')->value('#photos > a')));
         echo "current number: ".$current_number_photos;
 
 // check the value
         $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
 
-        /*Transforming the hidden field in something that can be seen in order to be able interact with it with Selenium*/
+        //Transforming the hidden field in something that can be seen in order to be able interact with it with Selenium
         $javaScriptCode = "var elemForm = $.find('input.dz-hidden-input')[0];elemForm.style.visibility='visible';elemForm.style.height=\"100px\"; elemForm.style.width=\"100px\";";
         $this->execute(    array(
             'script' => $javaScriptCode,
@@ -96,16 +115,18 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
 
         $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
-        /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
+        //Sending the file path, this trigers the same mehtod as dropping a file on the dropzone
         $pathFile1 = dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.jpg';
         $pathFile2 = dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'hypo.jpg';
         $hiddenInput ->value($pathFile1."\n".$pathFile2);
 
 
+        sleep(2);
         $this->waitUntilNoProgressBar();
+        sleep(2);
 
 //getting new number of tags
-        $new_number_photos = count($this->elements($this->using('css selector')->value('#photos > div')));
+        $new_number_photos = count($this->elements($this->using('css selector')->value('#photos > a')));
         $this->assertEquals($current_number_photos+2, $new_number_photos);
 
 //checking that there is nothing left in dropzone
@@ -116,10 +137,11 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
     {
         $this->url($this->projectURL.'/view/index.html');
 
+
 // check the value
         $this->assertEquals( 'image/jpeg,image/png,image/gif', $this->byCssSelector('input.dz-hidden-input')->attribute('accept'));
 
-        /*Transforming the hidden field in something that can be seen in order to be able interact with it with Selenium*/
+        //Transforming the hidden field in something that can be seen in order to be able interact with it with Selenium
         $javaScriptCode = "var elemForm = $.find('input.dz-hidden-input')[0];elemForm.style.visibility='visible';elemForm.style.height=\"100px\"; elemForm.style.width=\"100px\";";
         $this->execute(    array(
             'script' => $javaScriptCode,
@@ -130,7 +152,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
 
         $hiddenInput =$this->byCssSelector('input.dz-hidden-input');
-        /*Sending the file path, this trigers the same mehtod as dropping a file on the dropzone*/
+        //Sending the file path, this trigers the same mehtod as dropping a file on the dropzone
         $hiddenInput ->value(dirname(__FILE__).DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'uploadTest'.DIRECTORY_SEPARATOR.'flamingos.NEF');
 
 

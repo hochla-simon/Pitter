@@ -3,17 +3,12 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 if(!$phpunit['isTest']) {
 	session_start();
+	session_set_cookie_params(3600);
 	session_regenerate_id();
 }
 
 include_once(dirname(__FILE__).'/includes/functions.php');
 include_once(dirname(__FILE__).'/includes/config.php');
-include_once(dirname(__FILE__).'/includes/database.php');
-
-if($config['installed']){
-	$db = new Database();
-	$db->connect($config['databaseHost'], $config['databaseUser'], $config['databasePassword'], $config['databaseName']);
-}
 
 $page = (($_GET['page'] != '') ? $_GET['page'] : 'common/home.php');
 if(!$config['installed']){
