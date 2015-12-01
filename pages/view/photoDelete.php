@@ -22,7 +22,6 @@
                 if (!empty($albums)) {
                     foreach ($albums as $albumId) {
                         $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($albumId) . "'";
-                        echo $query_for_album.'\n';
                         $album_data = mysql_fetch_array($db->query($query_for_album));
                         if (!empty($album_data)) {
                             if ($album_data['ownerId'] == $currentUser['id']) {

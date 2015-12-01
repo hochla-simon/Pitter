@@ -1,7 +1,7 @@
 <?php
 $id = $_GET['id'];
 
-$sql = "SELECT id, extension FROM images WHERE id=" . mysql_real_escape_string($id);
+$sql = "SELECT id, extension, ownerId FROM images WHERE id=" . mysql_real_escape_string($id);
 $result = $db->query($sql);
 $row = mysql_fetch_array($result);
 

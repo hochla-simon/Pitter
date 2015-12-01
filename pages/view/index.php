@@ -69,72 +69,78 @@ if (!$albumId) {
 	$albumId = '1';
 }
 
-$sql = "SELECT parentAlbumId, id, name FROM albums ORDER BY name ASC";
-$albums = $db->query($sql);
+$query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($albumId) . "'";
+$album_data = mysql_fetch_array($db->query($query_for_album));
+if (!empty($album_data)) {
+    if ($album_data['ownerId'] != $currentUser['id']) {
+        include(dirname(__FILE__) . '/../common/error401.php');
+    }else{
+        $sql = "SELECT parentAlbumId, id, name FROM albums WHERE ownerId=".$currentUser['id']." ORDER BY name ASC";
+        $albums = $db->query($sql);
 
-if (!empty($albums)) {
+        if (!empty($albums)) {
 
-	$albumObjects = array();
-	while($row = mysql_fetch_array($albums)) {
-		$albumObject = array(
-			'name' => $row['name'],
-			'parentAlbumId' => $row['parentAlbumId'],
-			'childAlbums' => array()
-		);
-		$albumObjects[$row['id']] = $albumObject;
-		if ($row['id'] == $albumId) {
-			$albumName = $row['name'];
-		}
-	}
-
-	$orderedAlbumObjects = array();
-
-	orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
-
-	echo '<div id="albumsContainer">';
-
-	createAlbums($orderedAlbumObjects, 0, '-1', $albumId);
-
-	echo '</div>';
-}
-
-echo '<div id="albumView">';
-
-echo '<div id="upload">
-
-<form action="'.$config['projectURL'].'upload/upload.html"
-      class="dropzone"
-      id="myDropzone">';
-	if($albumId) echo '<input type="hidden" name="albumId" value="'.$albumId.'" />';
-	else echo '<input type="hidden" name="albumId" value="1" />';
-echo '</form>';
-
-echo '<script>
-
-        Dropzone.options.myDropzone = {
-            dictInvalidFileType : "only jpg, jpeg, png and gif are accepted",
-            acceptedFiles: "image/jpeg,image/png,image/gif",
-            init: function() {
-                this.on("error", function (file, errorMessage, XMLHttpRequestMessage) {
-                	debugger;
-                	if (XMLHttpRequestMessage===undefined){
-
-                	}else{
-                		$($(file.previewElement).find("div.dz-error-message")[0]).find("span").html("Error uploading");
-                	}
-                });
-                this.on("success", function (file, response) {
-                    if(file.accepted){
-                        htmlNewTag = \'<a href="photoView.html?id=\'+response.lastId+\'" id="image_\'+ response.lastId + \'"><div class="thumbnail" title="\' +file.name+\'"><span class="center_img"></span><img src="image.html?id=\' + response.lastId+ \'&max_size=100"/></div></a>\';
-                        $("div#photos").append(htmlNewTag);
-                        this.removeFile(file);
-                    }
-                });
+            $albumObjects = array();
+            while($row = mysql_fetch_array($albums)) {
+                $albumObject = array(
+                    'name' => $row['name'],
+                    'parentAlbumId' => $row['parentAlbumId'],
+                    'childAlbums' => array()
+                );
+                $albumObjects[$row['id']] = $albumObject;
+                if ($row['id'] == $albumId) {
+                    $albumName = $row['name'];
+                }
             }
+
+            $orderedAlbumObjects = array();
+
+            orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
+
+            echo '<div id="albumsContainer">';
+
+            createAlbums($orderedAlbumObjects, 0, '-1', $albumId);
+
+            echo '</div>';
         }
 
-</script>
-</div>';
+        echo '<div id="albumView">';
+
+        echo '<div id="upload">
+
+        <form action="'.$config['projectURL'].'upload/upload.html"
+              class="dropzone"
+              id="myDropzone">';
+            if($albumId) echo '<input type="hidden" name="albumId" value="'.$albumId.'" />';
+            else echo '<input type="hidden" name="albumId" value="1" />';
+        echo '</form>';
+
+        echo '<script>
+
+                Dropzone.options.myDropzone = {
+                    dictInvalidFileType : "only jpg, jpeg, png and gif are accepted",
+                    acceptedFiles: "image/jpeg,image/png,image/gif",
+                    init: function() {
+                        this.on("error", function (file, errorMessage, XMLHttpRequestMessage) {
+                            debugger;
+                            if (XMLHttpRequestMessage===undefined){
+
+                            }else{
+                                $($(file.previewElement).find("div.dz-error-message")[0]).find("span").html("Error uploading");
+                            }
+                        });
+                        this.on("success", function (file, response) {
+                            if(file.accepted){
+                                htmlNewTag = \'<a href="photoView.html?id=\'+response.lastId+\'" id="image_\'+ response.lastId + \'"><div class="thumbnail" title="\' +file.name+\'"><span class="center_img"></span><img src="image.html?id=\' + response.lastId+ \'&max_size=100"/></div></a>\';
+                                $("div#photos").append(htmlNewTag);
+                                this.removeFile(file);
+                            }
+                        });
+                    }
+                }
+
+        </script>
+        </div>';
 ?>
 
 <script type="text/javascript">
@@ -277,3 +283,6 @@ echo '<script>
 <div id="photos" class="images" data-albumId="<?php echo $albumId ?>"/><div class="animation_image" style="display:none" align="center"><img src="<?php echo $config['projectURL'];?>images/loader.gif"></div>
 </div>
 </div>
+<?php
+    }
+}
