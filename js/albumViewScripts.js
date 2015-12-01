@@ -92,6 +92,7 @@ $(document).ready(function() {
 		selector: '.thumbnail',
 		callback: function(key, opt) {
 			var photoId = opt.$trigger.parent().attr("id").substring(6);
+			var albumId = opt.$trigger.parent().parent().attr("data-albumid");
 			if (key === 'edit') {
 				window.open('photoEdit.html?id=' + photoId, '_self');
 			} else if (key === 'delete') {
@@ -99,7 +100,7 @@ $(document).ready(function() {
 			} else if (key === 'copy') {
 				window.open('photoCopy.html?id=' + photoId, '_self');
 			} else if (key === 'move') {
-				window.open('photoMove.html?id=' + photoId, '_self');
+				window.open('photoMoveRightClick.html?id=' + photoId + '&albumId=' + albumId, '_self');
 			}
 		},
 		items: {
