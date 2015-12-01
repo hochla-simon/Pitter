@@ -13,6 +13,10 @@ if ($row) {
     die();
 }
 
+if($row['ownerId']!=$currentUser['id']) {
+    include(dirname(__FILE__) . '/../common/error401.php');
+    die();
+}
 $path = dirname(__FILE__) . '/../../data/images/' . $id . '.' . $extension;
 
 $extension = strtolower($extension);
