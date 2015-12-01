@@ -25,6 +25,16 @@ if($_POST)
         exit();
     }
 
+    $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($album_id) . "'";
+    $album_data = mysql_fetch_array($db->query($query_for_album));
+    if (!empty($album_data)) {
+        if ($album_data['ownerId'] != $currentUser['id']) {
+            echo "owner: ".$album_data['ownerId'].' '.$currentUser['id'];
+            include(dirname(__FILE__) . '/../common/error401.php');
+            exit();
+        }
+    }
+
     //get current starting point of records
     $position = ($group_number * $items_per_group);
 

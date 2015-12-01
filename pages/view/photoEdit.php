@@ -1,15 +1,23 @@
 <?php
-
-
-	$site['title'] = 'Edit photo';
-	$imageId=$_GET['id'];
+    $site['title'] = 'Edit photo';
+    $imageId=$_GET['id'];
 
 	if($imageId != ''){
-        $select_sql_string = 'SELECT id, name, description FROM images WHERE id=' . mysql_real_escape_string($imageId);
+        $select_sql_string = "SELECT id, ownerId, name, filename, extension, created, description FROM images WHERE id=" . mysql_real_escape_string($imageId);
         $result = $db->query($select_sql_string);
         if (!empty($result)){
             $image = mysql_fetch_array($result);
+            if($image['ownerId']!=$currentUser['id']) {
+                $denied = true;
+                include(dirname(__FILE__) . '/../common/error401.php');
+                exit();
+            }
         }
+
+    }
+    if($denied){
+        include(dirname(__FILE__) . '/../common/error401.php');
+        exit();
     }
 	if (isset ($_POST["Save"])) {
         $update_sql_string = 'UPDATE images SET name="' . $_POST["name"] . '",description="' . $_POST["description"] . '" WHERE id="' . $_POST["imageId"] . '" ';

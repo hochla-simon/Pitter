@@ -21,6 +21,8 @@ if(isset($_POST["albumId"])) {
                 $uploadOk = 0;
             }
         }else{
+            echo $sql.'\n';
+            echo 'owner: '.$albums['ownerId'].' user: '.$currentUser['id'];
             $response_code=401;
             $uploadOk=0;
         }

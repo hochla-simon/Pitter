@@ -72,9 +72,9 @@ if (!$albumId) {
 $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($albumId) . "'";
 $album_data = mysql_fetch_array($db->query($query_for_album));
 if (!empty($album_data)) {
-    if ($album_data['ownerId'] != $currentUser['id']) {
+    /*if ($album_data['ownerId'] != $currentUser['id']) {
         include(dirname(__FILE__) . '/../common/error401.php');
-    }else{
+    }else*/{
         $sql = "SELECT parentAlbumId, id, name FROM albums WHERE ownerId=".$currentUser['id']." ORDER BY name ASC";
         $albums = $db->query($sql);
 
@@ -120,6 +120,7 @@ if (!empty($album_data)) {
                 Dropzone.options.myDropzone = {
                     dictInvalidFileType : "only jpg, jpeg, png and gif are accepted",
                     acceptedFiles: "image/jpeg,image/png,image/gif",
+                    withCredentials: true,
                     init: function() {
                         this.on("error", function (file, errorMessage, XMLHttpRequestMessage) {
                             debugger;
