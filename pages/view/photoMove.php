@@ -4,11 +4,13 @@ $imageId = $_POST["imageId"];
 $albumId = $_POST["albumId"];
 $newAlbumId = $_POST["newAlbumId"];
 
+$denied = false;
 $select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
 $result = $db->query($select_sql_string);
 if (!empty($result)){
     $album = mysql_fetch_array($result);
     if ($album['ownerId'] != $currentUser['id']) {
+        echo 'fuck1';
         $denied = true;
     }
 }else{
@@ -24,11 +26,11 @@ if (!empty($result)){
 }else{
     $denied = true;
 }
-$sql = "SELECT id,ownerId FROM images WHERE id=" . mysql_real_escape_string($id);
+$sql = "SELECT id,ownerId FROM images WHERE id=" . mysql_real_escape_string($imageId);
 $result = $db->query($sql);
 $row = mysql_fetch_array($result);
 if (!empty($row)) {
-    if($row['ownerId']==$currentUser['id']) {
+    if($row['ownerId']!=$currentUser['id']) {
         $denied = true;
     }
 }else{
