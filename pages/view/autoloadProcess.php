@@ -62,7 +62,16 @@ if($_POST)
 		echo '<script>
 			$(".draggablePhoto").draggable({
 				connectToSortable: "#photos",
-				revert: "invalid"
+				revert: "invalid",
+				start: function( event, ui ) {
+					$(".childAlbums").css("display", "");
+					$("img.toggleArrow").each(function(){
+						var originalImgSrc = $(this).attr("src");
+						var lastSlashIndex = originalImgSrc.lastIndexOf("/") + 1;
+						var newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
+						$(this).attr("src", newImgSrc);
+					});
+				}
 			});';
     } else {
         echo '<h2>No photos!</h2>';
