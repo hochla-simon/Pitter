@@ -56,7 +56,7 @@
 			<label for="parentAlbumId">Destination:</label>
 			<select name="parentAlbumId" id="parentAlbumId">
 				<?php
-					echo obtainSelectAlbum ($db);
+					echo obtainSelectAlbum ($db, $currentUser['id']);
 				?>
 			</select>
 		</div>
