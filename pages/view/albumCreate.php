@@ -13,16 +13,29 @@
 	$message='';
 	if (isset ($_POST["Save"])) {
 		if ($_POST["name"] != '') {
-			$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $_POST["parentAlbumId"] . '", 0,"' . $_POST["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $_POST["description"] . '" )';
-			$db->query($insert_sql_string);
+			$query_for_parent_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($parentAlbumId)."'";
+			$parent_album = mysql_fetch_assoc($db->query($query_for_parent_album));
+			if (!empty($parent_album)) {
+				if ($parent_album['ownerId'] == $currentUser['id']) {
 
-			if ( ! isset ($phpunit['isTest']) ) {
-				header('Location: ./index.html');
-				exit();
+
+					$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $_POST["parentAlbumId"] . '", ' . $currentUser['id'] . ',"' . $_POST["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $_POST["description"] . '" )';
+					$db->query($insert_sql_string);
+
+					if (!isset ($phpunit['isTest'])) {
+						header('Location: ./index.html');
+						exit();
+					}
+				}else{
+					http_response_code(401);
+					$message = createMessage( "Access denied" );
+				}
+			}else{
+				http_response_code(401);
+				$message = createMessage( "Access denied" );
 			}
 		} else {
 			http_response_code(500);
-			$db->query($delete_sql_string);
 			$message = createMessage( "Sorry, you cannot create an album with an empty name." );
 		}
 	}
