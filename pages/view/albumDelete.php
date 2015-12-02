@@ -29,7 +29,7 @@ else:
 			while ($image = mysql_fetch_array($images)) {
 				$delete_sql_string = 'DELETE FROM imagestoalbums WHERE imageId="' . $image['imageId'] . '" AND albumId="'. $_POST["albumId"] .'"';
 				$db->query($delete_sql_string);
-				deleteImage($db, $image['imageId']);
+				deleteImage($currentUser['id'], $db, $image['imageId']);
 			}
 		}
 		$delete_sql_string = 'DELETE FROM albums WHERE id="' . $_POST["albumId"] . '" ';
