@@ -8,10 +8,15 @@ else:
 	$albumId=$_GET['id'];
 	
 	if($albumId != ''){
-		$select_sql_string = "SELECT id, parentAlbumId, name, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
+		$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
 		$result = $db->query($select_sql_string);
 		if (!empty($result)){
 			$album = mysql_fetch_array($result);
+			if ($album['ownerId'] != $currentUser['id']) {
+				$denied = true;
+				include(dirname(__FILE__) . '/../common/error401.php');
+				exit();
+			}
 		}
 	}
 
