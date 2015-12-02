@@ -53,7 +53,7 @@ else{
 ?>
 <h2><?php echo $site['title'];?></h2>
 <?php echo $message;?>
-<p><a href="<?php echo $config['projectURl'];?>administration/users.html">... back to users</a></p>
+<p><a href="<?php echo $config['projectURL'];?>administration/users.html">... back to users</a></p>
 <form action="" method="post">
  <?php
  foreach($fields as $key => $field){

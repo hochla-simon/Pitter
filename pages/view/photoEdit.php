@@ -1,4 +1,9 @@
 <?php
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
+
     $site['title'] = 'Edit photo';
     $imageId=$_GET['id'];
 
@@ -48,5 +53,7 @@
         <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
         <input class="submit" type="submit" name="Save" value="Save">
     </div>
-
 </form>
+<?php
+endif;
+?>

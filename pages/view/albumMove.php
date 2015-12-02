@@ -1,4 +1,9 @@
 <?php
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/../users/login.php');
+else:
+
     include('albumFunctions.php');
 
 	$site['title'] = 'Move album';
@@ -58,3 +63,6 @@
 	</div>
 
 </form>
+<?php
+endif;
+?>

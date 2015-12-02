@@ -1,4 +1,7 @@
 <?php
+if($currentUser['id'] == ''):
+    echo "Unauthorized.";
+else:
     if (isset($_POST["albumId"]) && isset($_POST["parentAlbumId"]) ) {
         $update_sql_string = 'UPDATE albums SET parentAlbumId="' . $_POST["parentAlbumId"] . '",modified=CURRENT_TIMESTAMP() WHERE id="' . $_POST["albumId"] . '" ';
         $db->query($update_sql_string);
@@ -7,5 +10,8 @@
         $db->query($delete_sql_string);
         $message = createMessage("Sorry, there was an error moving your album.");
     }
+endif;
+if(!$phpunit['isTest']) {
     die();
+}
 ?>

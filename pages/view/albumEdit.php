@@ -1,4 +1,9 @@
 <?php
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/../users/login.php');
+else:
+
     include('albumFunctions.php');
 	
 	$site['title'] = 'Edit album';
@@ -17,8 +22,10 @@
 
 			$db->query($update_sql_string);
 
-			header('Location: ./index.html');
-			exit();
+			if(!$phpunit['isTest']) {
+				header('Location: ./index.html');
+				exit();
+			}
 		} else {
 			http_response_code(500);
 			$db->query($delete_sql_string);
@@ -54,3 +61,6 @@
 	</div>
 		
 </form>
+<?php
+endif;
+?>

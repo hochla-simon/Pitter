@@ -1,4 +1,9 @@
 <?php
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/../users/login.php');
+else:
+
 	$site['title'] = 'Delete album';
 	$albumId=$_GET['id'];
 	
@@ -36,3 +41,6 @@
 		<input class="submit" type="submit" name="Delete" value="Delete">
 	</div>
 </form>
+<?php
+endif;
+?>

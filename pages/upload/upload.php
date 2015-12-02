@@ -1,4 +1,9 @@
 <?php
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
+
 $target_dir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images'. DIRECTORY_SEPARATOR;
 $target_file = $target_dir . basename($_FILES["file"]["name"]);
 #echo "will try to move to " . $target_file;
@@ -91,3 +96,5 @@ if($uploadOk == 1){
 if(!$phpunit['isTest']) {
     die();
 }
+endif;
+?>

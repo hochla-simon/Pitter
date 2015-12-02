@@ -1,6 +1,10 @@
 <?php
-$site['title'] = 'My Profile';
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/login.php');
+else:
 
+$site['title'] = 'My Profile';
 $fields = array(
 	'firstName' => array('name' => 'First Name', 'required' => true),
 	'lastName' => array('name' => 'Last Name', 'required' => true),
@@ -66,3 +70,6 @@ else{
   <input class="submit" type="submit" name="submit" value="Save changes" />
  </div>
 </form>
+<?php
+endif;
+?>

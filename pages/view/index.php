@@ -1,5 +1,8 @@
 <?php
-
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/../users/login.php');
+else:
 include 'config.php';
 
 $result = mysql_query("SELECT COUNT(1) FROM images");
@@ -287,3 +290,5 @@ if (!empty($album_data)) {
 <?php
     }
 }
+endif;
+?>

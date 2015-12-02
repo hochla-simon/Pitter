@@ -1,4 +1,9 @@
 <?php
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
+
     $site['title'] = 'Delete photo';
     $imageId=$_GET['id'];
 
@@ -100,4 +105,6 @@
                 <?php
             }
         }
-    }?>
+    }
+endif;
+?>

@@ -1,4 +1,8 @@
 <?php
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
 $id = $_GET['id'];
 
 $sql = "SELECT id, extension, ownerId FROM images WHERE id=" . mysql_real_escape_string($id);
@@ -92,6 +96,6 @@ if(isset($_GET["max_size"])){
 } else {
     readfile($path);
 }
-
-
 die();
+endif;
+?>

@@ -3,6 +3,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
     public function testCreation(){
 
         // Initialization
+        $_SESSION['id'] = 1;
         $_GET = array(
             'page' => 'view/albumCreate.php',
             'parentId' => ''
@@ -41,6 +42,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
     public function testEdit(){
 
         // Initialization
+        $_SESSION['id'] = 1;
         $_GET = array(
             'page' => 'view/albumEdit.php',
             'id' => ''

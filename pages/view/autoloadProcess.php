@@ -5,6 +5,10 @@
  * Date: 11. 11. 2015
  * Time: 13:24
  */
+if($currentUser['id'] == ''):
+    echo "Unauthorized.";
+else:
+
 include("config.php"); //include config file
 
 if($_POST)
@@ -87,5 +91,8 @@ if($_POST)
         echo '<h2>No photos!</h2>';
     }
 }
-die();
+endif;
+if(!$phpunit['isTest']) {
+    die();
+}
 ?>

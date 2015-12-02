@@ -1,5 +1,8 @@
 <?php
-
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
 if(!isset($_GET['album'])){
     http_response_code(404);
 }else {
@@ -199,3 +202,5 @@ if(!isset($_GET['album'])){
         }
     }
 }
+endif;
+?>

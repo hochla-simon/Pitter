@@ -1,4 +1,8 @@
 <?php
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
 $site['title'] = 'View photo';
 
 $id = $_GET['id'];
@@ -20,4 +24,5 @@ if ($id != '') {
 } else {
     include(dirname(__FILE__) . '/../common/error404.php');
 }
+endif;
 ?>

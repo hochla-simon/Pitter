@@ -76,6 +76,7 @@ class TestConfiguration extends PHPUnit_Framework_TestCase {
     public function testSettings(){
 
         // Initialization
+        $_SESSION['id'] = 1;
         $_GET = array(
             'page' => 'administration/settings.php'
         );

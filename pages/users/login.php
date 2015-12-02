@@ -10,7 +10,7 @@ $message = '';
 if(isset($_POST['login'])){
 	$errors = array();
 	foreach($_POST as $key => $val){
-		if($fields[$key] == ''){
+		if($key != 'redirect' and $fields[$key] == ''){
 			unset($_POST[$key]);
 		}
 	}
@@ -24,14 +24,19 @@ if(isset($_POST['login'])){
 		if($user['id'] == '' or $user['password'] != crypt($_POST['password'], $user['password'])){
 			$errors[] = 'No user having these credentials could be found.';
 		}
+		else if($user['enabled'] == 0){
+			$errors[] = 'Your account has not been activated by the administrator yet.';
+		}
 	}
 	if(count($errors) == 0){
 		$_SESSION['id'] = $user['id'];
 		if($_POST['redirect'] == ''){
 			$_POST['redirect'] = $config['projectURL'].'users/profile.html';
 		}
-        header('Location: '.$_POST['redirect']);
-        die();
+		if(!$phpunit['isTest']) {
+			header('Location: '.$_POST['redirect']);
+			die();
+		}
 	}
 	else{
 		$message = createMessage(implode('<br />', $errors));

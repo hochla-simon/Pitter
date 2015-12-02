@@ -12,6 +12,7 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
     function testUpload()
     {
         // Initialization
+        $_SESSION['id'] = 1;
         $_GET = array(
             'page' => 'upload/upload.php'
         );
