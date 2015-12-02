@@ -4,5 +4,5 @@ if(!$phpunit['isTest']) {
 }
 $site['title'] = 'Forbidden';
 ?>
-<h1><?=$site['title']?></h1>
+<h2><?=$site['title']?></h2>
 You are not allowed to see this page.

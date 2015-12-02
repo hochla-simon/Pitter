@@ -40,7 +40,7 @@ if(isset($_POST['submit'])){
 		$db->query("insert into users set firstName = '".mysql_real_escape_string($_POST['firstName'])."', lastName = '".mysql_real_escape_string($_POST['lastName'])."', email = '".mysql_real_escape_string($_POST['email'])."', password = '".mysql_real_escape_string(crypt($_POST['password']))."', registered = '".time()."', enabled = '0'");
 		$lastId = mysql_insert_id();
 		$admin = mysql_fetch_assoc($db->query("SELECT email FROM users WHERE isAdmin = 1 LIMIT 1"));
-		@mail($admin['email'], $config['projectName'].': A new user account has been created', "Hi,\n\n".$_POST['firstName']." ".$_POST['lastName']." has created an account with the following email address: ".$_POST['email'].". Use the following link to activate the user account: ".$config['projectURL']."administration/activateUser.html?id=".$lastId, 'Content-Type: text/plain\n');
+		@mail($admin['email'], $config['projectName'].': A new user account has been created', "Hi,\n\n".$_POST['firstName']." ".$_POST['lastName']." has created an account with the following email address: ".$_POST['email'].". Use the following link to activate the user account: ".$config['projectURL']."administration/users.html?id=".$lastId."&action=enable", 'Content-Type: text/plain\n');
 		$message = createMessage('You have been succesfully registered to '.$config['projectName'].'!', 'confirm');
 		unset($_POST);
 	}

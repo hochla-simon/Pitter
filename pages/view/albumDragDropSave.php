@@ -24,8 +24,10 @@ else:
     }
 
     if($denied){
-        include(dirname(__FILE__) . '/../common/error401.php');
-        exit();
+        include(dirname(__FILE__) . '/../common/error400.php');
+        if(!$phpunit['isTest']) {
+            die();
+        }
     }else {
         if (isset($_POST["albumId"]) && isset($_POST["parentAlbumId"])) {
             $update_sql_string = 'UPDATE albums SET parentAlbumId="' . $_POST["parentAlbumId"] . '",modified=CURRENT_TIMESTAMP() WHERE id="' . $_POST["albumId"] . '" ';
@@ -35,7 +37,9 @@ else:
             $db->query($delete_sql_string);
             $message = createMessage("Sorry, there was an error moving your album.");
         }
-        die();
+        if(!$phpunit['isTest']) {
+            die();
+        }
    }
 endif;
 if(!$phpunit['isTest']) {

@@ -29,7 +29,7 @@ if (!empty($result)){
 }else{
     $denied = true;
 }
-$sql = "SELECT id,ownerId FROM images WHERE id=" . mysql_real_escape_string($imageId);
+$sql = "SELECT id,ownerId FROM images WHERE id='" . mysql_real_escape_string($imageId)."'";
 $result = $db->query($sql);
 $row = mysql_fetch_array($result);
 if (!empty($row)) {
@@ -40,12 +40,12 @@ if (!empty($row)) {
     $denied = true;
 }
 
-if($denied){
+if($denied and !$phpunit['isTest']){
     include(dirname(__FILE__) . '/../common/error401.php');
     exit();
 }
 
-$sql = "SELECT positionInAlbum FROM imagesToAlbums WHERE albumId = " . mysql_real_escape_string($newAlbumId) . " ORDER BY positionInAlbum DESC LIMIT 1";
+$sql = "SELECT positionInAlbum FROM imagesToAlbums WHERE albumId = '" . mysql_real_escape_string($newAlbumId) . "' ORDER BY positionInAlbum DESC LIMIT 1";
 $currentMaxPosition = $db->query($sql);
 $newMaxPosition = (int) mysql_fetch_array($currentMaxPosition)["positionInAlbum"] + 1;
 

@@ -4,7 +4,7 @@ if($currentUser['id'] == ''):
 	include(dirname(__FILE__).'/../users/login.php');
 else:
 
-    include('albumFunctions.php');
+	include_once(dirname(__FILE__).'/albumFunctions.php');
 
 	$site['title'] = 'Move album';
 	$site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';

@@ -5,7 +5,7 @@ if($currentUser['id'] == ''):
 else:
 $id = $_GET['id'];
 
-$sql = "SELECT id, extension, ownerId FROM images WHERE id=" . mysql_real_escape_string($id);
+$sql = "SELECT id, extension, ownerId FROM images WHERE id='".mysql_real_escape_string($id)."'";
 $result = $db->query($sql);
 $row = mysql_fetch_array($result);
 
@@ -14,12 +14,16 @@ if ($row) {
     $extension = $row['extension'];
 } else {
     include(dirname(__FILE__) . '/../common/error404.php');
-    die();
+    if(!$phpunit['isTest']) {
+        die();
+    }
 }
 
 if($row['ownerId']!=$currentUser['id']) {
-    include(dirname(__FILE__) . '/../common/error401.php');
-    die();
+    if(!$phpunit['isTest']) {
+        include(dirname(__FILE__) . '/../common/error401.php');
+        die();
+    }
 }
 $path = dirname(__FILE__) . '/../../data/images/' . $id . '.' . $extension;
 
@@ -27,7 +31,9 @@ $extension = strtolower($extension);
 if ($extension == 'jpg') {
     $extension = "jpeg";
 }
-header('Content-Type: image/' . $extension);
+if(!$phpunit['isTest']) {
+    header('Content-Type: image/' . $extension);
+}
 
 
 
@@ -94,8 +100,10 @@ if(isset($_GET["max_size"])){
         }
     }
 } else {
-    readfile($path);
+    @readfile($path);
 }
-die();
+if(!$phpunit['isTest']) {
+    die();
+}
 endif;
 ?>

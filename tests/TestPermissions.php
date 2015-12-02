@@ -41,18 +41,25 @@ class TestPermissions extends PHPUnit_Framework_TestCase {
             'isTest' => true
         );
 
-        // Testing as 0 = Anoymous
+        // Testing as 0 = Anonymous
         $_SESSION['id'] = '';
         foreach($pages as $url => $level){
             $_GET['page'] = str_replace('.html', '.php', $url);
             include(dirname(__FILE__).'/../index.php');
-            var_dump($url, $level, $site['content'], preg_match('!(Login|Unauthorized)!i', $site['content']));
             if($level > 0){
-                $this->assertTrue(preg_match('!(Login|Unauthorized)!i', $site['content']) == 1);
+                $this->assertTrue(preg_match('!(<h2>Login</h2>|Unauthorized)!i', $site['content']) == 1);
             }
             else {
-                $this->assertFalse(preg_match('!(Login|Unauthorized)!i', $site['content']) == 1);
+                $this->assertFalse(preg_match('!(<h2>Login</h2>|Unauthorized)!i', $site['content']) == 1);
             }
+        }
+
+        // Testing as 3 = Administrator
+        $_SESSION['id'] = 1;
+        foreach($pages as $url => $level){
+            $_GET['page'] = str_replace('.html', '.php', $url);
+            include(dirname(__FILE__).'/../index.php');
+            $this->assertFalse(preg_match('!(<h2>Login</h2>|Unauthorized)!i', $site['content']) == 1);
         }
 
     }

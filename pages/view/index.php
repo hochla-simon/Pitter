@@ -3,7 +3,7 @@ if($currentUser['id'] == ''):
 	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
 	include(dirname(__FILE__).'/../users/login.php');
 else:
-include 'config.php';
+include(dirname(__FILE__).'/config.php');
 
 $result = mysql_query("SELECT COUNT(1) FROM images");
 $row = mysql_fetch_array($result);
@@ -24,15 +24,19 @@ $site['script'] = '<link rel="stylesheet" href="' . $config['projectURL'] . 'css
 	<script type="text/javascript" src="' . $config['projectURL'] . 'js/albumViewScripts.js"></script>
 	<script type="text/javascript" src="' . $config['projectURL'] . 'js/dropzone.js"></script>';
 
-function orderAlbums($id, &$children, $albumsToOrder) {
+
+if(!function_exists('orderAlbums2')){
+function orderAlbums2($id, &$children, $albumsToOrder) {
 	foreach($albumsToOrder as $albumId => $album) {
 		if ($album['parentAlbumId'] == $id) {
 			$children[$albumId] = $album;
-			orderAlbums($albumId, $children[$albumId]['childAlbums'], $albumsToOrder);
+			orderAlbums2($albumId, $children[$albumId]['childAlbums'], $albumsToOrder);
 		}
 	}
 }
+}
 
+if(!function_exists('createAlbums')){
 function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 	global $config;
 	$display = 'none';
@@ -66,6 +70,7 @@ function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 	}
 	echo '</ul>';
 }
+}
 
 $albumId = $_GET['id'];
 if (!$albumId) {
@@ -98,7 +103,7 @@ if (!empty($album_data)) {
 
             $orderedAlbumObjects = array();
 
-            orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
+            orderAlbums2('-1', $orderedAlbumObjects, $albumObjects);
 
             echo '<div id="albumsContainer">';
 

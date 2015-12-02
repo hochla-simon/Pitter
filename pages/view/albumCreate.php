@@ -4,8 +4,8 @@ if($currentUser['id'] == ''):
 	include(dirname(__FILE__).'/../users/login.php');
 else:
 
-    include('albumFunctions.php');
-	
+	include_once(dirname(__FILE__).'/albumFunctions.php');
+
 	$site['title'] = 'Add new album';
 
 	if ($_GET['parentId']) {

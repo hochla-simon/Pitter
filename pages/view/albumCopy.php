@@ -3,8 +3,8 @@ if($currentUser['id'] == ''):
 	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
 	include(dirname(__FILE__).'/../users/login.php');
 else:
-    include('albumFunctions.php');
-	
+	include_once(dirname(__FILE__).'/albumFunctions.php');
+
 	$site['title'] = 'Copy album';
 	$site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 	$albumId=$_GET['id'];

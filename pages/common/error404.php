@@ -4,5 +4,5 @@ if(!$phpunit['isTest']) {
 }
 $site['title'] = 'Not Found';
 ?>
-<h1><?=$site['title']?></h1>
+<h2><?=$site['title']?></h2>
 The requested page could not be found.

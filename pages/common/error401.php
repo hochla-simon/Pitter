@@ -4,5 +4,5 @@ if(!$phpunit['isTest']) {
 }
 $site['title'] = 'Unauthorized';
 ?>
-<h1><?=$site['title']?></h1>
+<h2><?=$site['title']?></h2>
 You are not allowed to use this page without authorization.
