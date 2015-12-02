@@ -15,6 +15,15 @@ if(!$config['installed']){
 	$config['navigation'] = array();
 	$page = 'administration/settings.php';
 }
+else if(preg_match('!administration!i', $page)){
+	if($currentUser['id'] == ''){
+		$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+		$page = 'users/login.php';
+	}
+	else if($currentUser['isAdmin'] == '0'){
+		$page = 'common/error403.php';
+	}
+}
 else if(!file_exists(dirname(__FILE__).'/pages/'.$page)){
 	$page = 'common/error404.php';
 }

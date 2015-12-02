@@ -6,7 +6,7 @@ $fields = array(
 );
 
 $message = '';
-if(isset($_POST['login'])){
+if(isset($_POST['submit'])){
 	$errors = array();
 	foreach($_POST as $key => $val){
 		if($fields[$key] == ''){
@@ -49,6 +49,6 @@ if(isset($_POST['login'])){
 	}
 	?>
 	<div class="row">
-	  <input class="submit" type="submit" name="login" value="Request new password" /><br /><br />
+	  <input class="submit" type="submit" name="submit" value="Request new password" /><br /><br />
 	</div> 
 </form>

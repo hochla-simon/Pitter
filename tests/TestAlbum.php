@@ -3,6 +3,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
     public function testCreation(){
 
         // Initialization
+        $_SESSION['id'] = 1;
         $_GET = array(
             'parentId' => ''
         );
@@ -40,6 +41,8 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
     public function testEdit(){
 
         // Initialization
+        $_SESSION['id'] = 1;
+        
         $phpunit = array(
             'isTest' => true
         );
@@ -207,5 +210,4 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
         echo $newNumber;
         $this->assertEquals($initialNumber-$imagesNumber,$newNumber);
     }
-
 }

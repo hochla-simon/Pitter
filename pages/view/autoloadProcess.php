@@ -5,7 +5,11 @@
  * Date: 11. 11. 2015
  * Time: 13:24
  */
-include("config.php"); //include config file
+if($currentUser['id'] == ''):
+    echo "Unauthorized.";
+else:
+
+include(dirname(__FILE__)."/config.php"); //include config file
 
 if($_POST)
 {
@@ -15,14 +19,30 @@ if($_POST)
 
     //throw HTTP error if group number is not valid
     if(!is_numeric($group_number)){
-        header('HTTP/1.1 500 Invalid number!');
-        exit();
+        if(!$phpunit['isTest']){
+            header('HTTP/1.1 400 Bad Request');
+            die();
+        }
     }
 
     //throw HTTP error if album_id is not valid
     if(!is_numeric($album_id)){
-        header('HTTP/1.1 500 Invalid number!');
-        exit();
+        if(!$phpunit['isTest']){
+            header('HTTP/1.1 400 Bad Request');
+            die();
+        }
+    }
+
+    $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($album_id) . "'";
+    $album_data = mysql_fetch_array($db->query($query_for_album));
+    if (!empty($album_data)) {
+        if ($album_data['ownerId'] != $currentUser['id']) {
+            echo "owner: ".$album_data['ownerId'].' '.$currentUser['id'];
+            include(dirname(__FILE__) . '/../common/error401.php');
+            if(!$phpunit['isTest']){
+                die();
+            }
+        }
     }
 
     //get current starting point of records
@@ -62,11 +82,23 @@ if($_POST)
 		echo '<script>
 			$(".draggablePhoto").draggable({
 				connectToSortable: "#photos",
-				revert: "invalid"
+				revert: "invalid",
+				start: function( event, ui ) {
+					$(".childAlbums").css("display", "");
+					$("img.toggleArrow").each(function(){
+						var originalImgSrc = $(this).attr("src");
+						var lastSlashIndex = originalImgSrc.lastIndexOf("/") + 1;
+						var newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
+						$(this).attr("src", newImgSrc);
+					});
+				}
 			});';
     } else {
         echo '<h2>No photos!</h2>';
     }
 }
-die();
+endif;
+if(!$phpunit['isTest']) {
+    die();
+}
 ?>

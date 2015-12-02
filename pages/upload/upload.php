@@ -1,4 +1,9 @@
 <?php
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
+
 $target_dir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images'. DIRECTORY_SEPARATOR;
 $target_file = $target_dir . basename($_FILES["file"]["name"]);
 #echo "will try to move to " . $target_file;
@@ -9,15 +14,22 @@ $imageFileName = pathinfo($target_file,PATHINFO_FILENAME);
 
 $response_code=200;
 if(isset($_POST["albumId"])) {
-    $sql = "SELECT parentAlbumId, id, name FROM albums WHERE id='" . mysql_real_escape_string($_POST["albumId"])."'";
+    $sql = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($_POST["albumId"])."'";
     $albums = mysql_fetch_assoc($db->query($sql));
     if (!empty($albums)) {
-        $checkFile = getimagesize($_FILES["file"]["tmp_name"]);
-        if ($checkFile !== false) {
-            $uploadOk = 1;
-        } else {
-            $response_code=400;
-            $uploadOk = 0;
+        if($albums['ownerId']==$currentUser['id']) {
+            $checkFile = getimagesize($_FILES["file"]["tmp_name"]);
+            if ($checkFile !== false) {
+                $uploadOk = 1;
+            } else {
+                $response_code = 400;
+                $uploadOk = 0;
+            }
+        }else{
+            echo $sql.'\n';
+            echo 'owner: '.$albums['ownerId'].' user: '.$currentUser['id'];
+            $response_code=401;
+            $uploadOk=0;
         }
     }else{
         $response_code=401;
@@ -47,7 +59,7 @@ if($uploadOk == 1){
         $tmp_id = 'r'.rand();
         $tmpTarget_file_name = $target_dir . $tmp_id . '.' . $imageFileType;
         if (copy($_FILES["file"]["tmp_name"], $tmpTarget_file_name)) {
-            $insert_sql_string = 'INSERT INTO images (ownerId,filename, extension, created) VALUES (0,\'' . $imageFileName . '\',\'' . $imageFileType . '\', CURRENT_TIMESTAMP());';
+            $insert_sql_string = 'INSERT INTO images (ownerId,filename, extension, created) VALUES ('.$currentUser['id'].',\'' . $imageFileName . '\',\'' . $imageFileType . '\', CURRENT_TIMESTAMP());';
 
 
             $db->query($insert_sql_string);
@@ -84,3 +96,5 @@ if($uploadOk == 1){
 if(!$phpunit['isTest']) {
     die();
 }
+endif;
+?>

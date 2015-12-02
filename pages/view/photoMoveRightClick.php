@@ -1,17 +1,25 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Simon
+ * Date: 1. 12. 2015
+ * Time: 18:51
+ */
 if($currentUser['id'] == ''):
     $_POST['redirect'] = $_SERVER['REQUEST_URI'];
     include(dirname(__FILE__).'/../users/login.php');
 else:
-include_once(dirname(__FILE__).'/albumFunctions.php');
 
-$site['title'] = 'Copy photo';
+include('albumFunctions.php');
+
+$site['title'] = 'Move photo';
 $site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 $photoId=$_GET['id'];
+$albumId=$_GET['albumId'];
 
-if (isset ($_POST["Copy"])) {
+if (isset ($_POST["Move"])) {
     if ($_POST["imageId"] != '') {
-        $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($_POST["albumId"]) . "'";
+        $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($_POST["newAlbumId"]) . "'";
         $album_data = mysql_fetch_array($db->query($query_for_album));
         if (!empty($album_data)) {
             if ($album_data['ownerId'] == $currentUser['id']) {
@@ -24,9 +32,12 @@ if (isset ($_POST["Copy"])) {
 
 
                 $db->query('START TRANSACTION;');
-                $db->query('SELECT @maxPositionInAlbum := IFNULL(MAX(positionInAlbum),0) FROM imagesToAlbums WHERE albumId=' . $_POST["albumId"] . ';');
-                $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES (\'' . $_POST["albumId"] . '\',\'' . $_POST["imageId"] . '\', @maxPositionInAlbum + 1);');
+                $db->query('SELECT @maxPositionInAlbum := IFNULL(MAX(positionInAlbum),0) FROM imagesToAlbums WHERE albumId=' . $_POST["newAlbumId"] . ';');
+                $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES (\'' . $_POST["newAlbumId"] . '\',\'' . $_POST["imageId"] . '\', @maxPositionInAlbum + 1);');
                 $db->query('COMMIT;');
+
+                $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="' . $_POST["imageId"] . '"';
+                $db->query($delete_sql_string);
 
                 header('Location: ./index.html');
                 exit();
@@ -38,7 +49,7 @@ if (isset ($_POST["Copy"])) {
     } else {
         http_response_code(500);
         $db->query($delete_sql_string);
-        $message = createMessage("Sorry, there was an error copying your photo.");
+        $message = createMessage("Sorry, there was an error moving your photo.");
     }
 }
 $denied = false;
@@ -84,7 +95,7 @@ if(!$denied) {
         <div class="row">
             <label for="albumId">Destination:</label>
 
-            <select name="albumId" id="albumId">
+            <select name="newAlbumId" id="newAlbumId">
                 <?php
                 echo obtainSelectAlbum($db, $currentUser['id']);
                 ?>
@@ -93,7 +104,7 @@ if(!$denied) {
 
         <div class="row">
             <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-            <input class="submit" type="submit" name="Copy" value="Copy">
+            <input class="submit" type="submit" name="Move" value="Move">
         </div>
 
     </form>

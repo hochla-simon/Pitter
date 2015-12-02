@@ -1,13 +1,23 @@
 <?php
 	include('albumFunctions.php');
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/../users/login.php');
+else:
+
 	$site['title'] = 'Delete album';
 	$albumId=$_GET['id'];
 	
 	if($albumId != ''){
-		$select_sql_string = "SELECT id, parentAlbumId, name, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
+		$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
 		$result = $db->query($select_sql_string);
 		if (!empty($result)){
 			$album = mysql_fetch_array($result);
+			if ($album['ownerId'] != $currentUser['id']) {
+				$denied = true;
+				include(dirname(__FILE__) . '/../common/error401.php');
+				exit();
+			}
 		}
 	}
 
@@ -47,4 +57,6 @@ if ( !$phpunit['isTest'] ) {
 		<input class="submit" type="submit" name="Delete" value="Delete">
 	</div>
 </form>
-<?php } ?>
+<?php }
+endif;
+?>

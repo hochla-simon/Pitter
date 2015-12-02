@@ -1,24 +1,47 @@
 <?php
+if($currentUser['id'] == ''):
+    $_POST['redirect'] = $_SERVER['REQUEST_URI'];
+    include(dirname(__FILE__).'/../users/login.php');
+else:
+
     include('albumFunctions.php');
+
     $site['title'] = 'Delete photo';
     $imageId=$_GET['id'];
 
-    $select_sql_string = 'SELECT albums.id, albums.name FROM imagesToAlbums, albums WHERE imagesToAlbums.imageId=' . mysql_real_escape_string($imageId) . ' AND imagesToAlbums.albumId=albums.id' ;
+    $select_sql_string = 'SELECT * FROM images WHERE id=' . $imageId ;
     $result = $db->query($select_sql_string);
+    $row = mysql_fetch_array($result);
 
-    if (isset ($_POST["Delete"])) {
-        $albums = $_POST['album'];
-        if (!empty($albums)){
-            foreach ($albums as $albumId){
-                $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="'. $imageId . '"';
-                $db->query($delete_sql_string);
+    $error = false;
+    if(!empty($row)) {
+        if ($row['ownerId'] != $currentUser['id']) {
+            $message = createMessage("Access denied");
+            $error = true;
+            http_response_code(401);
+        } else {
+            $select_sql_string = 'SELECT albums.id, albums.name FROM imagesToAlbums, albums WHERE imagesToAlbums.imageId=' . mysql_real_escape_string($imageId) . ' AND imagesToAlbums.albumId=albums.id' ;
+            $result = $db->query($select_sql_string);
+
+            if (isset ($_POST["Delete"])) {
+                $albums = $_POST['album'];
+                if (!empty($albums)){
+                    foreach ($albums as $albumId){
+                        $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="'. $imageId . '"';
+                        $db->query($delete_sql_string);
+                    }
+                    deleteImage($db, $imageId);
+                }
+                header('Location: ./index.html');
+                exit();
             }
-            deleteImage($db, $imageId);
-        }
-        header('Location: ./index.html');
-        exit();
-    }
-?>
+        }        if (!$phpunit['isTest']) {
+            if ($error){
+                print ($message);
+            } else {
+                $select_sql_string = 'SELECT albums.id, albums.name FROM imagesToAlbums, albums WHERE imagesToAlbums.imageId=' . mysql_real_escape_string($imageId) . ' AND imagesToAlbums.albumId=albums.id';
+                $result = $db->query($select_sql_string);
+                ?>
 
 
 <form action="" method="POST">
@@ -39,18 +62,25 @@
     </div>
 </form>
 
-<script>
-    $('#selectAll').click(function(event) {
-        if(this.checked) {
-            // Iterate each checkbox
-            $(':checkbox').each(function() {
-                this.checked = true;
-            });
+                <script>
+                    $('#selectAll').click(function (event) {
+                        if (this.checked) {
+                            // Iterate each checkbox
+                            $(':checkbox').each(function () {
+                                this.checked = true;
+                            });
+                        }
+                        else {
+                            $(':checkbox').each(function () {
+                                this.checked = false;
+                            });
+                        }
+                    });
+                </script>
+
+                <?php
+            }
         }
-        else {
-            $(':checkbox').each(function() {
-                this.checked = false;
-            });
-        }
-    });
-</script>
+    }
+endif;
+?>

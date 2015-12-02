@@ -1,5 +1,10 @@
 <?php
-    include('albumFunctions.php');
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/../users/login.php');
+else:
+
+	include_once(dirname(__FILE__).'/albumFunctions.php');
 
 	$site['title'] = 'Move album';
 	$site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
@@ -41,7 +46,6 @@
 
 			<div class="row">
 				<label>Album to move:</label>
-
 				<p><?php echo $album['name']; ?></p>
 			</div>
 
@@ -50,7 +54,7 @@
 
 				<select name="parentAlbumId" id="parentAlbumId">
 					<?php
-					echo obtainSelectAlbum($db);
+					echo obtainSelectAlbum($db, $currentUser['id']);
 					?>
 				</select>
 			</div>
@@ -62,6 +66,7 @@
 			</div>
 
 		</form>
-		<?php
-	}
+<?php
+}
+endif;
 ?>

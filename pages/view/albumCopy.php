@@ -1,6 +1,10 @@
 <?php
-    include('albumFunctions.php');
-	
+if($currentUser['id'] == ''):
+	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
+	include(dirname(__FILE__).'/../users/login.php');
+else:
+	include_once(dirname(__FILE__).'/albumFunctions.php');
+
 	$site['title'] = 'Copy album';
 	$site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 	$albumId=$_GET['id'];
@@ -41,30 +45,36 @@
 	}
 	if ( !$phpunit['isTest'] ) {
 		print($message);
+		?>
+		<h2><?php echo $site['title']; ?> to...</h2>
+
+		<form action="" method="POST">
+
+			<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>">
+
+			<div class="row">
+				<label>Album to copy:</label>
+
+				<p><?php echo $album['name']; ?></p>
+			</div>
+
+			<div class="row">
+				<label for="parentAlbumId">Destination:</label>
+				<select name="parentAlbumId" id="parentAlbumId">
+					<?php
+					echo obtainSelectAlbum($db, $currentUser['id']);
+					?>
+				</select>
+			</div>
+			<div class="row">
+				<input class="cancel" type="button" name="Cancel" value="Cancel"
+					   onclick="window.location='./index.html';">
+				<input class="submit" type="submit" name="Save" value="Save">
+			</div>
+
+
+		</form>
+		<?php
+	}
+endif;
 ?>
-<h2><?php echo $site['title'];?> to...</h2>
-
-<form action="" method="POST">
-		
-		<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
-
-		<div class="row">
-			<label>Album to copy:</label>
-			<p><?php echo $album['name'];?></p>
-		</div>
-
-		<div class="row">
-			<label for="parentAlbumId">Destination:</label>
-			<select name="parentAlbumId" id="parentAlbumId">
-				<?php
-					echo obtainSelectAlbum ($db);
-				?>
-			</select>
-		</div>
-		<div class="row">
-			<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-			<input class="submit" type="submit" name="Save" value="Save">
-		</div>
-
-</form>
-<?php } ?>

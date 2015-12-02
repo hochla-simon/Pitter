@@ -65,9 +65,9 @@ if (!function_exists(writeSelectAlbum)) {
 	}
 }
 if (!function_exists(obtainSelectAlbum)) {
-	function obtainSelectAlbum($db)
+	function obtainSelectAlbum($db, $currentUserId)
 	{
-		$sql = "SELECT parentAlbumId, id, name FROM albums";
+		$sql = "SELECT parentAlbumId, id, name FROM albums WHERE ownerID=".$currentUserId;
 		$albums = $db->query($sql);
 		$selectAlbum = '';
 		if (!empty($albums)) {

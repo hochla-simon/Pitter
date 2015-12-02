@@ -1,8 +1,8 @@
 <?php
 $site['title'] = 'Edit user';
 
-$currentUser = mysql_fetch_assoc(mysql_query("select * from users where id = '".mysql_real_escape_string($_GET['id'])."'"));
-if($currentUser['id'] == ''){
+$user = mysql_fetch_assoc(mysql_query("select * from users where id = '".mysql_real_escape_string($_GET['id'])."'"));
+if($user['id'] == '' and !$phpunit['isTest']){
 	header('Location: '.$config['projectURL'].'administration/users.html');
 	die();
 }
@@ -34,13 +34,13 @@ if(isset($_POST['submit'])){
 		}
 	}
 	if(count($errors) == 0){
-		$user = mysql_fetch_assoc($db->query("select * from users where email = '".mysql_real_escape_string($_POST['email'])."' and id != '".mysql_real_escape_string($_GET['id'])."'"));
-		if($user['id'] != ''){
+		$tmpUser = mysql_fetch_assoc($db->query("select * from users where email = '".mysql_real_escape_string($_POST['email'])."' and id != '".mysql_real_escape_string($user['id'])."'"));
+		if($tmpUser['id'] != ''){
 			$errors[] = 'There is already a user having this email address.';
 		}
 	}
 	if(count($errors) == 0){
-		$db->query("update users set firstName = '".mysql_real_escape_string($_POST['firstName'])."', lastName = '".mysql_real_escape_string($_POST['lastName'])."', email = '".mysql_real_escape_string($_POST['email'])."', password = '".mysql_real_escape_string(crypt($_POST['password']))."' where id = '".mysql_real_escape_string($_GET['id'])."'");
+		$db->query("update users set firstName = '".mysql_real_escape_string($_POST['firstName'])."', lastName = '".mysql_real_escape_string($_POST['lastName'])."', email = '".mysql_real_escape_string($_POST['email'])."', password = '".mysql_real_escape_string(crypt($_POST['password']))."' where id = '".mysql_real_escape_string($user['id'])."'");
 		$message = createMessage('Changes successfully saved.', 'confirm');
 	}
 	else{
@@ -48,12 +48,12 @@ if(isset($_POST['submit'])){
 	}
 }
 else{
-	$_POST = $currentUser;
+	$_POST = $user;
 }
 ?>
 <h2><?php echo $site['title'];?></h2>
 <?php echo $message;?>
-<p><a href="<?php echo $config['projectURl'];?>administration/users.html">... back to users</a></p>
+<p><a href="<?php echo $config['projectURL'];?>administration/users.html">... back to users</a></p>
 <form action="" method="post">
  <?php
  foreach($fields as $key => $field){

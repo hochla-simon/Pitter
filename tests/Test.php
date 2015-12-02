@@ -2,7 +2,9 @@
 require 'DataBaseTesting.php';
 require 'TestConfiguration.php';
 require 'TestImageUpload.php';
+require 'TestUser.php';
 require 'TestUserAdministration.php';
+require 'TestPermissions.php';
 require 'TestAlbum.php';
 
 /**
@@ -13,18 +15,6 @@ require 'TestAlbum.php';
  */
 class Test extends PHPUnit_Framework_TestCase
 {
-    /*public function testAll(){
-        @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
-        $test = new DataBaseTesting();
-        $test->testReadDatabase();
-        $test = new TestConfiguration();
-        $test->testInstallation();
-        $test->testSettings();
-        $test = new TestImageUpload();
-        $test->testUpload();
-        @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
-    }*/
-
     public function testInitialDeletionOfConfiguration() {
         @unlink(dirname(__FILE__).'/../data/configuration/config.txt');
     }
@@ -47,12 +37,25 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testUpload();
     }
 
+    public function testUser() {
+        $test = new TestUser();
+        $test->testEditProfile();
+        $test->testLogin();
+        $test->testRecoverPassword();
+        $test->testRegister();
+    }
+
     public function testUserAdministration() {
         $test = new TestUserAdministration();
         $test->testCreateUser();
         $test->testEditUser();
         $test->testEnableUser();
         $test->testDeleteUser();
+    }
+
+    public function testPermissions() {
+        $test = new TestPermissions();
+        $test->testPermissions();
     }
 
     public function testAlbum() {
