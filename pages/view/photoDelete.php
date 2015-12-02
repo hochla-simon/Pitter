@@ -27,10 +27,16 @@ else:
                 $albums = $_POST['album'];
                 if (!empty($albums)){
                     foreach ($albums as $albumId){
-                        $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="'. $imageId . '"';
-                        $db->query($delete_sql_string);
+                        $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($albumId) . "'";
+                        $album_data = mysql_fetch_array($db->query($query_for_album));
+                        if (!empty($album_data)) {
+                            if ($album_data['ownerId'] == $currentUser['id']) {
+                                $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="' . $imageId . '"';
+                                $db->query($delete_sql_string);
+                            }
+                        }
                     }
-                    deleteImage($db, $imageId);
+                    deleteImage($currentUser['id'], $db, $imageId);
                 }
                 header('Location: ./index.html');
                 exit();

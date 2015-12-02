@@ -94,7 +94,7 @@ if (!function_exists(obtainSelectAlbum)) {
 }
 
 if (!function_exists(deleteImage)) {
-	function deleteImage($db, $imageId)
+	function deleteImage($currentUserId, $db, $imageId)
 	{
 		$select_sql_string = 'SELECT * FROM imagesToAlbums WHERE imageId=' . $imageId ;
 		$result = $db->query($select_sql_string);
@@ -102,18 +102,22 @@ if (!function_exists(deleteImage)) {
 			$select_sql_string = 'SELECT * FROM images WHERE id=' . $imageId;
 			$result = $db->query($select_sql_string);
 			$row = mysql_fetch_array($result);
-			unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $row['id'] . "." . $row['extension']);
-			$delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId);
-			$db->query($delete_sql_string);
-			$delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId);
-			$db->query($delete_sql_string);
+			if (!empty($row)) {
+				if ($row['ownerId'] == $currentUserId) {
+				}
+				unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $row['id'] . "." . $row['extension']);
+				$delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId);
+				$db->query($delete_sql_string);
+				$delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId);
+				$db->query($delete_sql_string);
+			}
 		}
 	}
 }
 
 
 if (!function_exists(deleteAlbumChild)) {
-	function deleteAlbumChild($db, $albumId)
+	function deleteAlbumChild($currentUserId, $db, $albumId)
 	{
 		$albumsChild = $db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumId . ' "');
 		if (!empty($albumsChild)) {
@@ -123,10 +127,10 @@ if (!function_exists(deleteAlbumChild)) {
 					while ($image = mysql_fetch_array($images)) {
 						$delete_sql_string = 'DELETE FROM imagestoalbums WHERE imageId="' . $image['imageId'] . '" AND albumId="'. $childAlbum['id'] .'"';
 						$db->query($delete_sql_string);
-						deleteImage($db, $image['imageId']);
+						deleteImage($currentUserId, $db, $image['imageId']);
 					}
 				}
-				deleteAlbumChild($db,$childAlbum['id']);
+				deleteAlbumChild($currentUserId, $db, $childAlbum['id']);
 				$delete_sql_string = 'DELETE FROM albums WHERE id="' . $childAlbum['id'] . '" ';
 				$db->query($delete_sql_string);
 			}
