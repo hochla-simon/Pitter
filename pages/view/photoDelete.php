@@ -38,10 +38,13 @@ else:
                     }
                     deleteImage($currentUser['id'], $db, $imageId);
                 }
-                header('Location: ./index.html');
-                exit();
+                if (!$phpunit['isTest']) {
+                    header('Location: ./index.html');
+                    exit();
+                }
             }
-        }        if (!$phpunit['isTest']) {
+        }
+        if (!$phpunit['isTest']) {
             if ($error){
                 print ($message);
             } else {

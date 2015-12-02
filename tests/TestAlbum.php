@@ -15,7 +15,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
 
         //Test album with empty name
         $_POST = array(
-            'save' => true,
+            'Save' => true,
         );
 
         $results = $db->query('SELECT * FROM albums');
@@ -98,6 +98,8 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
 
     public function testMove(){
         // Initialization
+        $_SESSION['id'] = 1;
+
         $phpunit = array(
             'isTest' => true
         );
@@ -155,6 +157,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
 
     public function testCopy(){
         // Initialization
+        $_SESSION['id'] = 1;
         $phpunit = array(
             'isTest' => true
         );
@@ -171,7 +174,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
         $_POST = array(
             'Save' => true,
             'albumId' => $albumTest['id'],
-            'parentAlbumId' => $albumTest['id']
+            'parentAlbumId' => '1'
         );
 
         include(dirname(__FILE__).'/../pages/view/albumCopy.php');
@@ -180,6 +183,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
 
     public function testDelete(){
         // Initialization
+        $_SESSION['id'] = 1;
         $phpunit = array(
             'isTest' => true
         );
@@ -207,7 +211,6 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
 
         $results = $db->query('SELECT * FROM imagestoalbums');
         $newNumber = mysql_num_rows($results);
-        echo $newNumber;
         $this->assertEquals($initialNumber-$imagesNumber,$newNumber);
     }
 }
