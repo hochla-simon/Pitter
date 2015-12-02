@@ -160,10 +160,11 @@ if (!function_exists(copyPhoto)) {
 if (!function_exists(copyAlbum)) {
 	function copyAlbum($db, $albumId, $newParentId)
 	{
-		$result = $db->query('SELECT name, description FROM albums WHERE id="'. $albumId .'"');
+		$result = $db->query('SELECT name, ownerId, description FROM albums WHERE id="'. $albumId .'"');
 		if (!empty($result)) {
 			$album = mysql_fetch_array($result);
-			$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $newParentId. '", 0,"' . $album["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $album["description"] . '" )';
+			$ownerId = $album['ownerId'];
+			$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $newParentId. '",'. $ownerId.',"' . $album["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $album["description"] . '" )';
 			$db->query($insert_sql_string);
 			$newAlbumId = mysql_insert_id();
 			copyPhoto($db, $albumId, $newAlbumId);

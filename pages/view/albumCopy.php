@@ -5,12 +5,42 @@ if($currentUser['id'] == ''):
 else:
 	include_once(dirname(__FILE__).'/albumFunctions.php');
 
+
+
 	$site['title'] = 'Copy album';
 	$site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 	$albumId=$_GET['id'];
 
+	$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
+	$result = $db->query($select_sql_string);
+	if (!empty($result)){
+		$album = mysql_fetch_array($result);
+		if ($album['ownerId'] != $currentUser['id']) {
+			include(dirname(__FILE__) . '/../common/error401.php');
+			exit();
+		}
+	}else{
+		include(dirname(__FILE__) . '/../common/error401.php');
+		exit();
+	}
+
+
 	if(isset($_POST["Save"])) {
 		if ($_POST["albumId"] != '') {
+			$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($_POST["parentAlbumId"]);
+			$result = $db->query($select_sql_string);
+			if (!empty($result)){
+				$album = mysql_fetch_array($result);
+				if ($album['ownerId'] != $currentUser['id']) {
+					include(dirname(__FILE__) . '/../common/error401.php');
+					exit();
+				}
+			}else{
+				include(dirname(__FILE__) . '/../common/error401.php');
+				exit();
+			}
+
+
 			copyAlbum($db, $albumId, $_POST["parentAlbumId"]);
 			if ( !$phpunit['isTest'] ) {
 				header('Location: ./index.html');
