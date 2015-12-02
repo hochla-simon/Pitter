@@ -5,7 +5,6 @@ class TestPermissions extends PHPUnit_Framework_TestCase {
         // Initialization
         // Level 3 = Administrator, 1 = Logged in, 0 = Anonymous
         $pages = array(
-            'administration/activateUser.html' => 3,
             'administration/createUser.html' => 3,
             'administration/editUser.html' => 3,
             'administration/index.html' => 3,

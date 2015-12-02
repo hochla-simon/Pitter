@@ -182,4 +182,79 @@ class TestUser extends PHPUnit_Framework_TestCase {
         $this->assertContains("successfully sent via email", $message);
         $this->assertEquals(count($errors), 0);
     }
+
+    public function testRegister(){
+
+        // Initialization
+        $_SESSION['id'] = 1;
+        $_GET = array(
+            'page' => 'users/register.php'
+        );
+        $phpunit = array(
+            'isTest' => true
+        );
+
+        // Test empty installation POST
+        $_POST = array(
+            'submit' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("Please provide", $errors[0]);
+        $this->assertEquals(count($errors), count($fields));
+
+        // Test creation with short password
+        $existingUser = mysql_fetch_assoc($db->query("select * from users order by id asc limit 0,1"));
+        $_POST = array(
+            'firstName' => 'Jim',
+            'lastName' => 'Doe',
+            'email' => $existingUser['email'],
+            'password' => 'test',
+            'retypepassword' => '1234',
+            'submit' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("at least 6 characters", $errors[0]);
+        $this->assertEquals(count($errors), 1);
+
+        // Test creation with not matching passwords
+        $_POST = array(
+            'firstName' => 'Jim',
+            'lastName' => 'Doe',
+            'email' => $existingUser['email'],
+            'password' => 'test1234',
+            'retypepassword' => '1234',
+            'submit' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("Passwords don't match", $errors[0]);
+        $this->assertEquals(count($errors), 1);
+
+        // Test creation of already used email address
+        $_POST = array(
+            'firstName' => 'Jim',
+            'lastName' => 'Doe',
+            'email' => $existingUser['email'],
+            'password' => 'test1234',
+            'retypepassword' => 'test1234',
+            'submit' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("user having this email address", $errors[0]);
+        $this->assertEquals(count($errors), 1);
+
+        // Successful creation of user
+        $_POST = array(
+            'firstName' => 'Jim',
+            'lastName' => 'Doe',
+            'email' => 'jim.doe@example.org',
+            'password' => 'test1234',
+            'retypepassword' => 'test1234',
+            'submit' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertContains("succesfully registered", $message);
+        $this->assertEquals(count($errors), 0);
+        $newUser = mysql_fetch_assoc($db->query("select * from users where email = 'jim.doe@example.org'"));
+        $this->assertNotEmpty($newUser['id']);
+    }
 }

@@ -42,6 +42,7 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testEditProfile();
         $test->testLogin();
         $test->testRecoverPassword();
+        $test->testRegister();
     }
 
     public function testUserAdministration() {

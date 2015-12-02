@@ -22,11 +22,11 @@ if(isset($_POST['submit'])){
 			$errors[] = 'Please provide the <i>'.$field['name'].'</i>.';
 		}
 	}
-	if(strlen($_POST['password']) < 6){
-		$errors[] = 'Please enter a password with at least 6 characters.';
-	}
 	if(count($errors) == 0){
-		if($_POST['password'] != $_POST['retypepassword']){
+		if(strlen($_POST['password']) < 6){
+			$errors[] = 'Please enter a password with at least 6 characters.';
+		}
+		else if($_POST['password'] != $_POST['retypepassword']){
 			$errors[] = 'Passwords don\'t match. Please retype your password correctly.';
 		}
 	}
