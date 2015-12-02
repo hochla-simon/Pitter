@@ -23,7 +23,7 @@ else:
 	}
 
 	if (isset ($_POST["Delete"])) {
-		deleteAlbumChild($db, $_POST["albumId"] );
+		deleteAlbumChild($currentUser['id'], $db, $_POST["albumId"] );
 		$images = $db->query('SELECT * FROM imagestoalbums WHERE albumId="'. $_POST["albumId"] .'"');
 		if (!empty($images)) {
 			while ($image = mysql_fetch_array($images)) {

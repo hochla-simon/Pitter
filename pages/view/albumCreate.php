@@ -23,7 +23,6 @@ else:
 			if (!empty($parent_album)) {
 				if ($parent_album['ownerId'] == $currentUser['id']) {
 
-
 					$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $_POST["parentAlbumId"] . '", ' . $currentUser['id'] . ',"' . $_POST["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $_POST["description"] . '" )';
 					$db->query($insert_sql_string);
 
