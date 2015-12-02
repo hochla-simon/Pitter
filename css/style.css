@@ -196,6 +196,8 @@ b{
 	border: solid 1px black;
 	vertical-align: middle;
 	text-align: center;
+	background: url(../images/loader.gif) no-repeat;
+	background-size: 100%;
 }
 .thumbnail:hover {
 	border-color: red;
