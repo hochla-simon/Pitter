@@ -5,6 +5,7 @@ if($currentUser['id'] == ''):
 	include(dirname(__FILE__).'/../users/login.php');
 else:
 
+	include_once(dirname(__FILE__).'/albumFunctions.php');
 	$site['title'] = 'Delete album';
 	$albumId=$_GET['id'];
 	
@@ -38,25 +39,26 @@ else:
 			exit();
 		}
 	}
-if ( !$phpunit['isTest'] ) {
+	if ( !$phpunit['isTest'] ) {
 ?>
 
-<h2><?php echo $site['title'];?></h2>
+	<h2><?php echo $site['title'];?></h2>
 
-<form action="" method="POST">
+	<form action="" method="POST">
 
-	<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
+		<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
 
-	<div class="row">
-		<label>Album to delete:</label>
-		<p><?php echo $album['name']; ?></p>
-	</div>
-	
-	<div class="row">
-		<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-		<input class="submit" type="submit" name="Delete" value="Delete">
-	</div>
-</form>
-<?php }
+		<div class="row">
+			<label>Album to delete:</label>
+			<p><?php echo $album['name']; ?></p>
+		</div>
+
+		<div class="row">
+			<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
+			<input class="submit" type="submit" name="Delete" value="Delete">
+		</div>
+	</form>
+<?php
+	}
 endif;
 ?>

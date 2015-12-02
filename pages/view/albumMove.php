@@ -67,6 +67,6 @@ else:
 
 		</form>
 <?php
-}
+	}
 endif;
 ?>

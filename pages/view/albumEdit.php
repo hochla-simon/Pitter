@@ -46,14 +46,14 @@ else:
 		?>
 		<h2><?php echo $site['title']; ?></h2>
 
-<form action="" method="POST">
+		<form action="" method="POST">
 		
-	<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
-		
-	<div class="row">
-		<label for="path">Path :</label>
-		<input type="text" name="path" id="path" size="60" disabled value="<?php echo get_path($album['parentAlbumId'], $db);?>" >
-	</div>
+			<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
+
+			<div class="row">
+				<label for="path">Path :</label>
+				<input type="text" name="path" id="path" size="60" disabled value="<?php echo get_path($album['parentAlbumId'], $db);?>" >
+			</div>
 
 			<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>">
 
