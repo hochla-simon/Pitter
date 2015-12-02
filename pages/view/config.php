@@ -7,5 +7,4 @@ $moduleConfig = array(
 		)
 	)
 );
-$items_per_group = 30;
 ?>

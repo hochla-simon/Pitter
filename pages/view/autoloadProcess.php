@@ -9,13 +9,12 @@ if($currentUser['id'] == ''):
     echo "Unauthorized.";
 else:
 
-include(dirname(__FILE__)."/config.php"); //include config file
-
 if($_POST)
 {
     //sanitize post value
     $group_number = filter_var($_POST["group_no"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
     $album_id = filter_var($_POST["album_id"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
+    $items_per_group = filter_var($_POST["images_per_group"], FILTER_SANITIZE_NUMBER_INT, FILTER_FLAG_STRIP_HIGH);
 
     //throw HTTP error if group number is not valid
     if(!is_numeric($group_number)){
