@@ -10,11 +10,12 @@
 			if (checkNoSon($_POST["albumId"], $_POST["parentAlbumId"], $db)) {
 				$update_sql_string = 'UPDATE albums SET parentAlbumId="' . $_POST["parentAlbumId"] . '",modified=CURRENT_TIMESTAMP() WHERE id="' . $_POST["albumId"] . '" ';
 				$db->query($update_sql_string);
-				header('Location: ./index.html');
-				exit();
+				if (!$phpunit['isTest']) {
+					header('Location: ./index.html');
+					exit();
+				}
 			} else {
 				$message = createMessage("Sorry, you cannot move a folder into a child folder.");
-
 			}
 		} else {
 			http_response_code(500);
@@ -29,32 +30,38 @@
 			$album = mysql_fetch_array($result);
 		}
 	}
-	print $message;
-?>
-<h2><?php echo $site['title'];?> to...</h2>
-
-<form action="" method="POST">
-
-	<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>" >
-
-	<div class="row">
-		<label>Album to move:</label>
-		<p><?php echo $album['name'];?></p>
-	</div>
-
-	<div class="row">
-		<label for="parentAlbumId">Destination:</label>
-
-		<select name="parentAlbumId" id="parentAlbumId">
-		<?php
-			echo obtainSelectAlbum ($db);
+	if (!$phpunit['isTest']) {
+		print ($message);
 		?>
-		</select>
-	</div>
+		<h2><?php echo $site['title']; ?> to...</h2>
 
-	<div class="row">
-		<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-		<input class="submit" type="submit" name="Save" value="Save">
-	</div>
+		<form action="" method="POST">
 
-</form>
+			<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>">
+
+			<div class="row">
+				<label>Album to move:</label>
+
+				<p><?php echo $album['name']; ?></p>
+			</div>
+
+			<div class="row">
+				<label for="parentAlbumId">Destination:</label>
+
+				<select name="parentAlbumId" id="parentAlbumId">
+					<?php
+					echo obtainSelectAlbum($db);
+					?>
+				</select>
+			</div>
+
+			<div class="row">
+				<input class="cancel" type="button" name="Cancel" value="Cancel"
+					   onclick="window.location='./index.html';">
+				<input class="submit" type="submit" name="Save" value="Save">
+			</div>
+
+		</form>
+		<?php
+	}
+?>

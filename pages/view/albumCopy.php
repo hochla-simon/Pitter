@@ -23,15 +23,15 @@
 					$db->query($insert_sql_string);
 				}
 			}
-			header('Location: ./index.html');
-			exit();
+			if ( !$phpunit['isTest'] ) {
+				header('Location: ./index.html');
+				exit();
+			}
 		} else {
 			http_response_code(500);
-			$db->query($delete_sql_string);
 			$message = createMessage( "Sorry, there was an error copying your album." );
 		}
 	}
-	print($message);
 	if($albumId != ''){
 		$select_sql_string = "SELECT id, parentAlbumId, name, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
 		$result = $db->query($select_sql_string);
@@ -39,6 +39,8 @@
 			$album = mysql_fetch_array($result);
 		}
 	}
+	if ( !$phpunit['isTest'] ) {
+		print($message);
 ?>
 <h2><?php echo $site['title'];?> to...</h2>
 
@@ -49,7 +51,6 @@
 		<div class="row">
 			<label>Album to copy:</label>
 			<p><?php echo $album['name'];?></p>
-
 		</div>
 
 		<div class="row">
@@ -65,5 +66,5 @@
 			<input class="submit" type="submit" name="Save" value="Save">
 		</div>
 
-		
 </form>
+<?php } ?>

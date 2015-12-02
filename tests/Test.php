@@ -59,6 +59,9 @@ class Test extends PHPUnit_Framework_TestCase
         $test = new TestAlbum();
         $test->testCreation();
         $test->testEdit();
+        $test->testMove();
+        $test->testCopy();
+        $test->testDelete();
     }
 
     public function testFinalDeletionOfConfiguration() {

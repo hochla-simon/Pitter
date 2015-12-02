@@ -16,7 +16,7 @@
 			$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $_POST["parentAlbumId"] . '", 0,"' . $_POST["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $_POST["description"] . '" )';
 			$db->query($insert_sql_string);
 
-			if ( ! isset ($phpunit['isTest']) ) {
+			if ( !$phpunit['isTest'] ) {
 				header('Location: ./index.html');
 				exit();
 			}

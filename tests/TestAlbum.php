@@ -4,7 +4,6 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
 
         // Initialization
         $_GET = array(
-            'page' => 'view/albumCreate.php',
             'parentId' => ''
         );
         $phpunit = array(
@@ -41,31 +40,17 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
     public function testEdit(){
 
         // Initialization
-        $_GET = array(
-            'page' => 'view/albumEdit.php',
-            'id' => ''
-        );
         $phpunit = array(
             'isTest' => true
         );
 
         include(dirname(__FILE__).'/../index.php');
 
-        $results = $db->query('SELECT * FROM albums');
-
-       /* $initialNumber = mysql_num_rows($results);
-        include(dirname(__FILE__).'/../pages/view/albumEdit.php');
-
         $results = $db->query('SELECT * FROM albums WHERE name="test"');
-
-        echo mysql_num_rows($results);
-
-        $albumTest = $results;
+        $albumTest = mysql_fetch_array($results);
         $_GET = array(
-            'page' => 'view/albumEdit.php',
             'id' => $albumTest['id']
         );
-        echo "toto" . $albumTest['id'];
 
         //Test edit album with empty name
         $_POST = array(
@@ -74,32 +59,153 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
         );
 
         include(dirname(__FILE__).'/../pages/view/albumEdit.php');
-        $results = $db->query('SELECT * FROM albums WHERE id='. $albumTest['id']);
+        $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE id='. $albumTest['id']));
         $this->assertEquals($albumTest['name'],$results['name']);
+        $this->assertEquals($albumTest['description'],$results['description']);
+        $this->assertEquals($albumTest['parentAlbumId'],$results['parentAlbumId']);
 
-        //Test album with name test
-        /*$_POST = array(
-            'save' => true,
+        //Test album with name testEdit
+        $_POST = array(
+            'Save' => true,
             'name' => 'testEdit',
             'albumId' => $albumTest['id'],
-            'description' => ''
         );
 
-        include(dirname(__FILE__).'/../pages/view/albumCreate.php');
-        $results = $db->query('SELECT * FROM albums WHERE id='. $albumTest['id']);
+        include(dirname(__FILE__).'/../pages/view/albumEdit.php');
+        $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE id='. $albumTest['id']));
         $this->assertEquals('testEdit',$results['name']);
-/*
+        $this->assertEquals($albumTest['description'],$results['description']);
+        $this->assertEquals($albumTest['parentAlbumId'],$results['parentAlbumId']);
+
+        //Test album with description
         $_POST = array(
-            'save' => true,
-            'name' => 'test',
-            'parentAlbumId' => '1',
-            'description' => ''
+            'Save' => true,
+            'name' => 'testEdit',
+            'description' => 'testEdit',
+            'albumId' => $albumTest['id'],
         );
-        $results = $db->query('SELECT * FROM albums WHERE name="test"');
-        $initialNumber = mysql_num_rows($results);
-        include(dirname(__FILE__).'/../pages/view/albumCreate.php');
-        $results = $db->query('SELECT * FROM albums WHERE name="test"');
-        $this->assertEquals($initialNumber+1,mysql_num_rows($results));
-*/
+
+        include(dirname(__FILE__).'/../pages/view/albumEdit.php');
+        $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE id='. $albumTest['id']));
+        $this->assertEquals('testEdit',$results['name']);
+        $this->assertEquals('testEdit',$results['description']);
+        $this->assertEquals($albumTest['parentAlbumId'],$results['parentAlbumId']);
+
     }
+
+    public function testMove(){
+        // Initialization
+        $phpunit = array(
+            'isTest' => true
+        );
+
+        include(dirname(__FILE__).'/../index.php');
+
+        $results = $db->query('SELECT * FROM albums WHERE name="testEdit"');
+        $albumTest = mysql_fetch_array($results);
+        $_GET = array(
+            'id' => $albumTest['id']
+        );
+
+        //Test move album in it self
+        $_POST = array(
+            'Save' => true,
+            'albumId' => $albumTest['id'],
+            'parentAlbumId' => $albumTest['id']
+        );
+
+        include(dirname(__FILE__).'/../pages/view/albumMove.php');
+        $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE id='. $albumTest['id']));
+        $this->assertContains("Sorry, you cannot move a folder into a child folder.", $message);
+
+
+        //Test move album in another family
+        $_POST = array(
+            'Save' => true,
+            'albumId' => $albumTest['id'],
+            'parentAlbumId' => -1
+        );
+
+        include(dirname(__FILE__).'/../pages/view/albumMove.php');
+        $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE id='. $albumTest['id']));
+        $this->assertEquals(-1,$results['parentAlbumId']);
+    }
+
+    public function checkPhoto($db, $albumId, $newAlbumId){
+        $originalImages = $db->query('SELECT imageId FROM imagestoalbums WHERE albumID="' . $albumId . ' "');
+        while ($image = mysql_fetch_array($originalImages)) {
+            $newImage = mysql_fetch_array($db->query('SELECT imageId FROM imagestoalbums WHERE albumID="' . $newAlbumId . ' AND imageId ='. $image['imageId'] .'"'));
+            $this->assertEquals($image['imageId'], $newImage['imageId'] );
+        }
+    }
+
+    public function checkAlbums($db, $albumRefId, $albumId){
+        $firstChilds = $db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumId. ' "');
+        if (!empty($firstChilds)) {
+            while ($childAlbum = mysql_fetch_array($firstChilds)) {
+                $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumTest['id'] . '" AND name="' . $albumTest['name'] . '" ORDER BY id DESC'));
+                checkPhoto($db, $albumRefId, $results['id']);
+                checkAlbums($db, $albumRefId, $results['id']);
+            }
+        }
+    }
+
+    public function testCopy(){
+        // Initialization
+        $phpunit = array(
+            'isTest' => true
+        );
+
+        include(dirname(__FILE__).'/../index.php');
+
+        $results = $db->query('SELECT * FROM albums WHERE name="testEdit"');
+        $albumTest = mysql_fetch_array($results);
+        $_GET = array(
+            'id' => $albumTest['id']
+        );
+
+        //Test copy album
+        $_POST = array(
+            'Save' => true,
+            'albumId' => $albumTest['id'],
+            'parentAlbumId' => $albumTest['id']
+        );
+
+        include(dirname(__FILE__).'/../pages/view/albumCopy.php');
+        $this->checkAlbums($db, $albumTest['id'], $results['id']);
+    }
+
+    public function testDelete(){
+        // Initialization
+        $phpunit = array(
+            'isTest' => true
+        );
+
+        include(dirname(__FILE__).'/../index.php');
+
+        $results = $db->query('SELECT * FROM albums WHERE name="testEdit" ORDER BY id DESC');
+        $albumTest = mysql_fetch_array($results);
+        $_GET = array(
+            'id' => $albumTest['id']
+        );
+
+        $results = $db->query('SELECT * FROM imagestoalbums');
+        $initialNumber = mysql_num_rows($results);
+
+        $images = $db->query('SELECT * FROM imagestoalbums WHERE albumId="'. $albumTest['id']. '"');
+        $imagesNumber = mysql_num_rows($images);
+
+        //Test delete album
+        $_POST = array(
+            'Delete' => true,
+            'albumId' => $albumTest['id'],
+        );
+        include(dirname(__FILE__).'/../pages/view/albumDelete.php');
+
+        $results = $db->query('SELECT * FROM imagestoalbums');
+        $newNumber = mysql_num_rows($results);
+        echo $newNumber;
+        $this->assertEquals($initialNumber-$imagesNumber,$newNumber);
+    }
+
 }

@@ -15,9 +15,12 @@
 		$db->query($delete_sql_string);
 		$delete_sql_string = "DELETE FROM imagestoalbums WHERE albumId=" . mysql_real_escape_string($albumId);
 		$db->query($delete_sql_string);
-		header('Location: ./index.html');
-		exit();
+		if ( !$phpunit['isTest'] ) {
+			header('Location: ./index.html');
+			exit();
+		}
 	}
+if ( !$phpunit['isTest'] ) {
 ?>
 
 <h2><?php echo $site['title'];?></h2>
@@ -36,3 +39,4 @@
 		<input class="submit" type="submit" name="Delete" value="Delete">
 	</div>
 </form>
+<?php } ?>
