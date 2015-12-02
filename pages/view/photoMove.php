@@ -13,7 +13,6 @@ $result = $db->query($select_sql_string);
 if (!empty($result)){
     $album = mysql_fetch_array($result);
     if ($album['ownerId'] != $currentUser['id']) {
-        echo 'fuck1';
         $denied = true;
     }
 }else{

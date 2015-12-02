@@ -104,12 +104,12 @@ if (!function_exists(deleteImage)) {
 			$row = mysql_fetch_array($result);
 			if (!empty($row)) {
 				if ($row['ownerId'] == $currentUserId) {
+					unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $row['id'] . "." . $row['extension']);
+					$delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId);
+					$db->query($delete_sql_string);
+					$delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId);
+					$db->query($delete_sql_string);
 				}
-				unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $row['id'] . "." . $row['extension']);
-				$delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId);
-				$db->query($delete_sql_string);
-				$delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId);
-				$db->query($delete_sql_string);
 			}
 		}
 	}
@@ -119,20 +119,27 @@ if (!function_exists(deleteImage)) {
 if (!function_exists(deleteAlbumChild)) {
 	function deleteAlbumChild($currentUserId, $db, $albumId)
 	{
-		$albumsChild = $db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumId . ' "');
-		if (!empty($albumsChild)) {
-			while ($childAlbum = mysql_fetch_array($albumsChild)) {
-				$images = $db->query('SELECT * FROM imagestoalbums WHERE albumId='. $childAlbum['id']);
-				if (!empty($images)) {
-					while ($image = mysql_fetch_array($images)) {
-						$delete_sql_string = 'DELETE FROM imagestoalbums WHERE imageId="' . $image['imageId'] . '" AND albumId="'. $childAlbum['id'] .'"';
+		$query_for_parent_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($albumId)."'";
+		$parent_album = mysql_fetch_assoc($db->query($query_for_parent_album));
+		if (!empty($parent_album)) {
+			if ($parent_album['ownerId'] == $currentUserId) {
+
+				$albumsChild = $db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumId . ' "');
+				if (!empty($albumsChild)) {
+					while ($childAlbum = mysql_fetch_array($albumsChild)) {
+						$images = $db->query('SELECT * FROM imagestoalbums WHERE albumId=' . $childAlbum['id']);
+						if (!empty($images)) {
+							while ($image = mysql_fetch_array($images)) {
+								$delete_sql_string = 'DELETE FROM imagestoalbums WHERE imageId="' . $image['imageId'] . '" AND albumId="' . $childAlbum['id'] . '"';
+								$db->query($delete_sql_string);
+								deleteImage($currentUserId, $db, $image['imageId']);
+							}
+						}
+						deleteAlbumChild($currentUserId, $db, $childAlbum['id']);
+						$delete_sql_string = 'DELETE FROM albums WHERE id="' . $childAlbum['id'] . '" ';
 						$db->query($delete_sql_string);
-						deleteImage($currentUserId, $db, $image['imageId']);
 					}
 				}
-				deleteAlbumChild($currentUserId, $db, $childAlbum['id']);
-				$delete_sql_string = 'DELETE FROM albums WHERE id="' . $childAlbum['id'] . '" ';
-				$db->query($delete_sql_string);
 			}
 		}
 	}
@@ -153,10 +160,11 @@ if (!function_exists(copyPhoto)) {
 if (!function_exists(copyAlbum)) {
 	function copyAlbum($db, $albumId, $newParentId)
 	{
-		$result = $db->query('SELECT name, description FROM albums WHERE id="'. $albumId .'"');
+		$result = $db->query('SELECT name, ownerId, description FROM albums WHERE id="'. $albumId .'"');
 		if (!empty($result)) {
 			$album = mysql_fetch_array($result);
-			$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $newParentId. '", 0,"' . $album["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $album["description"] . '" )';
+			$ownerId = $album['ownerId'];
+			$insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("' . $newParentId. '",'. $ownerId.',"' . $album["name"] . '", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $album["description"] . '" )';
 			$db->query($insert_sql_string);
 			$newAlbumId = mysql_insert_id();
 			copyPhoto($db, $albumId, $newAlbumId);

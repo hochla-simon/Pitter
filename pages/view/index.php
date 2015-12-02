@@ -3,13 +3,12 @@ if($currentUser['id'] == ''):
 	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
 	include(dirname(__FILE__).'/../users/login.php');
 else:
-include(dirname(__FILE__).'/config.php');
 
 $result = mysql_query("SELECT COUNT(1) FROM images");
 $row = mysql_fetch_array($result);
 $total_records = $row[0];
-$total_groups = ceil($total_records/$items_per_group);
 $projectUrl =  $config['projectURL'];
+
 
 
 $site['title'] = 'Photos';
@@ -155,11 +154,10 @@ if (!empty($album_data)) {
 <script type="text/javascript">
     var track_load = 0; //total loaded record group(s)
     var loading  = false; //to prevents multipal ajax loads
-    var total_groups = <?php echo $total_groups; ?>; //total record group(s)
     var album_id = <?php echo(json_encode($albumId)); ?>;
     var projectUrl = <?php echo(json_encode($projectUrl));?>;
 
-    function loadFirstElements() {
+    function loadFirstElements(images_per_group) {
         track_load = 0;
         loading  = false;
         var orderingField;
@@ -189,10 +187,24 @@ if (!empty($album_data)) {
                 orderingOrder="ASC";
                 break;
         }
-        $('#photos').load(projectUrl + "view/autoloadProcess.html", {'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function() {track_load++;}); //load first group
+        $('#photos').load(projectUrl + "view/autoloadProcess.html", {'images_per_group':images_per_group, 'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function() {track_load++;}); //load first group
+    }
+     function countImagesNumberPerPage() {
+        var elmnt = document.getElementById("wrapper");
+        var height =  $(window).height() - elmnt.scrollHeight;
+        var width = elmnt.scrollWidth;
+        var imageSize = 160;
+        var imagesInRow = Math.floor(width / imageSize);
+        var imagesInColumn = Math.ceil(height / imageSize) + 1;
+        var imagesToLoad = imagesInRow * imagesInColumn;
+        return imagesToLoad;
     }
 	$(document).ready(function() {
-        loadFirstElements();
+        countImagesNumberPerPage();
+        var total_records = <?php echo $total_records; ?>;
+        var images_per_group = countImagesNumberPerPage();
+        var total_groups = total_records / images_per_group;
+        loadFirstElements(images_per_group);
 		$(window).scroll(function() { //detect page scroll
 
 			if($(window).scrollTop() + $(window).height() == $(document).height())  //user scrolled to bottom of the page?
@@ -235,7 +247,7 @@ if (!empty($album_data)) {
                     }
 
 
-                    $.post(projectUrl + "view/autoloadProcess.html",{'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function(data){
+                    $.post(projectUrl + "view/autoloadProcess.html",{'images_per_group':images_per_group, 'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function(data){
 
 						$("#photos").append(data); //append received data into the element
 
