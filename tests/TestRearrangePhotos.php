@@ -1,5 +1,5 @@
 <?php
-class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
+class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
     public $email = ''; //Admin email here
     public $password = ''; //Admin password here
     public $projectURL;
@@ -17,12 +17,11 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
         $this->byClassName('submit')->click();
     }
 
-    public function testRootAlbum() {
+    public function testRearranging() {
         $this->url($this->projectURL.'/users/login.html');
         $this->login();
         $this->url($this->projectURL.'/view/index.html');
 
-        $this->assertEquals('ROOT', $this->byCssSelector('.droppableAlbum.active span')->text());
         sleep(5);
     }
 }
