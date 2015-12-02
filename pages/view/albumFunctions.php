@@ -92,4 +92,45 @@ if (!function_exists(obtainSelectAlbum)) {
 		return $selectAlbum;
 	}
 }
+
+if (!function_exists(deleteImage)) {
+	function deleteImage($db, $imageId)
+	{
+		$select_sql_string = 'SELECT * FROM imagesToAlbums WHERE imageId=' . $imageId ;
+		$result = $db->query($select_sql_string);
+		if (mysql_num_rows($result)==0) {
+			$select_sql_string = 'SELECT * FROM images WHERE id=' . $imageId;
+			$result = $db->query($select_sql_string);
+			$row = mysql_fetch_array($result);
+			unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $row['id'] . "." . $row['extension']);
+			$delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId);
+			$db->query($delete_sql_string);
+			$delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId);
+			$db->query($delete_sql_string);
+		}
+	}
+}
+
+
+if (!function_exists(deleteAlbumChild)) {
+	function deleteAlbumChild($db, $albumId)
+	{
+		$albumsChild = $db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumId . ' "');
+		if (!empty($albumsChild)) {
+			while ($childAlbum = mysql_fetch_array($albumsChild)) {
+				$images = $db->query('SELECT * FROM imagestoalbums WHERE albumId='. $childAlbum['id']);
+				if (!empty($images)) {
+					while ($image = mysql_fetch_array($images)) {
+						$delete_sql_string = 'DELETE FROM imagestoalbums WHERE imageId="' . $image['imageId'] . '" AND albumId="'. $childAlbum['id'] .'"';
+						$db->query($delete_sql_string);
+						deleteImage($db, $image['imageId']);
+					}
+				}
+				deleteAlbumChild($db,$childAlbum['id']);
+				$delete_sql_string = 'DELETE FROM albums WHERE id="' . $childAlbum['id'] . '" ';
+				$db->query($delete_sql_string);
+			}
+		}
+	}
+}
 ?>

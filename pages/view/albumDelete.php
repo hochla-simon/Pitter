@@ -1,4 +1,5 @@
 <?php
+	include('albumFunctions.php');
 	$site['title'] = 'Delete album';
 	$albumId=$_GET['id'];
 	
@@ -11,9 +12,16 @@
 	}
 
 	if (isset ($_POST["Delete"])) {
+		deleteAlbumChild($db, $_POST["albumId"] );
+		$images = $db->query('SELECT * FROM imagestoalbums WHERE albumId="'. $_POST["albumId"] .'"');
+		if (!empty($images)) {
+			while ($image = mysql_fetch_array($images)) {
+				$delete_sql_string = 'DELETE FROM imagestoalbums WHERE imageId="' . $image['imageId'] . '" AND albumId="'. $_POST["albumId"] .'"';
+				$db->query($delete_sql_string);
+				deleteImage($db, $image['imageId']);
+			}
+		}
 		$delete_sql_string = 'DELETE FROM albums WHERE id="' . $_POST["albumId"] . '" ';
-		$db->query($delete_sql_string);
-		$delete_sql_string = "DELETE FROM imagestoalbums WHERE albumId=" . mysql_real_escape_string($albumId);
 		$db->query($delete_sql_string);
 		if ( !$phpunit['isTest'] ) {
 			header('Location: ./index.html');

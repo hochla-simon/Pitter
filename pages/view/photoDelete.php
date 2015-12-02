@@ -1,4 +1,5 @@
 <?php
+    include('albumFunctions.php');
     $site['title'] = 'Delete photo';
     $imageId=$_GET['id'];
 
@@ -12,19 +13,7 @@
                 $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="'. $imageId . '"';
                 $db->query($delete_sql_string);
             }
-            $select_sql_string = 'SELECT * FROM imagesToAlbums WHERE imageId=' . $imageId ;
-            $result = $db->query($select_sql_string);
-            if (mysql_num_rows($result)==0){
-                //delete from folder
-                $select_sql_string = 'SELECT * FROM images WHERE id=' . $imageId ;
-                $result = $db->query($select_sql_string);
-                $row = mysql_fetch_array($result);
-                unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images'. DIRECTORY_SEPARATOR . $row['id'].".".$row['extension']);
-                $delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId) ;
-                $db->query($delete_sql_string);
-                $delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId) ;
-                $db->query($delete_sql_string);
-            }
+            deleteImage($db, $imageId);
         }
         header('Location: ./index.html');
         exit();

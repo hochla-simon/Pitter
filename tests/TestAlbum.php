@@ -139,11 +139,11 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
         }
     }
 
-    public function checkAlbums($db, $albumRefId, $albumId){
+    public function checkAlbums($db, $albumRefId, $albumRefName, $albumId){
         $firstChilds = $db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumId. ' "');
         if (!empty($firstChilds)) {
             while ($childAlbum = mysql_fetch_array($firstChilds)) {
-                $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumTest['id'] . '" AND name="' . $albumTest['name'] . '" ORDER BY id DESC'));
+                $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE parentAlbumId="' . $albumRefId . '" AND name="' . $albumRefName . '" ORDER BY id DESC'));
                 checkPhoto($db, $albumRefId, $results['id']);
                 checkAlbums($db, $albumRefId, $results['id']);
             }
@@ -172,7 +172,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
         );
 
         include(dirname(__FILE__).'/../pages/view/albumCopy.php');
-        $this->checkAlbums($db, $albumTest['id'], $results['id']);
+        $this->checkAlbums($db, $albumTest['id'], $albumTest['name'], $results['id']);
     }
 
     public function testDelete(){
