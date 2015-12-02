@@ -10,6 +10,39 @@ else:
 	$site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 	$albumId=$_GET['id'];
 
+
+	$denied = false;
+	$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($_POST["albumId"]);
+	$result = $db->query($select_sql_string);
+	if (!empty($result)){
+		$album = mysql_fetch_array($result);
+		if ($album['ownerId'] != $currentUser['id']) {
+			$denied = true;
+		}
+	}else{
+		$denied = true;
+	}
+	if (isset ($_POST["Save"])) {
+		if ($_POST["parentAlbumId"] != '') {
+			$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($_POST["parentAlbumId"]);
+			$result = $db->query($select_sql_string);
+			if (!empty($result)) {
+				$album = mysql_fetch_array($result);
+				if ($album['ownerId'] != $currentUser['id']) {
+					$denied = true;
+				}
+			} else {
+				$denied = true;
+			}
+
+			if ($denied) {
+				include(dirname(__FILE__) . '/../common/error401.php');
+				exit();
+			}
+		}
+	}
+
+
 	if (isset ($_POST["Save"])) {
 		if ($_POST["albumId"] != '') {
 			if (checkNoSon($_POST["albumId"], $_POST["parentAlbumId"], $db)) {
