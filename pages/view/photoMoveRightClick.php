@@ -32,8 +32,10 @@ if (isset ($_POST["Move"])) {
                 $delete_sql_string = 'DELETE FROM imagesToAlbums WHERE albumId="' . mysql_real_escape_string($albumId) . '" AND imageId ="' . $_POST["imageId"] . '"';
                 $db->query($delete_sql_string);
 
-                header('Location: ./index.html');
-                exit();
+                if (!$phpunit['isTest']) {
+                    header('Location: ./index.html');
+                    exit();
+                }
             } else {
                 include(dirname(__FILE__) . '/../common/error401.php');
                 exit();

@@ -21,8 +21,10 @@ if (isset ($_POST["Copy"])) {
                 $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES (\'' . $_POST["albumId"] . '\',\'' . $_POST["imageId"] . '\', @maxPositionInAlbum + 1);');
                 $db->query('COMMIT;');
 
-                header('Location: ./index.html');
-                exit();
+                if (!$phpunit['isTest']) {
+                    header('Location: ./index.html');
+                    exit();
+                }
             } else {
                 include(dirname(__FILE__) . '/../common/error401.php');
                 exit();
@@ -46,6 +48,8 @@ if($photoId != ''){
             exit();
         }
     }
+} else {
+    $message = createMessage("Photo id is blank.");
 }
 if(!$denied) {
     print $message;
