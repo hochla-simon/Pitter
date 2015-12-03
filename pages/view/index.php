@@ -156,8 +156,9 @@ if (!empty($album_data)) {
     var loading  = false; //to prevents multipal ajax loads
     var album_id = <?php echo(json_encode($albumId)); ?>;
     var projectUrl = <?php echo(json_encode($projectUrl));?>;
+    var images_per_group = 0;
 
-    function loadFirstElements(images_per_group) {
+    function loadFirstElements() {
         track_load = 0;
         loading  = false;
         var orderingField;
@@ -201,9 +202,9 @@ if (!empty($album_data)) {
     }
 	$(document).ready(function() {
         var total_records = <?php echo $total_records; ?>;
-        var images_per_group = countImagesNumberPerPage();
+        images_per_group = countImagesNumberPerPage();
         var total_groups = total_records / images_per_group;
-        loadFirstElements(images_per_group);
+        loadFirstElements();
 		$(window).scroll(function() { //detect page scroll
 
 			if($(window).scrollTop() + $(window).height() == $(document).height())  //user scrolled to bottom of the page?
