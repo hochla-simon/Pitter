@@ -38,16 +38,20 @@ if(!$phpunit['isTest']) {
 
 
 if(isset($_GET["max_size"])){
-    /*header("Pragma: cache");*/
-    header("Cache-Control: max-age=" . 24*60*60);
-    $time_last_modification = filemtime($path);
-    header("Last-Modified: " . date("F d Y H:i:s.", $time_last_modification));
+    if(!$phpunit['isTest']) {
+        /*header("Pragma: cache");*/
+        header("Cache-Control: max-age=" . 24 * 60 * 60);
+        $time_last_modification = filemtime($path);
+        header("Last-Modified: " . date("F d Y H:i:s.", $time_last_modification));
+    }
     if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
         &&
         (strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $time_last_modification)) {
-        // send the last mod time of the file back
-        header('Last-Modified: '.gmdate('D, d M Y H:i:s', $time_last_modification).' GMT',
-            true, 304);
+        if(!$phpunit['isTest']) {
+            // send the last mod time of the file back
+            header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $time_last_modification) . ' GMT',
+                true, 304);
+        }
     } else {
         list($width, $height) = getimagesize($path);
         //echo 'path: '.$path;

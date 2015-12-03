@@ -36,6 +36,8 @@ class Test extends PHPUnit_Framework_TestCase
     public function testUpload() {
         $test = new TestImageUpload();
         $test->testUpload();
+        $test->testThumbnails();
+        $test->cleanup();
     }
 
     public function testUser() {
