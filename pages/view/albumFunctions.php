@@ -104,7 +104,7 @@ if (!function_exists(deleteImage)) {
 			$row = mysql_fetch_array($result);
 			if (!empty($row)) {
 				if ($row['ownerId'] == $currentUserId) {
-					unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $row['id'] . "." . $row['extension']);
+					unlink(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . "data" . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $imageId . "." . $row['extension']);
 					$delete_sql_string = 'DELETE FROM metadata WHERE imageid=' . mysql_real_escape_string($imageId);
 					$db->query($delete_sql_string);
 					$delete_sql_string = 'DELETE FROM images WHERE id=' . mysql_real_escape_string($imageId);

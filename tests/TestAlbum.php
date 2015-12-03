@@ -125,15 +125,17 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
 
 
         //Test move album in another family
+        $db->query('INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("1", "1","album 1", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "description")');
+        $newAlbumId = mysql_insert_id();
         $_POST = array(
             'Save' => true,
             'albumId' => $albumTest['id'],
-            'parentAlbumId' => -1
+            'parentAlbumId' => $newAlbumId
         );
 
         include(dirname(__FILE__).'/../pages/view/albumMove.php');
         $results = mysql_fetch_array($db->query('SELECT * FROM albums WHERE id='. $albumTest['id']));
-        $this->assertEquals(-1,$results['parentAlbumId']);
+        $this->assertEquals($newAlbumId,$results['parentAlbumId']);
     }
 
     public function checkPhoto($db, $albumId, $newAlbumId){

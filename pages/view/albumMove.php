@@ -41,8 +41,6 @@ else:
 			}
 		}
 	}
-
-
 	if (isset ($_POST["Save"])) {
 		if ($_POST["albumId"] != '') {
 			if (checkNoSon($_POST["albumId"], $_POST["parentAlbumId"], $db)) {
