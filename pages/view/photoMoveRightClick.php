@@ -24,13 +24,6 @@ if (isset ($_POST["Move"])) {
         if (!empty($album_data)) {
             if ($album_data['ownerId'] == $currentUser['id']) {
 
-                $insert_sql_string = 'INSERT INTO images (ownerId, name, filename, extension, created, description)
-                              VALUES (\'' . $_POST["imageOwnerId"] . '\', \'' . $_POST["imageName"] . '\',
-                                  \'' . $_POST["imageFilename"] . '\', \'' . $_POST["imageExtension"] . '\',
-                                   CURRENT_TIMESTAMP(), \'' . $_POST["imageDescription"] . '\');';
-                $db->query($insert_sql_string);
-
-
                 $db->query('START TRANSACTION;');
                 $db->query('SELECT @maxPositionInAlbum := IFNULL(MAX(positionInAlbum),0) FROM imagesToAlbums WHERE albumId=' . $_POST["newAlbumId"] . ';');
                 $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES (\'' . $_POST["newAlbumId"] . '\',\'' . $_POST["imageId"] . '\', @maxPositionInAlbum + 1);');
