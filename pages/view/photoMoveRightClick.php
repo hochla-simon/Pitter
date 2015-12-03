@@ -66,12 +66,6 @@ if(!$denied) {
     <form action="" method="POST">
 
         <input type="hidden" name="imageId" id="imageId" value="<?php echo $image['id']; ?>">
-        <input type="hidden" name="imageOwnerId" id="imageOwnerId" value="<?php echo $image['ownerId']; ?>">
-        <input type="hidden" name="imageName" id="imageName" value="<?php echo $image['name']; ?>">
-        <input type="hidden" name="imageFilename" id="imageFilename" value="<?php echo $image['filename']; ?>">
-        <input type="hidden" name="imageExtension" id="imageExtension" value="<?php echo $image['extension']; ?>">
-        <input type="hidden" name="imageDescription" id="imageDescription" value="<?php echo $image['description']; ?>">
-
 
         <div class="row">
             <label>Photo to move:</label>
