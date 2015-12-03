@@ -61,7 +61,7 @@ if(!isset($_GET['album'])){
                             function transition_right() {
                                 $("img.slideshow").addClass("hidden");
                                 currentImage = currentImage + 1;
-                                if (currentImage >= totalNumberImages) {
+                                if (currentImage >= totalNumberImages - 1) {
                                     currentImage = totalNumberImages - 1;
                                     $("#slideshow_next").addClass("hidden");
                                 }

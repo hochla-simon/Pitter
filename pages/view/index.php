@@ -200,7 +200,6 @@ if (!empty($album_data)) {
         return imagesToLoad;
     }
 	$(document).ready(function() {
-        countImagesNumberPerPage();
         var total_records = <?php echo $total_records; ?>;
         var images_per_group = countImagesNumberPerPage();
         var total_groups = total_records / images_per_group;

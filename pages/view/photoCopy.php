@@ -16,13 +16,6 @@ if (isset ($_POST["Copy"])) {
         if (!empty($album_data)) {
             if ($album_data['ownerId'] == $currentUser['id']) {
 
-                $insert_sql_string = 'INSERT INTO images (ownerId, name, filename, extension, created, description)
-                              VALUES (\'' . $_POST["imageOwnerId"] . '\', \'' . $_POST["imageName"] . '\',
-                                  \'' . $_POST["imageFilename"] . '\', \'' . $_POST["imageExtension"] . '\',
-                                   CURRENT_TIMESTAMP(), \'' . $_POST["imageDescription"] . '\');';
-                $db->query($insert_sql_string);
-
-
                 $db->query('START TRANSACTION;');
                 $db->query('SELECT @maxPositionInAlbum := IFNULL(MAX(positionInAlbum),0) FROM imagesToAlbums WHERE albumId=' . $_POST["albumId"] . ';');
                 $db->query('INSERT INTO imagesToAlbums (albumId,imageId,positionInAlbum) VALUES (\'' . $_POST["albumId"] . '\',\'' . $_POST["imageId"] . '\', @maxPositionInAlbum + 1);');
