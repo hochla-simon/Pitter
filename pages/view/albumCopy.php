@@ -16,12 +16,16 @@ else:
 	if (!empty($result)){
 		$album = mysql_fetch_array($result);
 		if ($album['ownerId'] != $currentUser['id']) {
+			if(!$phpunit['isTest']) {
+				include(dirname(__FILE__) . '/../common/error401.php');
+				exit();
+			}
+		}
+	}else{
+		if(!$phpunit['isTest']) {
 			include(dirname(__FILE__) . '/../common/error401.php');
 			exit();
 		}
-	}else{
-		include(dirname(__FILE__) . '/../common/error401.php');
-		exit();
 	}
 
 

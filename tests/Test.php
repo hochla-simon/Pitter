@@ -36,6 +36,8 @@ class Test extends PHPUnit_Framework_TestCase
     public function testUpload() {
         $test = new TestImageUpload();
         $test->testUpload();
+        $test->testThumbnails();
+        $test->cleanup();
     }
 
     public function testUser() {
@@ -64,14 +66,14 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testCreation();
         $test->testEdit();
         $test->testMove();
-        //$test->testCopy();
+        $test->testCopy();
         $test->testDelete();
     }
 
     public function testImage() {
         $test = new testImage();
         $test->testEdit();
-        //$test->testDelete();
+        $test->testDelete();
     }
 
     public function testFinalDeletionOfConfiguration() {

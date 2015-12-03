@@ -9,7 +9,9 @@
  */
 class TestImageUpload extends PHPUnit_Framework_TestCase
 {
-    function testUpload()
+    private $photoId = null;
+
+    public function testUpload()
     {
         // Initialization
         $_SESSION['id'] = 1;
@@ -66,10 +68,78 @@ class TestImageUpload extends PHPUnit_Framework_TestCase
         );
         include(dirname(__FILE__).'/../index.php');
 
+        $this->photoId = $last_id;
         $this->assertEquals(1, $uploadOk);
-        $this->assertTrue(file_exists(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg'));
+        $this->assertTrue(file_exists(dirname(__FILE__).'/../data/images/'.$this->photoId.'.jpg'));
+    }
+
+    public function testThumbnails()
+    {
+        // Initialization
+        $_SESSION['id'] = 1;
+        $_GET = array(
+            'page' => 'view/image.php',
+            'id' => $this->photoId
+        );
+        $phpunit = array(
+            'isTest' => true
+        );
+
+        // Test without maximum size
+        include(dirname(__FILE__).'/../index.php');
+        $this->assertEquals($site['content'], file_get_contents(dirname(__FILE__).'/../data/images/'.$this->photoId.'.jpg'));
+
+        // Test with a maxium size of 1000px
+        $_GET['max_size'] = 1000;
+        include(dirname(__FILE__).'/../index.php');
+        $newFormat = getimagesizefromstring($site['content']);
+        $expectedFormat = $this->getDimensions(dirname(__FILE__).'/../data/images/'.$this->photoId.'.jpg', $_GET['max_size']);
+        $this->assertEquals($newFormat[0], $expectedFormat[0]);
+        $this->assertEquals($newFormat[1], $expectedFormat[1]);
+
+        // Test with a maxium size of 200px
+        $_GET['max_size'] = 200;
+        include(dirname(__FILE__).'/../index.php');
+        $newFormat = getimagesizefromstring($site['content']);
+        $expectedFormat = $this->getDimensions(dirname(__FILE__).'/../data/images/'.$this->photoId.'.jpg', $_GET['max_size']);
+        $this->assertEquals($newFormat[0], $expectedFormat[0]);
+        $this->assertEquals($newFormat[1], $expectedFormat[1]);
+
+        // Test with a maxium size of 100px
+        $_GET['max_size'] = 100;
+        include(dirname(__FILE__).'/../index.php');
+        $newFormat = getimagesizefromstring($site['content']);
+        $expectedFormat = $this->getDimensions(dirname(__FILE__).'/../data/images/'.$this->photoId.'.jpg', $_GET['max_size']);
+        $this->assertEquals($newFormat[0], $expectedFormat[0]);
+        $this->assertEquals($newFormat[1], $expectedFormat[1]);
+
+        // Test with a maxium size of 50px
+        $_GET['max_size'] = 50;
+        include(dirname(__FILE__).'/../index.php');
+        $newFormat = getimagesizefromstring($site['content']);
+        $expectedFormat = $this->getDimensions(dirname(__FILE__).'/../data/images/'.$this->photoId.'.jpg', $_GET['max_size']);
+        $this->assertEquals($newFormat[0], $expectedFormat[0]);
+        $this->assertEquals($newFormat[1], $expectedFormat[1]);
+    }
+
+    private function getDimensions($file, $max_size){
+        $image = getimagesize($file);
+        if($image[0] > $max_size){
+            $image[1] /= $image[0] / $max_size;
+            $image[0] = $max_size;
+        }
+        if($image[1] > $max_size){
+            $image[0] /= $image[1] / $max_size;
+            $image[1] = $max_size;
+        }
+        $image[0] = floor($image[0]);
+        $image[1] = floor($image[1]);
+        return $image;
+    }
+
+    public function cleanup(){
 
         // Delete uploaded foto
-        @unlink(dirname(__FILE__).'/../data/images/'.$last_id.'.jpg');
+        @unlink(dirname(__FILE__).'/../data/images/'.$this->photoId.'.jpg');
     }
 }
