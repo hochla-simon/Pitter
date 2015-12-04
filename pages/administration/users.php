@@ -41,6 +41,15 @@ else if($_GET['action'] == 'login'){
  <a href="<?php echo $config['projectURL'];?>administration/createUser.html">Create new user</a>
 </p>
 <?php
+if($_GET['id'] != ''):
+    ?>
+    <p>
+     <b>Filter for user:</b> #<?=$_GET['id']?> (<a href="<?php echo $config['projectURL'];?>administration/users.html">show all</a>)
+    </p>
+    <?php
+endif;
+?>
+<?php
 $v = $_GET['v'];
 if($v == '')
          $v = 0;
