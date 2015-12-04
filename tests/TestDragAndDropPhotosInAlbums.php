@@ -118,7 +118,6 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $this->url($this->projectURL.'/view/index.html');
 
         $testAlbumId = $this->addTestAlbum();
-        //$childTestAlbumId = $this->addTestChildAlbum($testAlbumId);
 
         sleep(2);
         $this->byCssSelector('#albumsContainer > ul > li > img')->click();
