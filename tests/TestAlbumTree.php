@@ -1,24 +1,11 @@
 <?php
 class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
-    public $adminId = null;
-    public $email = null;
-    public $password = null;
+    public $email = ''; //Admin email here
+    public $password = ''; //Admin password here
     public $testAlbumName = '%$¤testNewAlbum¤$%';
     public $projectURL;
 
     protected function setUp() {
-
-        // Create administrator for test
-        $this->email = 'admin@example.org';
-        $this->password = 'test1234';
-        $phpunit = array(
-            'isTest' => true
-        );
-        include(dirname(__FILE__).'/../index.php');
-        $db->query("delete from users where email = '".mysql_real_escape_string($this->email)."'");
-        $db->query("insert into users set email = '".mysql_real_escape_string($this->email)."', password = '".mysql_real_escape_string(crypt($this->password))."', enabled = '1', isAdmin = '1'");
-        $this->adminId = mysql_insert_id();
-
         $this->setBrowser('chrome');
         $readedConfig = json_decode(@file_get_contents(dirname(__FILE__).'/data/confForTests.txt'), true);
         $this->projectURL=$readedConfig['projectURL'];
@@ -114,4 +101,3 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
     }
 }
 ?>
-
