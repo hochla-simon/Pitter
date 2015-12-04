@@ -11,8 +11,12 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
         // Create administrator for test
         $this->email = 'admin@example.org';
         $this->password = 'test1234';
+        $phpunit = array(
+            'isTest' => true
+        );
         include(dirname(__FILE__).'/../index.php');
-        $db->query("insert into users set email = '".mysql_real_escape_string($this->email)."', password = '".mysql_real_escape_string(crypt($this->password))."', enabled = '1', 'isAdmin' = '1'");
+        $db->query("delete from users where email = '".mysql_real_escape_string($this->email)."'");
+        $db->query("insert into users set email = '".mysql_real_escape_string($this->email)."', password = '".mysql_real_escape_string(crypt($this->password))."', enabled = '1', isAdmin = '1'");
         $this->adminId = mysql_insert_id();
 
         $this->setBrowser('chrome');
