@@ -12,7 +12,7 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
         $this->email = 'admin@example.org';
         $this->password = 'test1234';
         include(dirname(__FILE__).'/../index.php');
-        $db->query("insert into users set email = '".mysql_real_escape_string($this->email)."', password = '".mysql_real_escape_string(crypt($this->password))."'");
+        $db->query("insert into users set email = '".mysql_real_escape_string($this->email)."', password = '".mysql_real_escape_string(crypt($this->password))."', enabled = '1', 'isAdmin' = '1'");
         $this->adminId = mysql_insert_id();
 
         $this->setBrowser('chrome');
