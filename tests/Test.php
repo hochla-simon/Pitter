@@ -7,6 +7,8 @@ require 'TestUserAdministration.php';
 require 'TestPermissions.php';
 require 'TestAlbum.php';
 require 'TestImage.php';
+require 'TestMovePhoto.php';
+require 'TestCopyPhoto.php';
 
 /**
  * Created by PhpStorm.
@@ -74,6 +76,20 @@ class Test extends PHPUnit_Framework_TestCase
         $test = new testImage();
         $test->testEdit();
         $test->testDelete();
+    }
+
+    public function testImageCopy() {
+        $test = new TestCopyPhoto();
+        $test->setUpBeforeClass();
+        $test->testCopy();
+        $test->tearDownAfterClass();
+    }
+
+    public function testImageMove() {
+        $test = new TestMovePhoto();
+        $test->setUpBeforeClass();
+        $test->testMove();
+        $test->tearDownAfterClass();
     }
 
     public function testFinalDeletionOfConfiguration() {

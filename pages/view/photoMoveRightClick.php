@@ -62,42 +62,45 @@ if($photoId != ''){
 }
 if(!$denied) {
     print $message;
-    ?>
-    <h2><?php echo $site['title']; ?> to...</h2>
+    if (!$phpunit['isTest']) {
+        ?>
+        <h2><?php echo $site['title']; ?> to...</h2>
 
-    <form action="" method="POST">
+        <form action="" method="POST">
 
-        <input type="hidden" name="imageId" id="imageId" value="<?php echo $image['id']; ?>">
+            <input type="hidden" name="imageId" id="imageId" value="<?php echo $image['id']; ?>">
 
-        <div class="row">
-            <label>Photo to move:</label>
+            <div class="row">
+                <label>Photo to move:</label>
 
-            <p><?php
-                if ($image['name'] != '') {
-                    echo $image['name'];
-                } else {
-                    echo $image['filename'] . $image['name'] . "." . $image['extension'];
-                } ?>
-            </p>
-        </div>
+                <p><?php
+                    if ($image['name'] != '') {
+                        echo $image['name'];
+                    } else {
+                        echo $image['filename'] . $image['name'] . "." . $image['extension'];
+                    } ?>
+                </p>
+            </div>
 
-        <div class="row">
-            <label for="albumId">Destination:</label>
+            <div class="row">
+                <label for="albumId">Destination:</label>
 
-            <select name="newAlbumId" id="newAlbumId">
-                <?php
-                echo obtainSelectAlbum($db, $currentUser['id']);
-                ?>
-            </select>
-        </div>
+                <select name="newAlbumId" id="newAlbumId">
+                    <?php
+                    echo obtainSelectAlbum($db, $currentUser['id']);
+                    ?>
+                </select>
+            </div>
 
-        <div class="row">
-            <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
-            <input class="submit" type="submit" name="Move" value="Move">
-        </div>
+            <div class="row">
+                <input class="cancel" type="button" name="Cancel" value="Cancel"
+                       onclick="window.location='./index.html';">
+                <input class="submit" type="submit" name="Move" value="Move">
+            </div>
 
-    </form>
-    <?php
+        </form>
+        <?php
+    }
 }
 endif;
 ?>

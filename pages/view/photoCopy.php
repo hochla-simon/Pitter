@@ -53,7 +53,9 @@ if($photoId != ''){
 }
 if(!$denied) {
     print $message;
+    if (!$phpunit['isTest']) {
     ?>
+
     <h2><?php echo $site['title']; ?> to...</h2>
 
     <form action="" method="POST">
@@ -88,7 +90,9 @@ if(!$denied) {
         </div>
 
     </form>
+
     <?php
+    }
 }
 endif;
 ?>
