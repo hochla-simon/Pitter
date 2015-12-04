@@ -1,7 +1,7 @@
 <?php
 class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
-    public $email = 'email'; //Admin email here
-    public $password = 'password'; //Admin password here
+    public $email = ''; //Admin email here
+    public $password = ''; //Admin password here
     public $projectURL;
 
     protected function setUp() {
