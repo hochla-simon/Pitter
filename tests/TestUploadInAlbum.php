@@ -24,7 +24,8 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
             'timeout' => 30000,
         )
     );*/
-
+    public $email = ''; //Admin email here
+    public $password = ''; //Admin password here
     public $projectURL;
 
     protected function setUp()
@@ -35,6 +36,12 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
         $this->setBrowserUrl($this->projectURL.'/view/index.html');
     }
 
+    protected function login() {
+        $this->url($this->projectURL.'/users/login.html');
+        $this->byId('setting_email')->value($this->email);
+        $this->byId('setting_password')->value($this->password);
+        $this->byClassName('submit')->click();
+    }
 
     protected function waitUntilFullyLoad(){
 
@@ -57,7 +64,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
     public function testSingleFileUpload()
     {
 
-
+        $this->login();
         $this->url($this->projectURL.'/view/index.html');
         $webdriver = $this;
 
@@ -95,7 +102,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
     public function testMultipleFileUpload()
     {
 
-
+        $this->login();
         $this->url($this->projectURL.'/view/index.html');
 
 
@@ -135,6 +142,7 @@ class TestUploadInAlbum extends PHPUnit_Extensions_Selenium2TestCase
 
     public function testWrongFileType()
     {
+        $this->login();
         $this->url($this->projectURL.'/view/index.html');
 
 
