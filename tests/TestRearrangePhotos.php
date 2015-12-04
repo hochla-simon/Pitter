@@ -1,7 +1,7 @@
 <?php
 class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
-    public $email = ''; //Admin email here
-    public $password = ''; //Admin password here
+    public $email = 'email'; //Admin email here
+    public $password = 'password'; //Admin password here
     public $projectURL;
 
     protected function setUp() {
@@ -63,11 +63,32 @@ class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
 
         $this->addTestPhotos();
 
+        $photos = $this->elements($this->using('css selector')->value('.draggablePhoto'));
+        $numberOfPhotos = count($photos);
+        // The photo to move is second from the end
+        $index = $numberOfPhotos - 2;
+        $photo = $photos[$index];
+        $target = $this->byId('footer');
+        $photoId = $photo->attribute('data-id');
 
+        $this->moveto($photo);
+        $this->buttondown();
+        $this->moveto($target);
+        $this->buttonup();
+
+        $photos2 = $this->elements($this->using('css selector')->value('.draggablePhoto'));
+        $numberOfPhotos2 = count($photos2);
+        // The moved photo remains second from the end
+        $index2 = $numberOfPhotos2 - 2;
+        $photo2 = $photos2[$index2];
+        $photoId2 = $photo2->attribute('data-id');
+
+        sleep(2);
+
+        $this->assertEquals($numberOfPhotos, $numberOfPhotos2);
+        $this->assertEquals($photoId, $photoId2);
 
         $this->removeTestPhotos();
-
-        sleep(5);
     }
 
     public function testMovingInsideTheArea() {
@@ -79,11 +100,32 @@ class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
 
         $this->addTestPhotos();
 
+        $photos = $this->elements($this->using('css selector')->value('.draggablePhoto'));
+        $numberOfPhotos = count($photos);
+        // The photo to move is third from the end
+        $index = $numberOfPhotos - 3;
+        $photo = $photos[$index];
+        $target = $photos[$numberOfPhotos - 1];
+        $photoId = $photo->attribute('data-id');
 
+        $this->moveto($photo);
+        $this->buttondown();
+        $this->moveto($target);
+        $this->buttonup();
+
+        $photos2 = $this->elements($this->using('css selector')->value('.draggablePhoto'));
+        $numberOfPhotos2 = count($photos2);
+        // The moved photo is now the last
+        $index2 = $numberOfPhotos2 - 1;
+        $photo2 = $photos2[$index2];
+        $photoId2 = $photo2->attribute('data-id');
+
+        sleep(2);
+
+        $this->assertEquals($numberOfPhotos, $numberOfPhotos2);
+        $this->assertEquals($photoId, $photoId2);
 
         $this->removeTestPhotos();
-
-        sleep(5);
     }
 }
 ?>

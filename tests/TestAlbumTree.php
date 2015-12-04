@@ -1,7 +1,7 @@
 <?php
 class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
-    public $email = ''; //Admin email here
-    public $password = ''; //Admin password here
+    public $email = 'email'; //Admin email here
+    public $password = 'password'; //Admin password here
     public $testAlbumName = '%$¤testNewAlbum¤$%';
     public $projectURL;
 
@@ -82,9 +82,11 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
         $albumLinks = $this->elements($this->using('css selector')->value('.droppableAlbum'));
         $albumLink = $albumLinks[$index]->attribute('href');
         $albumId = substr($albumLink, strrpos($albumLinks[$index]->attribute('href'), '=') + 1);
-        $this->removeTestAlbum($albumId);
+        $this->removeTestAlbum($albumId);http://localhost/
 
-        $this->byClassName('toggleArrow')->click();
+        if ($this->byClassName('toggleArrow')->displayed()) {
+            $this->byClassName('toggleArrow')->click();
+        }
         $albums = $this->elements($this->using('css selector')->value('.droppableAlbum span'));
         $count = 0;
         $index = 0;
