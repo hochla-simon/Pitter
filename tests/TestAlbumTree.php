@@ -95,7 +95,7 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
         $albumLinks = $this->elements($this->using('css selector')->value('.droppableAlbum'));
         $albumLink = $albumLinks[$index]->attribute('href');
         $albumId = substr($albumLink, strrpos($albumLinks[$index]->attribute('href'), '=') + 1);
-        $this->removeTestAlbum($albumId);http://localhost/
+        $this->removeTestAlbum($albumId);
 
         if ($this->byClassName('toggleArrow')->displayed()) {
             $this->byClassName('toggleArrow')->click();

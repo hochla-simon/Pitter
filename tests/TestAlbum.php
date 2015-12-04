@@ -198,10 +198,10 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
             'id' => $albumTest['id']
         );
 
-        $results = $db->query('SELECT * FROM imagestoalbums');
+        $results = $db->query('SELECT * FROM imagesToAlbums');
         $initialNumber = mysql_num_rows($results);
 
-        $images = $db->query('SELECT * FROM imagestoalbums WHERE albumId="'. $albumTest['id']. '"');
+        $images = $db->query('SELECT * FROM imagesToAlbums WHERE albumId="'. $albumTest['id']. '"');
         $imagesNumber = mysql_num_rows($images);
 
         //Test delete album
@@ -211,7 +211,7 @@ class TestAlbum extends PHPUnit_Framework_TestCase {
         );
         include(dirname(__FILE__).'/../pages/view/albumDelete.php');
 
-        $results = $db->query('SELECT * FROM imagestoalbums');
+        $results = $db->query('SELECT * FROM imagesToAlbums');
         $newNumber = mysql_num_rows($results);
         $this->assertEquals($initialNumber-$imagesNumber,$newNumber);
     }

@@ -1,5 +1,5 @@
 <?php
-class testImage extends PHPUnit_Framework_TestCase {
+class TestImage extends PHPUnit_Framework_TestCase {
     public function testEdit(){
         // Initialization
         $_SESSION['id'] = 1;
@@ -38,7 +38,7 @@ class testImage extends PHPUnit_Framework_TestCase {
         //Test delete photo from one album
         $db->query('INSERT INTO images (ownerId, name, filename, extension, created, description) VALUES ("1", "", "flamingo","jpg", CURRENT_TIMESTAMP(),"")');
         $newImageId = mysql_insert_id();
-        $db->query('INSERT INTO imagestoalbums (albumId, imageId, positionInAlbum) VALUES ("1", "'. $newImageId .'", "1")');
+        $db->query('INSERT INTO imagesToAlbums (albumId, imageId, positionInAlbum) VALUES ("1", "'. $newImageId .'", "1")');
 
         $target = dirname(__FILE__).'/data/uploadTest/flamingos.jpg'; // Ceci est le fichier qui existe actuellement
         $link = dirname(__FILE__).'/../data/images/'.$newImageId.'.jpg';  // Ceci sera le nom du fichier que vous voulez lier
@@ -58,8 +58,8 @@ class testImage extends PHPUnit_Framework_TestCase {
         //Test delete photo from one album but existing in two
         $db->query('INSERT INTO images (ownerId, name, filename, extension, created, description) VALUES ("1", "", "flamingo","jpg", CURRENT_TIMESTAMP(),"")');
         $newImageId = mysql_insert_id();
-        $db->query('INSERT INTO imagestoalbums (albumId, imageId, positionInAlbum) VALUES ("1", "'. $newImageId .'", "1")');
-        $db->query('INSERT INTO imagestoalbums (albumId, imageId, positionInAlbum) VALUES ("2", "'. $newImageId .'", "1")');
+        $db->query('INSERT INTO imagesToAlbums (albumId, imageId, positionInAlbum) VALUES ("1", "'. $newImageId .'", "1")');
+        $db->query('INSERT INTO imagesToAlbums (albumId, imageId, positionInAlbum) VALUES ("2", "'. $newImageId .'", "1")');
 
         $target = dirname(__FILE__).'/data/uploadTest/flamingos.jpg'; // Ceci est le fichier qui existe actuellement
         $link = dirname(__FILE__).'/../data/images/'.$newImageId.'.jpg';  // Ceci sera le nom du fichier que vous voulez lier
