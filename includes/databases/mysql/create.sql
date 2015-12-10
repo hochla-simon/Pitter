@@ -61,4 +61,19 @@ value            varchar(255) NOT NULL,
 PRIMARY KEY (id)
 );
 
+CREATE TABLE linkToAlbums
+(
+id         int NOT NULL AUTO_INCREMENT,
+albumId    int NOT NULL,
+link       varchar(255) NOT NULL,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE usersToAlbums
+(
+albumId   int NOT NULL,
+userId    int NOT NULL,
+PRIMARY KEY (albumId, userId)
+);
+
 INSERT INTO albums(parentAlbumId, ownerId, name, created, modified, description) VALUES('-1', '1', 'ROOT', CURDATE(), CURDATE(), 'This is the root album.');
