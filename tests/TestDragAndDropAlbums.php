@@ -11,7 +11,6 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
 
     public $email = ''; //Admin email here
     public $password = ''; //Admin password here
-    public $testAlbumName = '%$¤testNewAlbum¤$%';
     public $projectURL;
 
     protected function login() {
@@ -21,11 +20,11 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $this->byClassName('submit')->click();
     }
 
-    protected function addTestAlbum($parentId) {
+    protected function addTestAlbum($parentId, $albumName) {
 
         $_SESSION['id'] = 1;
         $_GET = array(
-            'parentId' => ''
+            'parentId' => $parentId
         );
         $phpunit = array(
             'isTest' => true
@@ -33,21 +32,12 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
 
         include(dirname(__FILE__).'/../index.php');
 
-        $_POST = array(
-            'Save' => true,
-            'name' => 'test',
-            'parentAlbumId' => $parentId,
-            'description' => ''
-        );
-
-        include(dirname(__FILE__).'/../pages/view/albumCreate.php');
-
 
         $this->url($this->projectURL.'/view/albumCreate.html?parentId=' . $parentId);
-        $this->byId('name')->value($this->testAlbumName);
+        $this->byId('name')->value($albumName);
         $this->byClassName('submit')->click();
 
-        $album = $db->query('SELECT id FROM albums WHERE name="' . $this->testAlbumName .'"');
+        $album = $db->query('SELECT id FROM albums WHERE name="' . $albumName .'"');
         if (mysql_num_rows($album) > 0) {
             //getting the id of the last added album with the name "test"
             while($row = mysql_fetch_assoc($album)) {
@@ -73,10 +63,21 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
     }
 
     public function testMakeSiblingAlbumFromChildAlbum() {
-        $this->login();
+        $_SESSION['id'] = 1;
+        $_GET = array(
+            'parentId' => ''
+        );
+        $phpunit = array(
+            'isTest' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
 
-        $testAlbumId = $this->addTestAlbum(1);
-        $this->addTestAlbum($testAlbumId);
+        $this->url($this->projectURL.'/users/login.html');
+        $this->login();
+        $this->url($this->projectURL.'/view/index.html');
+
+        $testAlbumId = $this->addTestAlbum(1, "#parent");
+        $this->addTestAlbum($testAlbumId, "#child");
 
         $this->url($this->projectURL.'/view/index.html');
 
