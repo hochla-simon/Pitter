@@ -9,8 +9,8 @@
 class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
 {
 
-    public $email = ''; //Admin email here
-    public $password = ''; //Admin password here
+    public $email = 'root@gmail.com'; //Admin email here
+    public $password = 'root'; //Admin password here
     public $projectURL;
 
     protected function login() {
@@ -76,8 +76,11 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $this->login();
         $this->url($this->projectURL.'/view/index.html');
 
-        $testAlbumId = $this->addTestAlbum(1, "#parent");
-        $this->addTestAlbum($testAlbumId, "#child");
+        $testAlbumId = $this->addTestAlbum(1, " !!!parent");
+        $childAlbum1Id = $this->addTestAlbum($testAlbumId, " !!!child1");
+        $siblingAlbum1Id = $this->addTestAlbum(1, " !!!sibling1");
+        $siblingAlbum2Id = $this->addTestAlbum(1, " !!!sibling2");
+
 
         $this->url($this->projectURL.'/view/index.html');
 
@@ -94,7 +97,7 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         sleep(3);
 
         $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li');
-        $targetDrop=$this->byCssSelector('#albumsContainer > ul');
+        $targetDrop=$this->byCssSelector('#albumsContainer > ul > li > ul');
 
         sleep(2);
         $this->moveto($srcDrag);
@@ -115,41 +118,64 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
             '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li'))));
 
         $this->removeTestAlbum($testAlbumId);
+        $this->removeTestAlbum($childAlbum1Id);
+        $this->removeTestAlbum($siblingAlbum1Id);
+        $this->removeTestAlbum($siblingAlbum2Id);
+
     }
 
-//    public function testMakeChildAlbumFromSiblingAlbum() {
-//        $this->login();
-//
-//        global $config;
-//
-//        $this->url($this->projectURL.'view/index.html');
-//
-//        $siblingAlbumsCount = count($this->elements($this->using('css selector')->value(
-//            '#albumsContainer > ul > li > ul > li')));
-//        $childAlbumsCount = count($this->elements($this->using('css selector')->value(
-//            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li')));
-//
-//        $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(2)');
-//        $targetDrop=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > ul');
-//
-//        sleep(2);
-//        $this->moveto($srcDrag);
-//        sleep(2);
-//        $this->buttondown();
-//        sleep(2);
-//        $this->moveto($targetDrop);
-//        sleep(2);
-//
-//        $this->buttonup();
-//
-//        sleep(2);
-//
-//        $newSiblingAlbumsCount = $siblingAlbumsCount - 1;
-//        $newChildAlbumsCount = $childAlbumsCount + 1;
-//
-////        $this->assertEquals($newSiblingAlbumsCount, count($this->elements($this->using('css selector')->value(
-////            '#albumsContainer > ul > li > ul > li'))));
-////        $this->assertEquals($newChildAlbumsCount, count($this->elements($this->using('css selector')->value(
-////            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li'))));
-//    }
+    public function testMakeChildAlbumFromSiblingAlbum() {
+        $_SESSION['id'] = 1;
+        $_GET = array(
+            'parentId' => ''
+        );
+        $phpunit = array(
+            'isTest' => true
+        );
+        include(dirname(__FILE__).'/../index.php');
+
+        $this->url($this->projectURL.'/users/login.html');
+        $this->login();
+        $this->url($this->projectURL.'/view/index.html');
+
+        $album1 = $this->addTestAlbum(1, " !!!album1");
+        $album2 = $this->addTestAlbum($album1, " !!!album2");
+        $album3 = $this->addTestAlbum(1, " !!!album3");
+
+        $siblingAlbumsCount = count($this->elements($this->using('css selector')->value(
+            '#albumsContainer > ul > li > ul > li')));
+        $childAlbumsCount = count($this->elements($this->using('css selector')->value(
+            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li')));
+
+        sleep(2);
+        $this->byCssSelector('#albumsContainer > ul > li > img')->click();
+        sleep(2);
+        $this->byCssSelector('#albumsContainer > ul > li > ul > li > img')->click();
+        sleep(3);
+
+        $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(2)');
+        $targetDrop=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > ul');
+
+        sleep(2);
+        $this->moveto($srcDrag);
+        sleep(2);
+        $this->buttondown();
+        sleep(2);
+        $this->moveto($targetDrop);
+        sleep(2);
+
+        $this->buttonup();
+
+        sleep(2);
+
+        $newSiblingAlbumsCount = $siblingAlbumsCount - 1;
+        $newChildAlbumsCount = $childAlbumsCount + 1;
+
+        $this->assertEquals($newSiblingAlbumsCount, count($this->elements($this->using('css selector')->value(
+            '#albumsContainer > ul > li > ul > li'))));
+        $this->assertEquals($newChildAlbumsCount, count($this->elements($this->using('css selector')->value(
+            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li'))));
+
+        $this->removeTestAlbum($album1);
+    }
 }
