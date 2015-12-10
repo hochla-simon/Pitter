@@ -5,7 +5,7 @@
  * Date: 11. 11. 2015
  * Time: 13:24
  */
-if($currentUser['id'] == ''):
+if($currentUser['id'] == '' && !isset($_POST["sharelink"])):
     echo "Unauthorized.";
 else:
 
@@ -35,7 +35,7 @@ if($_POST)
     $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($album_id) . "'";
     $album_data = mysql_fetch_array($db->query($query_for_album));
     if (!empty($album_data)) {
-        if ($album_data['ownerId'] != $currentUser['id']) {
+        if ($album_data['ownerId'] != $currentUser['id'] && !isset($_POST["sharelink"])) {
             echo "owner: ".$album_data['ownerId'].' '.$currentUser['id'];
             include(dirname(__FILE__) . '/../common/error401.php');
             if(!$phpunit['isTest']){
@@ -75,7 +75,12 @@ if($_POST)
         while($row = mysql_fetch_array($images)) {
             if (file_exists(dirname(__FILE__) . '/../../data/images/' . $row['id'] . '.' . $row['extension'])) {
                 echo '<a class="draggablePhoto" data-id="' . $row['id'] . '" href="photoView.html?id=' . $row['id'] . '" id="image_'. $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] .
-                    '.' . $row['extension'] . '"><span class="center_img"></span><img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
+                    '.' . $row['extension'] . '"><span class="center_img"></span>';
+                if (!isset($_POST['sharelink'])) {
+                    echo '<img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
+                }else{
+                    echo '<img src="image.html?sharelink=abc&id=' . $row['id'] . '&max_size=100"/></div></a>';
+                }
             }
         }
 		echo '<script>

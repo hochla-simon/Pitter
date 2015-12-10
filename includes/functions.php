@@ -73,4 +73,88 @@ function site_handler($url, $url_first_site, $amount, $v, $order, $limit){
                  $handler .= '<span>1</span>';
         return $handler;
 }
+
+function deliver_image_content($id, $extension, $isTest){
+
+    $path = dirname(__FILE__) . '/../data/images/' . $id . '.' . $extension;
+
+    $extension = strtolower($extension);
+    if ($extension == 'jpg') {
+        $extension = "jpeg";
+    }
+    if($isTest) {
+        header('Content-Type: image/' . $extension);
+    }
+
+
+    if(isset($_GET["max_size"])){
+        if($isTest) {
+            /*header("Pragma: cache");*/
+            header("Cache-Control: max-age=" . 24 * 60 * 60);
+            $time_last_modification = filemtime($path);
+            header("Last-Modified: " . date("F d Y H:i:s.", $time_last_modification));
+        }
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])
+            &&
+            (strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) == $time_last_modification)) {
+            if($isTest) {
+                // send the last mod time of the file back
+                header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $time_last_modification) . ' GMT',
+                    true, 304);
+            }
+        } else {
+            list($width, $height) = getimagesize($path);
+            //echo 'path: '.$path;
+            $longest_side = 0;
+            if ($width > $height) {
+                $longest_side = $width;
+            } else {
+                $longest_side = $height;
+            }
+
+            $max_size = $_GET["max_size"];
+
+            if ($max_size >= $longest_side) {
+                readfile($path);
+            } else {
+                $percent = 0;
+
+                $ratio = $longest_side / $max_size;
+
+                $new_width = $width / $ratio;
+                $new_height = $height / $ratio;
+
+                //echo 'new width '.$new_width.' new height '.$new_height;
+
+                // Resample
+
+                ini_set('memory_limit', '1000M');
+                $image_p = imagecreatetruecolor($new_width, $new_height);
+                $image = null;
+                if ($extension == 'jpeg') {
+                    $image = imagecreatefromjpeg($path);
+                } else {
+                    if ($extension == 'gif') {
+                        $image = imagecreatefromgif($path);
+                    } else {
+                        $image = imagecreatefrompng($path);
+                    }
+                }
+                imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+                if ($extension == 'jpeg') {
+                    imagejpeg($image_p, null, 100);
+                } else if ($extension == 'gif') {
+                    imagegif($image_p);
+                } else {
+                    imagepng($image_p);
+                }
+                imagedestroy($image_p);
+                imagedestroy($image);
+            }
+        }
+    } else {
+        @readfile($path);
+    }
+}
 ?>
