@@ -12,6 +12,7 @@ class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
     }
 
     protected function login() {
+        $this->url($this->projectURL.'/users/login.html');
         $this->byId('setting_email')->value($this->email);
         $this->byId('setting_password')->value($this->password);
         $this->byClassName('submit')->click();
@@ -57,7 +58,6 @@ class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
     }
 
     public function testMovingOutsideTheArea() {
-        $this->url($this->projectURL.'/users/login.html');
         $this->login();
         $this->url($this->projectURL.'/view/index.html');
 
@@ -92,9 +92,6 @@ class TestRearrangePhotos extends PHPUnit_Extensions_Selenium2TestCase {
     }
 
     public function testMovingInsideTheArea() {
-        echo 'Implement testMovingInsideTheArea';
-
-        $this->url($this->projectURL.'/users/login.html');
         $this->login();
         $this->url($this->projectURL.'/view/index.html');
 

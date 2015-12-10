@@ -42,7 +42,7 @@ class TestImage extends PHPUnit_Framework_TestCase {
 
         $target = dirname(__FILE__).'/data/uploadTest/flamingos.jpg'; // Ceci est le fichier qui existe actuellement
         $link = dirname(__FILE__).'/../data/images/'.$newImageId.'.jpg';  // Ceci sera le nom du fichier que vous voulez lier
-        link($target, $link);
+        @link($target, $link);
         $_GET = array(
             'id' => $newImageId
         );
@@ -63,7 +63,7 @@ class TestImage extends PHPUnit_Framework_TestCase {
 
         $target = dirname(__FILE__).'/data/uploadTest/flamingos.jpg'; // Ceci est le fichier qui existe actuellement
         $link = dirname(__FILE__).'/../data/images/'.$newImageId.'.jpg';  // Ceci sera le nom du fichier que vous voulez lier
-        link($target, $link);
+        @link($target, $link);
         $_GET = array(
             'id' => $newImageId
         );

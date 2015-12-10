@@ -56,15 +56,17 @@ else:
 <form action="" method="POST">
 
 	<input type="hidden" name="photoId" id="albumId" value="<?php echo $imageId; ?>" >
-
-    <label>From which album do you want to delete this photo ? </label>
-    <input type="checkbox" name="selectAll" id="selectAll" />
-    <?php
+    <div class="row">
+    From which album do you want to delete this photo ? <br /><br />
+    <label><input type="checkbox" name="selectAll" id="selectAll" /> Select all</label><br />
+    </div>
+    <div class="row">
+        <?php
         while ($row = mysql_fetch_array($result)){
-            echo '<input type="checkbox" name="album[]" value="'. $row['id'] . '">' . $row['name'] . '<br>';
+            echo '<label><input type="checkbox" name="album[]" value="'. $row['id'] . '">' . $row['name'] . '</label><br>';
         }
     ?>
-
+    </div>
     <div class="row">
         <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
         <input class="submit" type="submit" name="Delete" value="Delete">
@@ -72,7 +74,7 @@ else:
 </form>
 
                 <script>
-                    $('#selectAll').click(function (event) {
+                    $('#selectAll').change(function (event) {
                         if (this.checked) {
                             // Iterate each checkbox
                             $(':checkbox').each(function () {

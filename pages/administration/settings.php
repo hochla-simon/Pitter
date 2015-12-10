@@ -68,7 +68,6 @@ if(isset($_POST['submit'])){
 		}
 	}
 	if(count($errors) == 0){
-		$db->query("insert into users set firstName = '".mysql_real_escape_string($_POST['adminFirstName'])."', lastName = '".mysql_real_escape_string($_POST['adminLastName'])."', email = '".mysql_real_escape_string($_POST['adminEmail'])."', password = '".mysql_real_escape_string(crypt($_POST['adminPassword']))."', registered = '".time()."', enabled = '1', isAdmin = '1'");
 		$newConfig = array_merge($config, $_POST);
         unset($newConfig['navigation']);
         unset($newConfig['modules']);
@@ -89,6 +88,7 @@ if(isset($_POST['submit'])){
 			$message = createMessage('Changes successfully saved.', 'confirm');
 		}
 		else{
+			$db->query("insert into users set firstName = '".mysql_real_escape_string($_POST['adminFirstName'])."', lastName = '".mysql_real_escape_string($_POST['adminLastName'])."', email = '".mysql_real_escape_string($_POST['adminEmail'])."', password = '".mysql_real_escape_string(crypt($_POST['adminPassword']))."', registered = '".time()."', enabled = '1', isAdmin = '1'");
 			$message = createMessage('Installation successful. You will be redirected...', 'confirm');
 			echo '<meta http-equiv="refresh" content="2; url='.$newConfig['projectURL'].'">';
 		}
