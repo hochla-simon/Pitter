@@ -6,7 +6,7 @@
  * Time: 13:24
  */
 if($currentUser['id'] == '' && !isset($_POST["sharelink"])):
-    echo "Unauthorized.";
+    echo "Unauthorized. and no sharelink";
 else:
 
 if($_POST)
@@ -35,11 +35,22 @@ if($_POST)
     $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($album_id) . "'";
     $album_data = mysql_fetch_array($db->query($query_for_album));
     if (!empty($album_data)) {
-        if ($album_data['ownerId'] != $currentUser['id'] && !isset($_POST["sharelink"])) {
-            echo "owner: ".$album_data['ownerId'].' '.$currentUser['id'];
-            include(dirname(__FILE__) . '/../common/error401.php');
-            if(!$phpunit['isTest']){
-                die();
+        if ($album_data['ownerId'] != $currentUser['id']) {
+            if(isset($_POST["sharelink"])){
+                $sharelink = $_POST['sharelink'];
+                $sql = "SELECT * FROM `linkToAlbums` WHERE `albumId` = ".mysql_real_escape_string($album_id)." AND `link` LIKE '".$sharelink."'";
+                $result = $db->query($sql);
+                $row = mysql_fetch_array($result);
+                if(empty($row)){
+                    include(dirname(__FILE__) . '/../common/error401.php');
+                    exit();
+                }
+            }else {
+                echo "owner: " . $album_data['ownerId'] . ' ' . $currentUser['id'];
+                include(dirname(__FILE__) . '/../common/error401.php');
+                if (!$phpunit['isTest']) {
+                    die();
+                }
             }
         }
     }
@@ -79,7 +90,7 @@ if($_POST)
                 if (!isset($_POST['sharelink'])) {
                     echo '<img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
                 }else{
-                    echo '<img src="image.html?sharelink=abc&id=' . $row['id'] . '&max_size=100"/></div></a>';
+                    echo '<img src="image.html?sharelink='.$sharelink.'&id=' . $row['id'] . '&max_size=100"/></div></a>';
                 }
             }
         }

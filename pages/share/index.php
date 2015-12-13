@@ -19,12 +19,26 @@ $site['script'] = '<link rel="stylesheet" href="' . $config['projectURL'] . 'css
 <script type="text/javascript" src="' . $config['projectURL'] . 'js/albumViewScripts.js"></script>
 <script type="text/javascript" src="' . $config['projectURL'] . 'js/dropzone.js"></script>';
 
-
-
 $albumId = $_GET['id'];
 if (!$albumId) {
-$albumId = '1';
+    include(dirname(__FILE__) . '/../common/error401.php');
+    exit();
 }
+
+$sharelink = $_GET['sharelink'];
+if(!isset($sharelink)){
+    include(dirname(__FILE__) . '/../common/error401.php');
+    exit();
+}
+
+$sql = "SELECT * FROM `linkToAlbums` WHERE `albumId` = ".$albumId." AND `link` = '".$sharelink."'";
+$result = $db->query($sql);
+$row = mysql_fetch_array($result);
+if(empty($row)){
+    include(dirname(__FILE__) . '/../common/error401.php');
+    exit();
+}
+
 
 $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($albumId) . "'";
 $album_data = mysql_fetch_array($db->query($query_for_album));
@@ -69,7 +83,7 @@ $album_data = mysql_fetch_array($db->query($query_for_album));
                     orderingOrder="ASC";
                     break;
             }
-            $('#photos').load(projectUrl + "view/autoloadProcess.html", {'sharelink':'1234', 'images_per_group':images_per_group, 'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function() {track_load++;}); //load first group
+            $('#photos').load(projectUrl + "view/autoloadProcess.html", {'sharelink':'<?=$sharelink?>', 'images_per_group':images_per_group, 'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function() {track_load++;}); //load first group
         }
         function countImagesNumberPerPage() {
             var elmnt = document.getElementById("wrapper");
@@ -128,7 +142,7 @@ $album_data = mysql_fetch_array($db->query($query_for_album));
                         }
 
 
-                        $.post(projectUrl + "view/autoloadProcess.html",{'images_per_group':images_per_group, 'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function(data){
+                        $.post(projectUrl + "view/autoloadProcess.html",{'sharelink':'<?=$sharelink?>', 'images_per_group':images_per_group, 'group_no':track_load, 'album_id':album_id, 'ordering':orderingOrder,'ord_field':orderingField}, function(data){
 
                             $("#photos").append(data); //append received data into the element
 
