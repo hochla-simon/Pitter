@@ -151,6 +151,11 @@ if (!empty($album_data)) {
         </div>';
 ?>
 
+<div id="share">
+    <a onclick="alert('Link for this album :');"> Get link to share </a>
+    <a href="#">Share to user </a>
+</div>
+
 <script type="text/javascript">
     var track_load = 0; //total loaded record group(s)
     var loading  = false; //to prevents multipal ajax loads

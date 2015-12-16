@@ -150,7 +150,7 @@ b{
 .albums {
 	margin: 0px;
 	padding: 10px;
-	border: solid #5C5B5B 1px;
+	border: solid #d4d4d4 1px;
 }
 .albums li {
 	list-style: none;
@@ -187,13 +187,34 @@ b{
 }
 #upload {
 	margin-left: 10px;
+	width: 80%;
+	display: inline-block;
 }
+#share {
+	display: inline-block;
+	float: right;
+	width: 15%;
+}
+#share a{
+	border: 1px solid #D4D4D4;
+	background: #242424;
+	color: white;
+	padding : 10px;
+	display: block;
+	margin: 2px;
+	text-decoration: none;
+}
+#share a:hover{
+	background: #D4D4D4;
+	color: black;
+}
+
 .thumbnail {
 	margin: 10px;
 	display: inline-block;
 	height: 100px;
 	width: 100px;
-	border: solid 1px black;
+	border: solid 1px #d4d4d4;
 	vertical-align: middle;
 	text-align: center;
 	background: url(../images/loader.gif) no-repeat;
