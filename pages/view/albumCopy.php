@@ -45,9 +45,9 @@ else:
 			}
 
 
-			copyAlbum($db, $albumId, $_POST["parentAlbumId"]);
+			$newAlbumId = copyAlbum($db, $albumId, $_POST["parentAlbumId"]);
 			if ( !$phpunit['isTest'] ) {
-				header('Location: ./index.html');
+				header('Location: ./index.html?id='.$newAlbumId);
 				exit();
 			}
 		} else {
@@ -87,7 +87,7 @@ else:
 			</div>
 			<div class="row">
 				<input class="cancel" type="button" name="Cancel" value="Cancel"
-					   onclick="window.location='./index.html';">
+					   onclick="history.back();">
 				<input class="submit" type="submit" name="Save" value="Save">
 			</div>
 

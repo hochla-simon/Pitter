@@ -94,11 +94,11 @@ $(document).ready(function() {
 			var photoId = opt.$trigger.parent().attr("id").substring(6);
 			var albumId = opt.$trigger.parent().parent().attr("data-albumid");
 			if (key === 'edit') {
-				window.open('photoEdit.html?id=' + photoId, '_self');
+				window.open('photoEdit.html?id=' + photoId + '&albumId=' + albumId, '_self');
 			} else if (key === 'delete') {
-				window.open('photoDelete.html?id=' + photoId, '_self');
+				window.open('photoDelete.html?id=' + photoId + '&albumId=' + albumId, '_self');
 			} else if (key === 'copy') {
-				window.open('photoCopy.html?id=' + photoId, '_self');
+				window.open('photoCopy.html?id=' + photoId + '&albumId=' + albumId, '_self');
 			} else if (key === 'move') {
 				window.open('photoMoveRightClick.html?id=' + photoId + '&albumId=' + albumId, '_self');
 			}

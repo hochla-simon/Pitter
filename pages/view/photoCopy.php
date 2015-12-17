@@ -22,7 +22,7 @@ if (isset ($_POST["Copy"])) {
                 $db->query('COMMIT;');
 
                 if (!$phpunit['isTest']) {
-                    header('Location: ./index.html');
+                    header('Location: ./index.html?id='.$_POST['albumId']);
                     exit();
                 }
             } else {
@@ -85,7 +85,7 @@ if(!$denied) {
         </div>
 
         <div class="row">
-            <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
+            <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html?id=<?echo $_GET['albumId'];?>';">
             <input class="submit" type="submit" name="Copy" value="Copy">
         </div>
 

@@ -65,9 +65,9 @@ if (!function_exists(writeSelectAlbum)) {
 	}
 }
 if (!function_exists(obtainSelectAlbum)) {
-	function obtainSelectAlbum($db, $currentUserId)
+	function obtainSelectAlbum($db, $currentUserId, $excludeAlbum = '')
 	{
-		$sql = "SELECT parentAlbumId, id, name FROM albums WHERE ownerID=".$currentUserId;
+		$sql = "SELECT parentAlbumId, id, name FROM albums WHERE ownerID=".$currentUserId.(($excludeAlbum != '') ? " and id != '".$excludeAlbum."'" : "");
 		$albums = $db->query($sql);
 		$selectAlbum = '';
 		if (!empty($albums)) {
@@ -174,6 +174,7 @@ if (!function_exists(copyAlbum)) {
 					copyAlbum($db, $childAlbum['id'], $newAlbumId);
 				}
 			}
+			return $newAlbumId;
 		}
 	}
 }

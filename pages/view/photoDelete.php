@@ -39,7 +39,7 @@ else:
                     deleteImage($currentUser['id'], $db, $imageId);
                 }
                 if (!$phpunit['isTest']) {
-                    header('Location: ./index.html');
+                    header('Location: ./index.html?id='.$_GET['albumId']);
                     exit();
                 }
             }
@@ -68,7 +68,7 @@ else:
     ?>
     </div>
     <div class="row">
-        <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
+        <input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html?id=<?php echo $_GET['albumId'];?>';">
         <input class="submit" type="submit" name="Delete" value="Delete">
     </div>
 </form>

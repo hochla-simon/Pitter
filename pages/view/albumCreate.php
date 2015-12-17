@@ -33,7 +33,7 @@ else:
 			$db->query($insert_sql_string);
 
 			if (!isset ($phpunit['isTest'])) {
-				header('Location: ./index.html');
+				header('Location: ./index.html?id='.mysql_insert_id());
 				exit();
 			}
 
@@ -68,7 +68,7 @@ else:
 			</div>
 
 			<div class="row">
-				<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
+				<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="history.back();">
 				<input class="submit" type="submit" name="Save" value="Save">
 			</div>
 

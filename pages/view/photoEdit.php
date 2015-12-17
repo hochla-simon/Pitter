@@ -28,7 +28,7 @@ else:
         $update_sql_string = 'UPDATE images SET name="' . $_POST["name"] . '",description="' . $_POST["description"] . '" WHERE id="' . $_POST["imageId"] . '" ';
         $db->query($update_sql_string);
         if (!$phpunit['isTest']) {
-            header('Location: ./index.html');
+            header('Location: ./index.html?id='.$_GET['albumId']);
             exit();
         }
     }
@@ -54,7 +54,7 @@ else:
 
             <div class="row">
                 <input class="cancel" type="button" name="Cancel" value="Cancel"
-                       onclick="window.location='./index.html';">
+                       onclick="window.location='./index.html?id=<?php echo $_GET['albumId'];?>';">
                 <input class="submit" type="submit" name="Save" value="Save">
             </div>
         </form>
