@@ -85,12 +85,14 @@ if($_POST)
     if (!empty($images)) {
         while($row = mysql_fetch_array($images)) {
             if (file_exists(dirname(__FILE__) . '/../../data/images/' . $row['id'] . '.' . $row['extension'])) {
-                echo '<a class="draggablePhoto" data-id="' . $row['id'] . '" href="photoView.html?id=' . $row['id'] . '" id="image_'. $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] .
-                    '.' . $row['extension'] . '"><span class="center_img"></span>';
                 if (!isset($_POST['sharelink'])) {
+                    echo '<a class="draggablePhoto" data-id="' . $row['id'] . '" href="photoView.html?id=' . $row['id'] . '" id="image_'. $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] .
+                        '.' . $row['extension'] . '"><span class="center_img"></span>';
                     echo '<img src="image.html?id=' . $row['id'] . '&max_size=100"/></div></a>';
                 }else{
-                    echo '<img src="image.html?sharelink='.$sharelink.'&id=' . $row['id'] . '&max_size=100"/></div></a>';
+                    echo '<a class="draggablePhoto" data-id="' . $row['id'] . '" href="photoView.html?id=' . $row['id'] .'&sharelink='.$_POST['sharelink']. '" id="image_'. $row['id'] . '"><div class="thumbnail" title="' . $row['filename'] .
+                        '.' . $row['extension'] . '"><span class="center_img"></span>';
+                    echo '<img src="image.html?sharelink='.$_POST['sharelink'].'&id=' . $row['id'] . '&max_size=100"/></div></a>';
                 }
             }
         }

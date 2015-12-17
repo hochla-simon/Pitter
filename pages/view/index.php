@@ -152,7 +152,25 @@ if (!empty($album_data)) {
 ?>
 
 <div id="share">
-    <a onclick="alert('Link for this album :');"> Get link to share </a>
+    <script>
+
+
+        function requestShareLink(param_albumId) {
+            $.ajax({
+                url: projectUrl + "share/linkGenerator.html",
+                type: "get", //send it through get method
+                data:{id:param_albumId},
+                success: function(response) {
+                    prompt("The url to share the album is: ", projectUrl+"share/index.html?sharelink="+response+"&id="+param_albumId);
+                },
+                error: function(xhr) {
+                    alert( "An error happened." );
+                }
+            });
+
+        }
+    </script>
+    <a onclick="requestShareLink(album_id);"> Get link to share </a>
     <a href="#">Share to user </a>
 </div>
 
