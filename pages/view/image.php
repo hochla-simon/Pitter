@@ -4,7 +4,6 @@ if($currentUser['id'] == ''):
     include(dirname(__FILE__).'/../users/login.php');
 else:
 
-    //include(dirname(__FILE__).'/../../includes/functions.php');
     $id = $_GET['id'];
 
     $sql = "SELECT id, extension, ownerId FROM images WHERE id='".mysql_real_escape_string($id)."'";

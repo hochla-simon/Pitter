@@ -28,11 +28,7 @@ else:
 			$db->query($update_sql_string);
 
 			if(!$phpunit['isTest']) {
-				header('Location: ./index.html');
-				exit();
-			}
-			if ( !$phpunit['isTest'] ) {
-				header('Location: ./index.html');
+				header('Location: ./index.html?id='.$_POST["albumId"]);
 				exit();
 			}
 		} else {
@@ -55,14 +51,6 @@ else:
 				<input type="text" name="path" id="path" size="60" disabled value="<?php echo get_path($album['parentAlbumId'], $db);?>" >
 			</div>
 
-			<input type="hidden" name="albumId" id="albumId" value="<?php echo $album['id']; ?>">
-
-			<div class="row">
-				<label for="path">Path :</label>
-				<input type="text" name="path" id="path" size="60" disabled
-					   value="<?php echo get_path($album['parentAlbumId'], $db); ?>">
-			</div>
-
 			<div class="row">
 				<label for="name">Name :</label>
 				<input type="text" name="name" id="name" size="60" value="<?php echo $album['name']; ?>">
@@ -75,7 +63,7 @@ else:
 
 			<div class="row">
 				<input class="cancel" type="button" name="Cancel" value="Cancel"
-					   onclick="window.location='./index.html';">
+					   onclick="history.back();">
 				<input class="submit" type="submit" name="Save" value="Save">
 			</div>
 

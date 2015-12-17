@@ -33,7 +33,7 @@ if (isset ($_POST["Move"])) {
                 $db->query($delete_sql_string);
 
                 if (!$phpunit['isTest']) {
-                    header('Location: ./index.html');
+                    header('Location: ./index.html?id='.$_POST['newAlbumId']);
                     exit();
                 }
             } else {
@@ -94,7 +94,7 @@ if(!$denied) {
 
             <div class="row">
                 <input class="cancel" type="button" name="Cancel" value="Cancel"
-                       onclick="window.location='./index.html';">
+                       onclick="window.location='./index.html?id=<?echo $_GET['albumId'];?>';">
                 <input class="submit" type="submit" name="Move" value="Move">
             </div>
 

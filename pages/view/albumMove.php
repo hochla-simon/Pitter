@@ -47,7 +47,7 @@ else:
 				$update_sql_string = 'UPDATE albums SET parentAlbumId="' . $_POST["parentAlbumId"] . '",modified=CURRENT_TIMESTAMP() WHERE id="' . $_POST["albumId"] . '" ';
 				$db->query($update_sql_string);
 				if (!$phpunit['isTest']) {
-					header('Location: ./index.html');
+					header('Location: ./index.html?id='.$_POST["albumId"]);
 					exit();
 				}
 			} else {
@@ -85,14 +85,14 @@ else:
 
 				<select name="parentAlbumId" id="parentAlbumId">
 					<?php
-					echo obtainSelectAlbum($db, $currentUser['id']);
+					echo obtainSelectAlbum($db, $currentUser['id'], $album['id']);
 					?>
 				</select>
 			</div>
 
 			<div class="row">
 				<input class="cancel" type="button" name="Cancel" value="Cancel"
-					   onclick="window.location='./index.html';">
+					   onclick="history.back();">
 				<input class="submit" type="submit" name="Save" value="Save">
 			</div>
 

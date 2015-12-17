@@ -14,6 +14,12 @@ else:
 		$result = $db->query($select_sql_string);
 		if (!empty($result)){
 			$album = mysql_fetch_array($result);
+			if ($album['parentAlbumId'] == -1){
+				if ( !$phpunit['isTest'] ) {
+					header('Location: ./index.html');
+					exit();
+				}
+			}
 			if ($album['ownerId'] != $currentUser['id']) {
 				$denied = true;
 				include(dirname(__FILE__) . '/../common/error401.php');
@@ -35,7 +41,7 @@ else:
 		$delete_sql_string = 'DELETE FROM albums WHERE id="' . $_POST["albumId"] . '" ';
 		$db->query($delete_sql_string);
 		if ( !$phpunit['isTest'] ) {
-			header('Location: ./index.html');
+			header('Location: ./index.html?id='.$album['parentAlbumId']);
 			exit();
 		}
 	}
@@ -54,7 +60,7 @@ else:
 		</div>
 
 		<div class="row">
-			<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="window.location='./index.html';">
+			<input class="cancel" type="button" name="Cancel" value="Cancel" onclick="history.back();">
 			<input class="submit" type="submit" name="Delete" value="Delete">
 		</div>
 	</form>
