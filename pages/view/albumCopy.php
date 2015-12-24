@@ -81,7 +81,7 @@ else:
 				<label for="parentAlbumId">Destination:</label>
 				<select name="parentAlbumId" id="parentAlbumId">
 					<?php
-					echo obtainSelectAlbum($db, $currentUser['id'], $currentUser['id']);
+					echo obtainSelectAlbum($db, $currentUser['id'], $album['id']);
 					?>
 				</select>
 			</div>

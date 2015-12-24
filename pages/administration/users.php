@@ -17,6 +17,8 @@ else if($_GET['action'] == 'enable'){
     $user = mysql_fetch_assoc($db->query("select * from users where id = '".mysql_real_escape_string($_GET['id'])."'"));
 	if($user['id'] != '' and $user['enabled'] != '1'){
 		mysql_query("update users set enabled = '1' where id = '".mysql_real_escape_string($_GET['id'])."'") or die(mysql_error());
+        $insert_sql_string = 'INSERT INTO albums (parentAlbumId, ownerId, name, created, modified, description) VALUES ("-1", ' . mysql_real_escape_string($_GET['id']) . ',"ROOT", CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), "' . $_POST["description"] . '" )';
+        $db->query($insert_sql_string);
 		@mail($user['email'], $config['projectName'].': Your account has been activated', "Hi,\n\nyour account on ".$config['projectName']." has been activated some seconds ago. You can now log in and use the service:\n".$config['projectURL']."\users\login.html", 'Content-Type: text/plain\n');
 		echo createMessage('The user was successfully enabled.', 'confirm');
 	}
