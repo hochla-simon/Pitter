@@ -86,7 +86,6 @@ function deliver_image_content($id, $extension, $isTest){
         header('Content-Type: image/' . $extension);
     }
 
-
     if(isset($_GET["max_size"])){
         if($isTest) {
             /*header("Pragma: cache");*/
@@ -128,29 +127,35 @@ function deliver_image_content($id, $extension, $isTest){
 
                 // Resample
 
-                ini_set('memory_limit', '1000M');
-                $image_p = imagecreatetruecolor($new_width, $new_height);
-                $image = null;
-                if ($extension == 'jpeg') {
-                    $image = imagecreatefromjpeg($path);
-                } else {
-                    if ($extension == 'gif') {
-                        $image = imagecreatefromgif($path);
+                if (!extension_loaded('imagick')){
+                    ini_set('memory_limit', '1000M');
+                    $image_p = imagecreatetruecolor($new_width, $new_height);
+                    $image = null;
+                    if ($extension == 'jpeg') {
+                        $image = imagecreatefromjpeg($path);
                     } else {
-                        $image = imagecreatefrompng($path);
+                        if ($extension == 'gif') {
+                            $image = imagecreatefromgif($path);
+                        } else {
+                            $image = imagecreatefrompng($path);
+                        }
                     }
-                }
-                imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+                    imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
-                if ($extension == 'jpeg') {
-                    imagejpeg($image_p, null, 100);
-                } else if ($extension == 'gif') {
-                    imagegif($image_p);
-                } else {
-                    imagepng($image_p);
+                    if ($extension == 'jpeg') {
+                        imagejpeg($image_p, null, 100);
+                    } else if ($extension == 'gif') {
+                        imagegif($image_p);
+                    } else {
+                        imagepng($image_p);
+                    }
+                    imagedestroy($image_p);
+                    imagedestroy($image);
+                }else{
+                    $image = new \Imagick(realpath($path));
+                    $image->thumbnailImage($new_width , $new_height , TRUE);
+                    echo $image->getImageBlob();
                 }
-                imagedestroy($image_p);
-                imagedestroy($image);
             }
         }
     } else {
