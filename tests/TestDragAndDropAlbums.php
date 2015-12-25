@@ -9,8 +9,8 @@
 class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
 {
 
-    public $email = 'root@gmail.com'; //Admin email here
-    public $password = 'root'; //Admin password here
+    public $email = ''; //Admin email here
+    public $password = ''; //Admin password here
     public $projectURL;
 
     protected function login() {
@@ -148,9 +148,7 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
             '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li')));
 
         sleep(2);
-        $this->byCssSelector('#albumsContainer > ul > li > img')->click();
-        sleep(2);
-        $this->byCssSelector('#albumsContainer > ul > li > ul > li > img')->click();
+        $this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > img')->click();
         sleep(3);
 
         $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(2)');
