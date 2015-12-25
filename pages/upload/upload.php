@@ -67,6 +67,21 @@ if($uploadOk == 1){
             //$insert_query->execute($data);
             $last_id = mysql_insert_id();
 
+            $image_id = $last_id;
+            if ($imageFileType === 'jpg') {
+                $exif = exif_read_data($_FILES['file']['tmp_name'], 0, true);
+
+                if ($exif != false) {
+                    foreach ($exif as $key => $section) {
+                        foreach ($section as $name => $val) {
+                            $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                            VALUES (' . $image_id . ',\'' . $key . $name . '\',' . $val . ')';
+                            $db->query($insert_sql_string);
+                        }
+                    }
+                }
+            }
+
             $newTarget_file_name = $target_dir . $last_id . '.' . $imageFileType;
 
 
