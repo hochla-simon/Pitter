@@ -94,7 +94,6 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $this->byCssSelector('#albumsContainer > ul > li > img')->click();
         sleep(2);
         $this->byCssSelector('#albumsContainer > ul > li > ul > li > img')->click();
-        sleep(3);
 
         $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li');
         $targetDrop=$this->byCssSelector('#albumsContainer > ul > li > ul');
@@ -149,12 +148,11 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
 
         sleep(2);
         $this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > img')->click();
-        sleep(3);
+        sleep(2);
 
         $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(2)');
         $targetDrop=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > ul');
 
-        sleep(2);
         $this->moveto($srcDrag);
         sleep(2);
         $this->buttondown();
