@@ -80,6 +80,38 @@ if($uploadOk == 1){
                         }
                     }
                 }
+            } else if ($imageFileType === 'png') {
+                $fp = fopen($_FILES['file']['tmp_name'], 'rb');
+                $sig = fread($fp, 8);
+                if ($sig != "\x89PNG\x0d\x0a\x1a\x0a")
+                {
+                    print "Not a PNG image";
+                    fclose($fp);
+                    die();
+                }
+
+                while (!feof($fp))
+                {
+                    $data = unpack('Nlength/a4type', fread($fp, 8));
+                    if ($data['type'] == 'IEND') break;
+
+                    if ($data['type'] == 'tEXt')
+                    {
+                        list($key, $val) = explode("\0", fread($fp, $data['length']));
+
+                        $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                            VALUES (' . $image_id .',\'' . $key . $name . '\',\'' . $val . '\')';
+                        $db->query($insert_sql_string);
+
+                        fseek($fp, 4, SEEK_CUR);
+                    }
+                    else
+                    {
+                        fseek($fp, $data['length'] + 4, SEEK_CUR);
+                    }
+                }
+
+                fclose($fp);
             }
 
             $newTarget_file_name = $target_dir . $last_id . '.' . $imageFileType;
