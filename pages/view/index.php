@@ -171,7 +171,7 @@ if (!empty($album_data)) {
         }
     </script>
     <a onclick="requestShareLink(album_id);"> Get link to share </a>
-    <a href="#">Share to user </a>
+    <a href=<?php echo$config['projectURL'] ?>view/shareAlbum.html?albumId=<?php echo $albumId ?>>Share to user </a>
 </div>
 
 <script type="text/javascript">
