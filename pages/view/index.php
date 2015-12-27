@@ -73,7 +73,10 @@ function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 
 $albumId = $_GET['id'];
 if (!$albumId) {
-	$albumId = '1';
+    $sql = "SELECT id FROM albums WHERE ownerId = " . $currentUser['id'] . " AND name = 'ROOT'";
+    $result = $db->query($sql);
+    $rootAlbum = mysql_fetch_assoc($result);
+    $albumId = $rootAlbum["id"];
 }
 
 $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($albumId) . "'";
