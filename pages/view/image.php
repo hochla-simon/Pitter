@@ -12,7 +12,7 @@ else:
 
     $albumSharedWithUsers = array();
     $select_sql_query = "SELECT userId FROM imagesToAlbums, usersToAlbums WHERE imagesToAlbums.albumId = usersToAlbums.albumId AND imagesToAlbums.imageId = " . mysql_real_escape_string($id);
-    $result = $db->query($sql);
+    $result = $db->query($select_sql_query);
     while ($user = mysql_fetch_array($result)) {
         array_push($albumSharedWithUsers, $user["userId"]);
     }
@@ -27,7 +27,7 @@ else:
         }
     }
 
-    if($row['ownerId']!=$currentUser['id'] && !in_array($user["id"], $albumSharedWithUsers)) {
+    if($row['ownerId']!=$currentUser['id'] && !in_array($currentUser['id'], $albumSharedWithUsers)) {
         if(!$phpunit['isTest']) {
             include(dirname(__FILE__) . '/../common/error401.php');
             die();
