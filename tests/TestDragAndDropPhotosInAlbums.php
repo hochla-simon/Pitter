@@ -71,17 +71,7 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
         );
 
         include(dirname(__FILE__).'/../index.php');
-        /*
-        $_POST = array(
-            'Save' => true,
-            'name' => 'test',
-            'parentAlbumId' => '1',
-            'description' => ''
-        );
-
-        include(dirname(__FILE__).'/../pages/view/albumCreate.php');
-        */
-
+        
         $this->url($this->projectURL.'/view/albumCreate.html?parentId=1');
         $this->byId('name')->value($this->testAlbumName);
         $this->byClassName('submit')->click();
@@ -118,14 +108,6 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $this->url($this->projectURL.'/view/index.html');
 
         $testAlbumId = $this->addTestAlbum();
-
-        /*
-        sleep(2);
-        $this->byCssSelector('#albumsContainer > ul > li > img')->click();
-        sleep(2);
-        $this->byXPath('//*[@id="albumsContainer"]/ul/li/ul/li[1]/a/span')->click();
-        sleep(3);
-        */
 
         $this->url($this->projectURL.'/view/index.html?id=' . $testAlbumId);
         $this->addTestPhotos($testAlbumId);
@@ -168,12 +150,6 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
 
 
         sleep(2);
-
-//        $photo = end($this->elements($this->using('css selector')->value('.draggablePhoto')));
-//        $photoId = $photo->attribute('data-id');
-//        $this->url($this->projectURL.'/view/photoDelete.html?id=' . $photoId);;
-//        $this->byId('selectAll')->click();
-//        $this->byClassName('submit')->click();
 
         $this->removeTestAlbum($testAlbumId);
     }
