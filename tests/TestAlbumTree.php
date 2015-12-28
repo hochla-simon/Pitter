@@ -41,6 +41,8 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
         $this->login();
         $this->addTestAlbum();
 
+        $this->url($this->projectURL.'/view/index.html');
+
         $this->byClassName('toggleArrow')->click();
         $albums = $this->elements($this->using('css selector')->value('.droppableAlbum span'));
         $count = 0;
@@ -66,6 +68,8 @@ class TestAlbumTree extends PHPUnit_Extensions_Selenium2TestCase {
     public function testNewAlbum() {
         $this->login();
         $this->addTestAlbum();
+
+        $this->url($this->projectURL.'/view/index.html');
 
         $this->byClassName('toggleArrow')->click();
         $albums = $this->elements($this->using('css selector')->value('.droppableAlbum span'));

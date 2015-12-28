@@ -47,6 +47,9 @@ function createAlbums ($albums, $subNumber, $parentId, $activeAlbumId) {
 	}
 
 	echo '<ul class="' . $albumListClass . '" data-albumId="' . $parentId . '" style="display: ' . $display . '">';
+    if ($subNumber == 0) {
+        echo '<li>My Albums</li>';
+    }
 	foreach ($albums as $albumId => $album) {
 		$visibility = '';
 		if (empty($album['childAlbums'])) {
@@ -110,6 +113,32 @@ if (!empty($album_data)) {
             echo '<div id="albumsContainer">';
 
             createAlbums($orderedAlbumObjects, 0, '-1', $albumId);
+
+            $query_for_shared_albums = "SELECT albumId, name FROM usersToAlbums, albums WHERE usersToAlbums.albumId = albums.id AND usersToAlbums.userId = " . $currentUser['id'] . " ORDER BY albums.name ASC";
+            $sharedAlbums = $db->query($query_for_shared_albums);
+            $firstAlbumAdded = false;
+            if ($sharedAlbums != false) {
+                while ($sharedAlbum = mysql_fetch_array($sharedAlbums)) {
+                    if (!$firstAlbumAdded) {
+                        $firstAlbumAdded = true;
+                        echo '<ul class="albums">';
+                        echo '<li> Albums Shared With Me</li>';
+                    }
+                    $albumClass = '';
+                    if ($albumId == $sharedAlbum["albumId"]) {
+                        $albumClass = ' active';
+                    }
+                    echo '<li class="context-menu-one box menu-1" data-id ="' . $sharedAlbum["albumId"] . '" data-path="' . $config['projectURL'] . '">
+                        <img class="toggleArrow" style="visibility:hidden" src="' . $config['projectURL'] . 'images/arrow_right.png" alt=""/>
+                        <a class="droppableAlbum' . $albumClass . '" href="' . $config['projectURL'] . 'view/index.html?id=' . $sharedAlbum["albumId"] .'">
+                            <img src="' . $config['projectURL'] . 'images/folder.png" alt=""/>
+                            <span>' . $sharedAlbum["name"] . '</span>
+                        </a>';
+                }
+            }
+            if ($firstAlbumAdded) {
+                echo '</ul>';
+            }
 
             echo '</div>';
         }

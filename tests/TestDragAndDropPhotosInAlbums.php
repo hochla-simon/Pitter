@@ -71,7 +71,7 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
         );
 
         include(dirname(__FILE__).'/../index.php');
-
+        /*
         $_POST = array(
             'Save' => true,
             'name' => 'test',
@@ -80,7 +80,7 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
         );
 
         include(dirname(__FILE__).'/../pages/view/albumCreate.php');
-
+        */
 
         $this->url($this->projectURL.'/view/albumCreate.html?parentId=1');
         $this->byId('name')->value($this->testAlbumName);
@@ -119,11 +119,13 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
 
         $testAlbumId = $this->addTestAlbum();
 
+        /*
         sleep(2);
         $this->byCssSelector('#albumsContainer > ul > li > img')->click();
         sleep(2);
         $this->byXPath('//*[@id="albumsContainer"]/ul/li/ul/li[1]/a/span')->click();
         sleep(3);
+        */
 
         $this->url($this->projectURL.'/view/index.html?id=' . $testAlbumId);
         $this->addTestPhotos($testAlbumId);
@@ -139,10 +141,10 @@ class TestDragAndDropPhotosInAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $photos = $this->elements($this->using('css selector')->value('.draggablePhoto'));
         $numberOfPhotos = count($photos);
 
-        // The photo to move is third from the end
+        // The photo to move is third from the end? last?
         $index = $numberOfPhotos - 1;
         $photo = $photos[$index];
-        $target = $this->byCssSelector('#albumsContainer > ul > li > a');
+        $target = $this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > a');
         sleep(3);
 
         $this->moveto($photo);

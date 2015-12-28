@@ -77,7 +77,7 @@ class TestImage extends PHPUnit_Framework_TestCase {
         $this->assertEquals('2',$results);
 
         //Test delete photo from two album, photo in only two albums
-        $db->query('INSERT INTO imagestoalbums (albumId, imageId, positionInAlbum) VALUES ("1", "'. $newImageId .'", "1")');
+        $db->query('INSERT INTO imagesToAlbums (albumId, imageId, positionInAlbum) VALUES ("1", "'. $newImageId .'", "1")');
 
         $_GET = array(
             'id' => $newImageId

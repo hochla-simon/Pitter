@@ -85,18 +85,18 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $this->url($this->projectURL.'/view/index.html');
 
         $siblingAlbumsCount = count($this->elements($this->using('css selector')->value(
-            '#albumsContainer > ul > li > ul > li')));
+            '#albumsContainer > ul > li:nth-child(2) > ul > li')));
         $childAlbumsCount = count($this->elements($this->using('css selector')->value(
-            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li')));
+            '#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(1) > ul > li')));
 
 
         sleep(2);
-        $this->byCssSelector('#albumsContainer > ul > li > img')->click();
+        $this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > img')->click();
         sleep(2);
-        $this->byCssSelector('#albumsContainer > ul > li > ul > li > img')->click();
+        $this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > ul > li > img')->click();
 
-        $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li');
-        $targetDrop=$this->byCssSelector('#albumsContainer > ul > li > ul');
+        $srcDrag=$this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(1) > ul > li');
+        $targetDrop=$this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > ul');
 
         sleep(2);
         $this->moveto($srcDrag);
@@ -112,9 +112,9 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $newSiblingAlbumsCount = $siblingAlbumsCount + 1;
 
         $this->assertEquals($newSiblingAlbumsCount, count($this->elements($this->using(
-            'css selector')->value('#albumsContainer > ul > li > ul > li'))));
+            'css selector')->value('#albumsContainer > ul > li:nth-child(2) > ul > li'))));
         $this->assertEquals($newChildAlbumsCount, count($this->elements($this->using('css selector')->value(
-            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li'))));
+            '#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(1) > ul > li'))));
 
         $this->removeTestAlbum($testAlbumId);
         $this->removeTestAlbum($childAlbum1Id);
@@ -142,16 +142,16 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $album3 = $this->addTestAlbum(1, " !!!album3");
 
         $siblingAlbumsCount = count($this->elements($this->using('css selector')->value(
-            '#albumsContainer > ul > li > ul > li')));
+            '#albumsContainer > ul > li:nth-child(2) > ul > li')));
         $childAlbumsCount = count($this->elements($this->using('css selector')->value(
-            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li')));
+            '#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(1) > ul > li')));
 
         sleep(2);
-        $this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > img')->click();
+        $this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(1) > img')->click();
         sleep(2);
 
-        $srcDrag=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(2)');
-        $targetDrop=$this->byCssSelector('#albumsContainer > ul > li > ul > li:nth-child(1) > ul');
+        $srcDrag=$this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(2)');
+        $targetDrop=$this->byCssSelector('#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(1) > ul');
 
         $this->moveto($srcDrag);
         sleep(2);
@@ -168,9 +168,9 @@ class TestDragAndDropAlbums extends PHPUnit_Extensions_Selenium2TestCase
         $newChildAlbumsCount = $childAlbumsCount + 1;
 
         $this->assertEquals($newSiblingAlbumsCount, count($this->elements($this->using('css selector')->value(
-            '#albumsContainer > ul > li > ul > li'))));
+            '#albumsContainer > ul > li:nth-child(2) > ul > li'))));
         $this->assertEquals($newChildAlbumsCount, count($this->elements($this->using('css selector')->value(
-            '#albumsContainer > ul > li > ul > li:nth-child(1) > ul > li'))));
+            '#albumsContainer > ul > li:nth-child(2) > ul > li:nth-child(1) > ul > li'))));
 
         $this->removeTestAlbum($album1);
     }

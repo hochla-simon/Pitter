@@ -13,8 +13,10 @@ else:
     $albumSharedWithUsers = array();
     $select_sql_query = "SELECT userId FROM imagesToAlbums, usersToAlbums WHERE imagesToAlbums.albumId = usersToAlbums.albumId AND imagesToAlbums.imageId = " . mysql_real_escape_string($id);
     $result = $db->query($select_sql_query);
-    while ($user = mysql_fetch_array($result)) {
-        array_push($albumSharedWithUsers, $user["userId"]);
+    if ($result != false) {
+        while ($user = mysql_fetch_array($result)) {
+            array_push($albumSharedWithUsers, $user["userId"]);
+        }
     }
 
     if ($row) {

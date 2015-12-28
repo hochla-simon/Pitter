@@ -35,9 +35,12 @@ if($_POST)
     $albumSharedWithUsers = array();
     $select_sql_string = "SELECT userId FROM usersToAlbums WHERE albumId=" . mysql_real_escape_string($album_id);
     $result = $db->query($select_sql_string);
-    while ($user = mysql_fetch_array($result)) {
-        array_push($albumSharedWithUsers, $user["userId"]);
+    if ($result != false) {
+        while ($user = mysql_fetch_array($result)) {
+            array_push($albumSharedWithUsers, $user["userId"]);
+        }
     }
+
 
     $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($album_id) . "'";
     $album_data = mysql_fetch_array($db->query($query_for_album));

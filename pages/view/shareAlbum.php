@@ -28,8 +28,10 @@ else:
 		$albumSharedWithUsers = array();
 		$select_sql_string = "SELECT userId FROM usersToAlbums WHERE albumId=" . mysql_real_escape_string($albumId);
 		$result = $db->query($select_sql_string);
-		while ($user = mysql_fetch_array($result)) {
-			array_push($albumSharedWithUsers, $user["userId"]);
+		if ($result != false) {
+			while ($user = mysql_fetch_array($result)) {
+				array_push($albumSharedWithUsers, $user["userId"]);
+			}
 		}
 	}
 	$select_sql_string = "SELECT id, email FROM users";
