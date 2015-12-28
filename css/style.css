@@ -246,6 +246,15 @@ b{
 	display: inline;
 	vertical-align: middle;
 }
+#metadata {
+	margin: auto;
+	margin-top: 20px;
+}
+
+#metadata th, #metadata td {
+	border: solid 1px black;
+	padding: 5px;
+}
 .confirmMessage, .errorMessage{
 	background:#87A644;
 	color:#ffffff;
