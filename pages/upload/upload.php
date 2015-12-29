@@ -75,7 +75,7 @@ if($uploadOk == 1){
                     foreach ($exif as $key => $section) {
                         foreach ($section as $name => $val) {
                             $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
-                            VALUES (' . $image_id .',\'' . $key . $name . '\',\'' . $val . '\')';
+                            VALUES (' . $image_id .',\'' . $key . ' ' . $name . '\',\'' . $val . '\')';
                             $db->query($insert_sql_string);
                         }
                     }
@@ -100,7 +100,7 @@ if($uploadOk == 1){
                         list($key, $val) = explode("\0", fread($fp, $data['length']));
 
                         $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
-                            VALUES (' . $image_id .',\'' . $key . $name . '\',\'' . $val . '\')';
+                            VALUES (' . $image_id .',\'' . $key . ' ' . $name . '\',\'' . $val . '\')';
                         $db->query($insert_sql_string);
 
                         fseek($fp, 4, SEEK_CUR);
