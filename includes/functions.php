@@ -32,7 +32,7 @@ function addModuleNavigation($module, $data){
 	}
 	$config['navigation'] = $newNavigation;
 }
-function get_search_cols($keywords, $tables){
+function get_search_cols($keywords, $tables, $exactMatch = true){
          $search = str_replace('*', '%', $keywords);
          if($keywords != $search)
                  $sign = " like ";
@@ -50,6 +50,23 @@ function get_search_cols($keywords, $tables){
                                  $part .= " and ".((count($tables) > 1) ? $table."." : "").$row['Field']." != '0'";
                          $part .= ')';
                          $parts[] = $part;
+                         if(!$exactMatch){
+                             $part = '('.((count($tables) > 1) ? $table."." : "").$row['Field']." like ".((!is_numeric($search)) ? "'%" : "").mysql_real_escape_string($search).((!is_numeric($search)) ? "%'" : "");
+                             if(@preg_match('§(int|float)§i', $row['Type']) and !is_numeric($search))
+                                 $part .= " and ".((count($tables) > 1) ? $table."." : "").$row['Field']." != '0'";
+                             $part .= ')';
+                             $parts[] = $part;
+                             $part = '('.((count($tables) > 1) ? $table."." : "").$row['Field']." like ".((!is_numeric($search)) ? "'%" : "").mysql_real_escape_string($search).((!is_numeric($search)) ? "'" : "");
+                             if(@preg_match('§(int|float)§i', $row['Type']) and !is_numeric($search))
+                                 $part .= " and ".((count($tables) > 1) ? $table."." : "").$row['Field']." != '0'";
+                             $part .= ')';
+                             $parts[] = $part;
+                             $part = '('.((count($tables) > 1) ? $table."." : "").$row['Field']." like ".((!is_numeric($search)) ? "'" : "").mysql_real_escape_string($search).((!is_numeric($search)) ? "%'" : "");
+                             if(@preg_match('§(int|float)§i', $row['Type']) and !is_numeric($search))
+                                 $part .= " and ".((count($tables) > 1) ? $table."." : "").$row['Field']." != '0'";
+                             $part .= ')';
+                             $parts[] = $part;
+                         }
                  }
          }
          return implode(' or ', $parts);

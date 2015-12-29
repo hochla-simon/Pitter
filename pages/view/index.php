@@ -334,6 +334,11 @@ if (!empty($album_data)) {
         <input class="field_order_option" type="button" value="filename">
         <input class="field_order_option" type="button" value="capture date">
     </form>
+    <form action="<?php echo $config['projectURL'] ?>view/search.html" method="post" class="searchForm">
+        <input type="text" name="keywords" placeholder="Search for...">
+        <input type="hidden" name="albumId" value="<?php echo $albumId?>">
+        <input type="submit" name="submit" value="search">
+    </form>
     <form class="ordering_menu">
         <input class="ordering_option checked" type="button" value="ascending">
         <input class="ordering_option" type="button" value="descending">

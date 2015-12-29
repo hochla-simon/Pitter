@@ -56,20 +56,22 @@ if (!function_exists(orderAlbums)) {
 	}
 }
 if (!function_exists(writeSelectAlbum)) {
-	function writeSelectAlbum($albums, $subNumber, $parentId, &$selectAlbum)
+	function writeSelectAlbum($albums, $subNumber, $parentId, $selectAlbum)
 	{
+		$code = '';
 		foreach ($albums as $albumId => $album) {
-			$selectAlbum .= '<option value="' . $albumId . '" >' . str_repeat("&nbsp", $subNumber * 3) . $album[name] . '</option>';
-			writeSelectAlbum($album['childAlbums'], $subNumber + 1, $albumId, $selectAlbum);
+			$code .= '<option value="' . $albumId . '" '.(($selectAlbum == $albumId) ? 'selected="selected"' : '').'>' . str_repeat("&nbsp", $subNumber * 3) . $album[name] . '</option>';
+			$code .= writeSelectAlbum($album['childAlbums'], $subNumber + 1, $albumId, $selectAlbum);
 		}
+		return $code;
 	}
 }
 if (!function_exists(obtainSelectAlbum)) {
-	function obtainSelectAlbum($db, $currentUserId, $excludeAlbum = '')
+	function obtainSelectAlbum($db, $currentUserId, $excludeAlbum = '', $selectAlbum = '')
 	{
 		$sql = "SELECT parentAlbumId, id, name FROM albums WHERE ownerID=".$currentUserId.(($excludeAlbum != '') ? " and id != '".$excludeAlbum."'" : "");
 		$albums = $db->query($sql);
-		$selectAlbum = '';
+		$code = '';
 		if (!empty($albums)) {
 
 			$albumObjects = array();
@@ -86,10 +88,10 @@ if (!function_exists(obtainSelectAlbum)) {
 
 			orderAlbums('-1', $orderedAlbumObjects, $albumObjects);
 
-			writeSelectAlbum($orderedAlbumObjects, 0, '-1', $selectAlbum);
+			$code = writeSelectAlbum($orderedAlbumObjects, 0, '-1', $selectAlbum);
 		}
 
-		return $selectAlbum;
+		return $code;
 	}
 }
 

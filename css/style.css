@@ -465,7 +465,7 @@ div.slideshow_commands {
 .searchForm{
 	display:inline;
 }
-.searchForm input[name="keywords"]{
+.searchForm input[name="keywords"], .searchForm select{
 	border: solid #5C5B5B 1px;
 	padding: 5px;
 }
@@ -485,4 +485,7 @@ div.slideshow_commands {
 }
 .administrationMenu:hover, .administrationMenu:active{
 	border:1px solid #57A3DF;
+}
+.searchPage input[name="keywords"]{
+	width:80%;
 }
