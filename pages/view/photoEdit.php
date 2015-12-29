@@ -14,15 +14,19 @@ else:
             $image = mysql_fetch_array($result);
             if($image['ownerId']!=$currentUser['id']) {
                 $denied = true;
-                include(dirname(__FILE__) . '/../common/error401.php');
-                exit();
+                if(!$phpunit['isTest']) {
+                    include(dirname(__FILE__) . '/../common/error401.php');
+                    exit();
+                }
             }
         }
 
     }
     if($denied){
-        include(dirname(__FILE__) . '/../common/error401.php');
-        exit();
+        if(!$phpunit['isTest']) {
+            include(dirname(__FILE__) . '/../common/error401.php');
+            exit();
+        }
     }
 	if (isset ($_POST["Save"])) {
         $update_sql_string = 'UPDATE images SET name="' . $_POST["name"] . '",description="' . $_POST["description"] . '" WHERE id="' . $_POST["imageId"] . '" ';

@@ -19,8 +19,10 @@ else:
 	$parent_album = mysql_fetch_assoc($db->query($query_for_parent_album));
 	if (!empty($parent_album)) {
 		if ($parent_album['ownerId'] != $currentUser['id']) {
-			include(dirname(__FILE__) . '/../common/error401.php');
-			exit();
+			if(!$phpunit['isTest']) {
+				include(dirname(__FILE__) . '/../common/error401.php');
+				exit();
+			}
 		}
 	}
 

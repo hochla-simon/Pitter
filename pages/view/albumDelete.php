@@ -22,8 +22,10 @@ else:
 			}
 			if ($album['ownerId'] != $currentUser['id']) {
 				$denied = true;
-				include(dirname(__FILE__) . '/../common/error401.php');
-				exit();
+				if(!$phpunit['isTest']) {
+					include(dirname(__FILE__) . '/../common/error401.php');
+					exit();
+				}
 			}
 		}
 	}

@@ -36,8 +36,10 @@ else:
 			}
 
 			if ($denied) {
-				include(dirname(__FILE__) . '/../common/error401.php');
-				exit();
+				if(!$phpunit['isTest']) {
+					include(dirname(__FILE__) . '/../common/error401.php');
+					exit();
+				}
 			}
 		}
 	}
