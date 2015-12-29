@@ -81,6 +81,21 @@ if($uploadOk == 1){
                     }
                 }
             } else if ($imageFileType === 'png') {
+                $size = getimagesize($_FILES['file']['tmp_name']);
+
+                $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                    VALUES (' . $image_id .',\'MIME type\',\'' . $size['mime'] . '\')';
+                $db->query($insert_sql_string);
+
+                $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                    VALUES (' . $image_id .',\'Image width\',\'' . $size[0] . '\')';
+                $db->query($insert_sql_string);
+
+                $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                    VALUES (' . $image_id .',\'Image height\',\'' . $size[1] . '\')';
+                $db->query($insert_sql_string);
+
+
                 $fp = fopen($_FILES['file']['tmp_name'], 'rb');
                 $sig = fread($fp, 8);
                 if ($sig != "\x89PNG\x0d\x0a\x1a\x0a")
@@ -112,6 +127,20 @@ if($uploadOk == 1){
                 }
 
                 fclose($fp);
+            } else if ($imageFileType === 'gif') {
+                $size = getimagesize($_FILES['file']['tmp_name']);
+
+                $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                    VALUES (' . $image_id .',\'MIME type\',\'' . $size['mime'] . '\')';
+                $db->query($insert_sql_string);
+
+                $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                    VALUES (' . $image_id .',\'Image width\',\'' . $size[0] . '\')';
+                $db->query($insert_sql_string);
+
+                $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
+                    VALUES (' . $image_id .',\'Image height\',\'' . $size[1] . '\')';
+                $db->query($insert_sql_string);
             }
 
             $newTarget_file_name = $target_dir . $last_id . '.' . $imageFileType;
