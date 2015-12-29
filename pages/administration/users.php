@@ -30,12 +30,12 @@ else if($_GET['action'] == 'login'){
 	$user = mysql_fetch_assoc($db->query("select * from users where id = '".mysql_real_escape_string($_GET['id'])."'"));
 	if($user['id'] != '' and $user['enabled'] == '1'){
 		$_SESSION['id'] = $user['id'];
-        if(!$phpUnit['test']) {
+        if(!$phpunit['isTest']) {
             header('Location: '.$config['projectURL'] . 'users/profile.html');
         }
 	}
 	else{
-		echo make_error('An error occurred.');
+		echo createMessage('An error occurred.');
 	}
 }
 ?>

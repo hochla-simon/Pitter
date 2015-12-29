@@ -55,6 +55,7 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testCreateUser();
         $test->testEditUser();
         $test->testEnableUser();
+        $test->testLogin();
         $test->testDeleteUser();
     }
 

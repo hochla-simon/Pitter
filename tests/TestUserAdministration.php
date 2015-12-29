@@ -183,10 +183,12 @@ class TestUserAdministration extends PHPUnit_Framework_TestCase {
         $this->assertContains("An error occurred", $site['content']);
 
         // Successful login
+        $db->query("update users set enabled = '1' where email = 'jane.doe@example.org'");
         $user = mysql_fetch_assoc($db->query("select * from users where email = 'jane.doe@example.org'"));
         $_GET['id'] = $user['id'];
         include(dirname(__FILE__).'/../index.php');
         $this->assertEquals($_SESSION['id'], $user['id']);
+        $_SESSION['id'] = 1;
     }
 
     public function testDeleteUser(){
