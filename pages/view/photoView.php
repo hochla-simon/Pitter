@@ -1,14 +1,16 @@
 <?php
 
-function addMetadata($id, $db) {
-    $select_sql_query = "SELECT name, value FROM metadata WHERE imageId = " . mysql_real_escape_string($id);
-    $result = $db->query($select_sql_query);
-    if ($result != false) {
-        while ($row = mysql_fetch_array($result)) {
-            echo '<tr>';
-            echo '<td>' . $row['name'] . ':</td>';
-            echo '<td>' . $row['value'] . '</td>';
-            echo '</tr>';
+if(!function_exists('addMetadata')) {
+    function addMetadata($id, $db) {
+        $select_sql_query = "SELECT name, value FROM metadata WHERE imageId = " . mysql_real_escape_string($id);
+        $result = $db->query($select_sql_query);
+        if ($result != false) {
+            while ($row = mysql_fetch_array($result)) {
+                echo '<tr>';
+                echo '<td>' . $row['name'] . ':</td>';
+                echo '<td>' . $row['value'] . '</td>';
+                echo '</tr>';
+            }
         }
     }
 }
@@ -45,7 +47,7 @@ if ($id != '') {
             echo '<th colspan="2">Metadata</th>';
             echo '</tr>';
             echo '<tr>';
-            echo '<td>Original file name:</td>';
+            echo '<td>Original filename:</td>';
             echo '<td>' . $row['filename'] . '.' . $row['extension'] . '</td>';
             echo '</tr>';
             addMetadata($id, $db);
