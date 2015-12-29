@@ -8,21 +8,46 @@ else:
 
 	if (isset ($_POST["Save"])) {
 		if ($_POST["albumId"] != '' && $_POST["userId"] != '') {
-			$insert_sql_string = "INSERT INTO usersToAlbums (albumId, userId) VALUES (" . mysql_real_escape_string($_POST["albumId"]) . "," . mysql_real_escape_string($_POST["userId"]) . ")";
-			$result = $db->query($insert_sql_string);
-			if ($result) {
-				echo createMessage('Album has been shared successfully!', 'confirm');
-			} else {
-				echo createMessage('Error has occured when sharing the album!', 'error');
+			$select_sql_string = "SELECT id, name, ownerId FROM albums WHERE id=" . mysql_real_escape_string($_POST["albumId"]);
+			$albumResult = $db->query($select_sql_string);
+			$album = mysql_fetch_assoc($albumResult);
+
+			$select_sql_string = "SELECT id FROM users WHERE id=" . mysql_real_escape_string($_POST["userId"]);
+			$userResult = $db->query($select_sql_string);
+			$user = mysql_fetch_assoc($userResult);
+
+			if ($album["id"] == $_POST["albumId"] && $user["id"] == $_POST["userId"]) {
+				if ($album["ownerId"] != $currentUser['id']) {
+					if (!$phpunit['isTest']) {
+						include(dirname(__FILE__) . '/../common/error401.php');
+						exit();
+					}
+				} else {
+					if ($album["ownerId"] != $_POST["userId"]) {
+						$insert_sql_string = "INSERT INTO usersToAlbums (albumId, userId) VALUES (" . mysql_real_escape_string($_POST["albumId"]) . "," . mysql_real_escape_string($_POST["userId"]) . ")";
+						$result = $db->query($insert_sql_string);
+						if (!$phpunit['isTest']) {
+							if ($result) {
+								echo createMessage('Album has been shared successfully!', 'confirm');
+							} else {
+								echo createMessage('Error has occured when sharing the album!', 'error');
+							}
+						}
+					}
+				}
 			}
 		}
 	}
 
 	if($albumId != ''){
-		$select_sql_string = "SELECT name FROM albums WHERE id=" . mysql_real_escape_string($albumId);
+		$select_sql_string = "SELECT name, ownerId FROM albums WHERE id=" . mysql_real_escape_string($albumId);
 		$result = $db->query($select_sql_string);
 		if (!empty($result)){
 			$album = mysql_fetch_array($result);
+		}
+		if ($album["ownerId"] != $currentUser['id']) {
+			include(dirname(__FILE__) . '/../common/error401.php');
+			exit();
 		}
 
 		$albumSharedWithUsers = array();

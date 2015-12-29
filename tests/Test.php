@@ -9,6 +9,7 @@ require 'TestAlbum.php';
 require 'TestImage.php';
 require 'TestMovePhoto.php';
 require 'TestCopyPhoto.php';
+require 'TestUserBasedSharing.php';
 
 /**
  * Created by PhpStorm.
@@ -91,6 +92,16 @@ class Test extends PHPUnit_Framework_TestCase
         $test->setUpBeforeClass();
         $test->testMove();
         $test->tearDownAfterClass();
+    }
+
+    public function testUserBasedSharing() {
+        $test = new TestUserBasedSharing();
+        $test->testSuccesfulSharing();
+        $test->testSharingSameAlbumToSameUser();
+        $test->testSharingAlbumThatUserDoesNotOwn();
+        $test->testSharingToOwner();
+        $test->testSharingToUserThatDoesNotExist();
+        $test->testSharingAlbumThatDoesNotExist();
     }
 
     public function testFinalDeletionOfConfiguration() {
