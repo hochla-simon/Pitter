@@ -178,14 +178,11 @@ if (!empty($album_data)) {
                         });
                     }
                 }
-
         </script>
         </div>';
 ?>
-
 <div id="share">
     <script>
-
 
         function requestShareLink(param_albumId) {
             $.ajax({
@@ -256,6 +253,22 @@ if (!empty($album_data)) {
         return imagesToLoad;
     }
 	$(document).ready(function() {
+        if(typeof(localStorage) !== "undefined") {
+            $("input.field_order_option").each(function(){
+                if ( $(this)[0].value == localStorage.getItem("lastOrderingField") ){
+                    $(this).addClass("checked");
+                }
+            });
+            $("input.ordering_option").each(function(){
+                if ( $(this)[0].value == localStorage.getItem("lastOrderingOrder") ){
+                    $(this).addClass("checked");
+                }
+            });
+        } else {
+            $("input.field_order_option").first().addClass("checked");
+            $("input.ordering_option").first().addClass("checked");
+        }
+
         var total_records = <?php echo $total_records; ?>;
         images_per_group = countImagesNumberPerPage();
         var total_groups = total_records / images_per_group;
@@ -330,7 +343,7 @@ if (!empty($album_data)) {
         <a class="view_menu_option" href=<?php echo $config['projectURL'] ?>slideshow/index.html?album=<?php echo $albumId?>>Slideshow</a>
     </form>
     <form class="field_order_menu">
-        <input class="field_order_option checked" type="button" value="upload order">
+        <input class="field_order_option" type="button" value="upload order">
         <input class="field_order_option" type="button" value="filename">
         <input class="field_order_option" type="button" value="capture date">
     </form>
@@ -340,7 +353,7 @@ if (!empty($album_data)) {
         <input type="submit" name="submit" value="search">
     </form>
     <form class="ordering_menu">
-        <input class="ordering_option checked" type="button" value="ascending">
+        <input class="ordering_option" type="button" value="ascending">
         <input class="ordering_option" type="button" value="descending">
     </form>
 </div>
@@ -351,12 +364,14 @@ if (!empty($album_data)) {
             // ajax process
             $("input.field_order_option").removeClass("checked");
             $(this).addClass("checked");
+            localStorage.setItem("lastOrderingField", $(this)[0].value);
             loadFirstElements();
         });
         $("input.ordering_option").on('click', function() {
             // ajax process
             $("input.ordering_option").removeClass("checked");
             $(this).addClass("checked");
+            localStorage.setItem("lastOrderingOrder",  $(this)[0].value);
             loadFirstElements();
         });
     });
