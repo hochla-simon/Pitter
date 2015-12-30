@@ -254,16 +254,26 @@ if (!empty($album_data)) {
     }
 	$(document).ready(function() {
         if(typeof(localStorage) !== "undefined") {
-            $("input.field_order_option").each(function(){
-                if ( $(this)[0].value == localStorage.getItem("lastOrderingField") ){
-                    $(this).addClass("checked");
-                }
-            });
-            $("input.ordering_option").each(function(){
-                if ( $(this)[0].value == localStorage.getItem("lastOrderingOrder") ){
-                    $(this).addClass("checked");
-                }
-            });
+            if (localStorage.getItem("lastOrderingField") !== null) {
+                $("input.field_order_option").each(function(){
+                    if ( $(this)[0].value == localStorage.getItem("lastOrderingField") ){
+                        $(this).addClass("checked");
+                    }
+                });
+            } else {
+                $("input.field_order_option").first().addClass("checked");
+            }
+
+            if (localStorage.getItem("lastOrderingOrder") !== null) {
+                $("input.ordering_option").each(function(){
+                    if ( $(this)[0].value == localStorage.getItem("lastOrderingOrder") ){
+                        $(this).addClass("checked");
+                    }
+                });
+            } else {
+                $("input.ordering_option").first().addClass("checked");
+            }
+
         } else {
             $("input.field_order_option").first().addClass("checked");
             $("input.ordering_option").first().addClass("checked");
