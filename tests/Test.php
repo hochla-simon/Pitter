@@ -10,6 +10,7 @@ require 'TestImage.php';
 require 'TestMovePhoto.php';
 require 'TestCopyPhoto.php';
 require 'TestUserBasedSharing.php';
+require 'TestSearch.php';
 
 /**
  * Created by PhpStorm.
@@ -102,6 +103,16 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testSharingToOwner();
         $test->testSharingToUserThatDoesNotExist();
         $test->testSharingAlbumThatDoesNotExist();
+    }
+
+    public function testSearch() {
+        $test = new TestSearch();
+        $test->testSearchingPhotoName();
+        $test->testFailingSearch();
+        $test->testInsideAlbumSearch();
+        $test->testFailingInsideAlbumSearch();
+        $test->testSearchWithAlbumName();
+        $test->testSearchWithMetadata();
     }
 
     public function testFinalDeletionOfConfiguration() {
