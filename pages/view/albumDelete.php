@@ -1,5 +1,6 @@
 <?php
 	include('albumFunctions.php');
+
 if($currentUser['id'] == ''):
 	$_POST['redirect'] = $_SERVER['REQUEST_URI'];
 	include(dirname(__FILE__).'/../users/login.php');
@@ -8,7 +9,8 @@ else:
 	include_once(dirname(__FILE__).'/albumFunctions.php');
 	$site['title'] = 'Delete album';
 	$albumId=$_GET['id'];
-	
+	$accessDenied = false;
+
 	if($albumId != ''){
 		$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
 		$result = $db->query($select_sql_string);
@@ -26,6 +28,7 @@ else:
 					include(dirname(__FILE__) . '/../common/error401.php');
 					exit();
 				}
+				$accessDenied = true;
 			}
 		}
 	}

@@ -159,7 +159,7 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         include(dirname(__FILE__).'/../index.php');
     }
 
-    public function testAlbumCreation($albumId, $name){
+    public function testAlbumCreation($albumId, $name, $denied){
         $_GET = array(
             'parentId' => $albumId
         );
@@ -176,9 +176,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
             'description' => ''
         );
         include(dirname(__FILE__).'/../pages/view/albumCreate.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    private function testAlbumCopy($albumId, $parentAlbumId){
+    private function testAlbumCopy($albumId, $parentAlbumId, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -196,9 +197,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         );
 
         include(dirname(__FILE__).'/../pages/view/albumCopy.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    public function testAlbumMove($albumId, $parentAlbumId){
+    public function testAlbumMove($albumId, $parentAlbumId, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -216,9 +218,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         );
 
         include(dirname(__FILE__).'/../pages/view/albumMove.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    public function testAlbumDelete($albumId){
+    public function testAlbumDelete($albumId, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -234,9 +237,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
             'albumId' => $albumId,
         );
         include(dirname(__FILE__).'/../pages/view/albumDelete.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    public function testAlbumEdit($albumId, $newName){
+    public function testAlbumEdit($albumId, $newName, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -254,9 +258,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         );
 
         include(dirname(__FILE__).'/../pages/view/albumEdit.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    public function testPhotoDelete($imageId, $albumId){
+    public function testPhotoDelete($imageId, $albumId, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -272,9 +277,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         );
 
         include(dirname(__FILE__).'/../pages/view/photoDelete.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    public function testPhotoEdit($imageId){
+    public function testPhotoEdit($imageId, $denied){
         $_GET = array(
             'id' => $imageId
         );
@@ -287,11 +293,12 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         $_POST = array(
             'Save' => true,
             'imageId' => $imageId,
-            'name' => 'test',
+            'name' => 'newName',
             'description' => 'description'
         );
 
         include(dirname(__FILE__).'/../pages/view/photoEdit.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
     private function uploadPhoto($albumId) {
@@ -303,7 +310,7 @@ class TestOwnership extends PHPUnit_Framework_TestCase
 
         include(dirname(__FILE__).'/../index.php');
 
-        $db->query('INSERT INTO images (ownerId, name, filename, extension, created, description) VALUES (' . $_SESSION['id'] . ', "", "flamingo","jpg", CURRENT_TIMESTAMP(),"")');
+        $db->query('INSERT INTO images (ownerId, name, filename, extension, created, description) VALUES (' . $_SESSION['id'] . ', "name", "flamingo","jpg", CURRENT_TIMESTAMP(),"")');
         $newImageId = mysql_insert_id();
         $db->query('INSERT INTO imagesToAlbums (albumId, imageId, positionInAlbum) VALUES ( ' . $albumId . ', "'. $newImageId .'", "1")');
 
@@ -315,7 +322,7 @@ class TestOwnership extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testPhotoCopy($imageId, $albumId){
+    public function testPhotoCopy($imageId, $albumId, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -330,9 +337,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
             'Copy' => true
         );
         include(dirname(__FILE__).'/../pages/view/photoCopy.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    public function testPhotoMoveRightClick($imageId, $albumId, $newAlbumId){
+    public function testPhotoMoveRightClick($imageId, $albumId, $newAlbumId, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -348,9 +356,10 @@ class TestOwnership extends PHPUnit_Framework_TestCase
             'Move' => true
         );
         include(dirname(__FILE__).'/../pages/view/photoMoveRightClick.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
-    public function testPhotoMove($imageId, $albumId, $newAlbumId){
+    public function testPhotoMove($imageId, $albumId, $newAlbumId, $denied){
         $phpunit = array(
             'isTest' => true
         );
@@ -367,6 +376,7 @@ class TestOwnership extends PHPUnit_Framework_TestCase
             'Move' => true
         );
         include(dirname(__FILE__).'/../pages/view/photoMoveRightClick.php');
+        $this->assertEquals($denied, $accessDenied);
     }
 
 
@@ -382,62 +392,62 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         $user = mysql_fetch_assoc($db->query("select * from users where email = 'jude.doe@example.org' order by id asc limit 0,1"));
         $userId = $user['id'];
 
-        $this->testAlbumCreation('-1', 'ROOT_OWNER');
+        $this->testAlbumCreation('-1', 'ROOT_OWNER', false);
 
         $rootAlbum = mysql_fetch_assoc($db->query("select * from albums where name = 'ROOT_OWNER' order by id asc limit 0,1"));
         $rootAlbumId = $rootAlbum['id'];
 
         /*TEST OF ALBUM CREATION*/
-        $this->testAlbumCreation($rootAlbumId, '!test!');
+        $this->testAlbumCreation($rootAlbumId, '!test!', false);
 
         $album = mysql_fetch_assoc($db->query("select * from albums where name = '!test!' order by id asc limit 0,1"));
         $albumId = $album['id'];
 
         /*TEST OF ALBUM COPY*/
-        $this->testAlbumCopy($albumId, $rootAlbumId);
+        $this->testAlbumCopy($albumId, $rootAlbumId, false);
 
         $copiedAlbum = mysql_fetch_assoc($db->query("select * from albums where name = '!test!' order by id asc limit 1,2"));
         $copiedAlbumId = $copiedAlbum['id'];
 
         /*TEST OF ALBUM MOVE*/
-        $this->testAlbumMove($albumId, $copiedAlbumId);
+        $this->testAlbumMove($albumId, $copiedAlbumId, false);
 
         //move back to the ROOT_OWNER
-        $this->testAlbumMove($albumId, $rootAlbumId);
+        $this->testAlbumMove($albumId, $rootAlbumId, false);
 
-        $this->testAlbumCreation($rootAlbumId, '!test2!');
-        $this->testAlbumCreation($rootAlbumId, '!test3!');
-        $this->testAlbumCreation($rootAlbumId, '!test4!');
+        $this->testAlbumCreation($rootAlbumId, '!test2!', false);
+        $this->testAlbumCreation($rootAlbumId, '!test3!', false);
+        $this->testAlbumCreation($rootAlbumId, '!test4!', false);
         $albumToDelete = mysql_fetch_assoc($db->query("select * from albums where name = '!test2!' order by id asc limit 0,1"));
         $albumToDeleteId = $albumToDelete['id'];
 
         /*TEST OF ALBUM DELETE*/
-        $this->testAlbumDelete($albumToDeleteId);
+        $this->testAlbumDelete($albumToDeleteId, false);
 
         /*TEST OF ALBUM EDIT*/
-        $this->testAlbumEdit($rootAlbumId, "ROOT_OWNER_NEW_NAME");
+        $this->testAlbumEdit($rootAlbumId, "ROOT_OWNER_NEW_NAME", false);
 
         //change the name back to ROOT_OWNER
-        $this->testAlbumEdit($rootAlbumId, "ROOT_OWNER");
+        $this->testAlbumEdit($rootAlbumId, "ROOT_OWNER", false);
 
         $newImageId = $this->uploadPhoto($rootAlbumId);
 
         /*TEST OF PHOTO DELETION*/
-        $this->testPhotoDelete($newImageId, $rootAlbumId);
+        $this->testPhotoDelete($newImageId, $rootAlbumId, false);
 
         $newImageId = $this->uploadPhoto($rootAlbumId);
 
         /*TEST OF PHOTO EDIT*/
-        $this->testPhotoEdit($newImageId);
+        $this->testPhotoEdit($newImageId, false);
 
         /*TEST OF PHOTO COPY*/
-        $this->testPhotoCopy($newImageId, $albumId);
+        $this->testPhotoCopy($newImageId, $albumId, false);
 
         /*TEST OF PHOTO MOVE BY RIGHT CLICK*/
-        $this->testPhotoMoveRightClick($newImageId, $rootAlbumId, $albumId);
+        $this->testPhotoMoveRightClick($newImageId, $rootAlbumId, $albumId, false);
 
         /*TEST OF PHOTO MOVE*/
-        $this->testPhotoMove($newImageId, $albumId, $rootAlbumId);
+        $this->testPhotoMove($newImageId, $albumId, $rootAlbumId, false);
     }
 
     public function testNonOwnerAccess() {
@@ -452,7 +462,7 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         $user = mysql_fetch_assoc($db->query("select * from users where email = 'alice.doe@example.org' order by id asc limit 0,1"));
         $userId = $user[id];
 
-        $this->testAlbumCreation('-1', 'ROOT_NON_OWNER');
+        $this->testAlbumCreation('-1', 'ROOT_NON_OWNER', false);
 
         $rootAlbumNonOwner = mysql_fetch_assoc($db->query("select * from albums where name = 'ROOT_NON_OWNER' order by id asc limit 0,1"));
         $rootAlbumNonOwnerId = $rootAlbumNonOwner['id'];
@@ -460,51 +470,51 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         $rootAlbumOwner = mysql_fetch_assoc($db->query("select * from albums where name = 'ROOT_OWNER' order by id asc limit 0,1"));
         $rootAlbumOwnerId = $rootAlbumOwner['id'];
 
-        set_exit_overload(function() { return FALSE; });
         /*TEST OF ALBUM CREATION*/
-        $this->testAlbumCreation($rootAlbumOwnerId, '!test!');
+        $this->testAlbumCreation($rootAlbumOwnerId, '!test!', true);
 
         $album = mysql_fetch_assoc($db->query("select * from albums where name = '!test!' order by id asc limit 0,1"));
         $albumId = $album['id'];
 
         /*TEST OF ALBUM COPY*/
-        $this->testAlbumCopy($albumId, $rootAlbumOwnerId);
+        $this->testAlbumCopy($albumId, $rootAlbumOwnerId, true);
 
         $copiedAlbum = mysql_fetch_assoc($db->query("select * from albums where name = '!test!' order by id asc limit 1,2"));
         $copiedAlbumId = $copiedAlbum['id'];
 
         /*TEST OF ALBUM MOVE*/
-        $this->testAlbumMove($albumId, $copiedAlbumId);
+        $this->testAlbumMove($albumId, $copiedAlbumId, true);
 
         $albumToDelete = mysql_fetch_assoc($db->query("select * from albums where name = '!test3!' order by id asc limit 0,1"));
         $albumToDeleteId = $albumToDelete['id'];
 
         /*TEST OF ALBUM DELETE*/
-        $this->testAlbumDelete($albumToDeleteId);
+        $this->testAlbumDelete($albumToDeleteId, true);
 
         /*TEST OF ALBUM EDIT*/
-        $this->testAlbumEdit($rootAlbumOwnerId, "ROOT_OWNER_NEW_NAME");
+        $this->testAlbumEdit($rootAlbumOwnerId, "ROOT_OWNER_NEW_NAME", true);
 
         $newImageId = $this->uploadPhoto($rootAlbumOwnerId);
         $this->loginAsNonOwner();
 
         /*TEST OF PHOTO DELETION*/
-        $this->testPhotoDelete($newImageId, $rootAlbumOwnerId);
-
-        $newImageId = $this->uploadPhoto($rootAlbumOwnerId);
-        $this->loginAsNonOwner();
+        $this->testPhotoDelete($newImageId, $rootAlbumOwnerId, true);
 
         /*TEST OF PHOTO EDIT*/
-        $this->testPhotoEdit($newImageId);
+        $this->testPhotoEdit($newImageId, true);
 
         /*TEST OF PHOTO COPY*/
-        $this->testPhotoCopy($newImageId, $albumId);
+        $this->testPhotoCopy($newImageId, $albumId, true);
 
         /*TEST OF PHOTO MOVE BY RIGHT CLICK*/
-        $this->testPhotoMoveRightClick($newImageId, $rootAlbumOwnerId, $albumId);
+        $this->testPhotoMoveRightClick($newImageId, $rootAlbumOwnerId, $albumId, true);
 
         /*TEST OF PHOTO MOVE*/
-        $this->testPhotoMove($newImageId, $albumId, $rootAlbumOwnerId);
+        $this->testPhotoMove($newImageId, $albumId, $rootAlbumOwnerId, true);
+
+        $this->loginAsOwner();
+        $this->testPhotoDelete($newImageId, $rootAlbumOwnerId, false);
+        $this->loginAsAdministrator();
     }
 
     public function testAdministratorAccess() {
@@ -516,7 +526,6 @@ class TestOwnership extends PHPUnit_Framework_TestCase
 
         $this->loginAsAdministrator();
 
-        set_exit_overload(function() { return FALSE; });
         $user = mysql_fetch_assoc($db->query("select * from users where email = 'john@example.org' order by id asc limit 0,1"));
         $userId = $user[id];
 
@@ -527,48 +536,101 @@ class TestOwnership extends PHPUnit_Framework_TestCase
         $rootAlbumOwnerId = $rootAlbumOwner['id'];
 
         /*TEST OF ALBUM CREATION*/
-        $this->testAlbumCreation($rootAlbumOwnerId, '!test!');
+        $this->testAlbumCreation($rootAlbumOwnerId, '!test!', false);
 
         $album = mysql_fetch_assoc($db->query("select * from albums where name = '!test!' order by id asc limit 0,1"));
         $albumId = $album['id'];
 
         /*TEST OF ALBUM COPY*/
-        $this->testAlbumCopy($albumId, $rootAlbumOwnerId);
+        $this->testAlbumCopy($albumId, $rootAlbumOwnerId, true);
 
         $copiedAlbum = mysql_fetch_assoc($db->query("select * from albums where name = '!test!' order by id asc limit 1,2"));
         $copiedAlbumId = $copiedAlbum['id'];
 
         /*TEST OF ALBUM MOVE*/
-        $this->testAlbumMove($albumId, $copiedAlbumId);
+        $this->testAlbumMove($albumId, $copiedAlbumId, true);
 
         $albumToDelete = mysql_fetch_assoc($db->query("select * from albums where name = '!test4!' order by id asc limit 0,1"));
         $albumToDeleteId = $albumToDelete['id'];
 
         /*TEST OF ALBUM DELETE*/
-        $this->testAlbumDelete($albumToDeleteId);
+        $this->testAlbumDelete($albumToDeleteId, true);
 
         /*TEST OF ALBUM EDIT*/
-        $this->testAlbumEdit($rootAlbumOwnerId, "ROOT_OWNER_NEW_NAME");
+        $this->testAlbumEdit($rootAlbumOwnerId, "ROOT_OWNER_NEW_NAME", false);
 
         $newImageId = $this->uploadPhoto($rootAlbumOwnerId);
         $this->loginAsAdministrator();
 
         /*TEST OF PHOTO DELETION*/
-        $this->testPhotoDelete($newImageId, $rootAlbumOwnerId);
-
-        $newImageId = $this->uploadPhoto($rootAlbumOwnerId);
-        $this->loginAsAdministrator();
+        $this->testPhotoDelete($newImageId, $rootAlbumOwnerId, true);
 
         /*TEST OF PHOTO EDIT*/
-        $this->testPhotoEdit($newImageId);
+        $this->testPhotoEdit($newImageId, true);
 
         /*TEST OF PHOTO COPY*/
-        $this->testPhotoCopy($newImageId, $albumId);
+        $this->testPhotoCopy($newImageId, $albumId, true);
 
         //*TEST OF PHOTO MOVE BY RIGHT CLICK*/
-        $this->testPhotoMoveRightClick($newImageId, $rootAlbumOwnerId, $albumId);
+        $this->testPhotoMoveRightClick($newImageId, $rootAlbumOwnerId, $albumId, true);
 
         /*TEST OF PHOTO MOVE*/
-        $this->testPhotoMove($newImageId, $albumId, $rootAlbumOwnerId);
+        $this->testPhotoMove($newImageId, $albumId, $rootAlbumOwnerId, true);
+
+        $this->loginAsOwner();
+        $this->testPhotoDelete($newImageId, $rootAlbumOwnerId, false);
+        $this->loginAsAdministrator();
+    }
+
+    public static function tearDownAfterClass() {
+        $phpunit = array(
+            'isTest' => true
+        );
+
+        include(dirname(__FILE__).'/../index.php');
+
+        //deletion of the owner root album
+        $rootAlbum = mysql_fetch_assoc($db->query("select * from albums where name = 'ROOT_OWNER_NEW_NAME' order by id asc limit 0,1"));
+        $rootAlbumId = $rootAlbum['id'];
+
+        $_GET = array(
+            'id' => $rootAlbumId
+        );
+
+        $_POST = array(
+            'Delete' => true,
+            'albumId' => $rootAlbumId,
+        );
+        include(dirname(__FILE__).'/../pages/view/albumDelete.php');
+
+        //deletion of the albums with the name '!test!'
+        $albums = $db->query("select * from albums where name = '!test!'");
+        if (!empty($albums)) {
+            while ($album = mysql_fetch_array($albums)) {
+                $_GET = array(
+                    'id' => $album['id']
+                );
+
+                $_POST = array(
+                    'Delete' => true,
+                    'albumId' => $album['id'],
+                );
+                include(dirname(__FILE__) . '/../pages/view/albumDelete.php');
+            }
+        }
+
+        //deletion of the non owner root album
+        $rootAlbum = mysql_fetch_assoc($db->query("select * from albums where name = 'ROOT_NON_OWNER' order by id asc limit 0,1"));
+        $rootAlbumId = $rootAlbum['id'];
+
+        $_GET = array(
+            'id' => $rootAlbumId
+        );
+
+        $_POST = array(
+            'Delete' => true,
+            'albumId' => $rootAlbumId,
+        );
+        include(dirname(__FILE__).'/../pages/view/albumDelete.php');
     }
 }

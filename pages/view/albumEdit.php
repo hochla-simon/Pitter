@@ -8,7 +8,8 @@ else:
 
 	$site['title'] = 'Edit album';
 	$albumId=$_GET['id'];
-	
+	$accessDenied = false;
+
 	if($albumId != ''){
 		$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
 		$result = $db->query($select_sql_string);
@@ -20,6 +21,7 @@ else:
 					include(dirname(__FILE__) . '/../common/error401.php');
 					exit();
 				}
+				$accessDenied = true;
 			}
 		}
 	}

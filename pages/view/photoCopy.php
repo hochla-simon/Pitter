@@ -8,8 +8,9 @@ include_once(dirname(__FILE__).'/albumFunctions.php');
 $site['title'] = 'Copy photo';
 $site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 $photoId=$_GET['id'];
+$accessDenied = false;
 
-if (isset ($_POST["Copy"])) {
+    if (isset ($_POST["Copy"])) {
     if ($_POST["imageId"] != '') {
         $query_for_album = "SELECT parentAlbumId, id, ownerId, name FROM albums WHERE id='" . mysql_real_escape_string($_POST["albumId"]) . "'";
         $album_data = mysql_fetch_array($db->query($query_for_album));
@@ -30,6 +31,7 @@ if (isset ($_POST["Copy"])) {
                     include(dirname(__FILE__) . '/../common/error401.php');
                     exit();
                 }
+                $accessDenied = true;
             }
         }
     } else {
@@ -50,6 +52,7 @@ if($photoId != ''){
                 include(dirname(__FILE__) . '/../common/error401.php');
                 exit();
             }
+            $accessDenied = true;
         }
     }
 } else {

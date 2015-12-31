@@ -6,8 +6,9 @@ else:
 
     $site['title'] = 'Edit photo';
     $imageId=$_GET['id'];
+    $accessDenied = false;
 
-	if($imageId != ''){
+    if($imageId != ''){
         $select_sql_string = "SELECT id, ownerId, name, filename, extension, created, description FROM images WHERE id=" . mysql_real_escape_string($imageId);
         $result = $db->query($select_sql_string);
         if (!empty($result)){
@@ -18,6 +19,7 @@ else:
                     include(dirname(__FILE__) . '/../common/error401.php');
                     exit();
                 }
+                $accessDenied = true;
             }
         }
 

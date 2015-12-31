@@ -9,7 +9,7 @@ else:
 	$site['title'] = 'Move album';
 	$site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 	$albumId=$_GET['id'];
-
+	$accessDenied = false;
 
 	$denied = false;
 	$select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($_POST["albumId"]);
@@ -40,6 +40,7 @@ else:
 					include(dirname(__FILE__) . '/../common/error401.php');
 					exit();
 				}
+				$accessDenied = true;
 			}
 		}
 	}

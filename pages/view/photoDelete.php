@@ -8,6 +8,7 @@ else:
 
     $site['title'] = 'Delete photo';
     $imageId=$_GET['id'];
+    $accessDenied = false;
 
     $select_sql_string = 'SELECT * FROM images WHERE id=' . $imageId ;
     $result = $db->query($select_sql_string);
@@ -19,6 +20,7 @@ else:
             $message = createMessage("Access denied");
             $error = true;
             http_response_code(401);
+            $accessDenied = true;
         } else {
             $select_sql_string = 'SELECT albums.id, albums.name FROM imagesToAlbums, albums WHERE imagesToAlbums.imageId=' . mysql_real_escape_string($imageId) . ' AND imagesToAlbums.albumId=albums.id' ;
             $result = $db->query($select_sql_string);

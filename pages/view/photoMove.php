@@ -6,6 +6,7 @@ $path = $_POST["path"];
 $imageId = $_POST["imageId"];
 $albumId = $_POST["albumId"];
 $newAlbumId = $_POST["newAlbumId"];
+$accessDenied = false;
 
 $denied = false;
 $select_sql_string = "SELECT id, parentAlbumId, name, ownerId, description FROM albums WHERE id=" . mysql_real_escape_string($albumId);
@@ -39,9 +40,12 @@ if (!empty($row)) {
     $denied = true;
 }
 
-if($denied and !$phpunit['isTest']){
-    include(dirname(__FILE__) . '/../common/error401.php');
-    exit();
+if($denied) {
+    if (!$phpunit['isTest']) {
+        include(dirname(__FILE__) . '/../common/error401.php');
+        exit();
+    }
+    $accessDenied = true;
 }
 
 $sql = "SELECT positionInAlbum FROM imagesToAlbums WHERE albumId = '" . mysql_real_escape_string($newAlbumId) . "' ORDER BY positionInAlbum DESC LIMIT 1";

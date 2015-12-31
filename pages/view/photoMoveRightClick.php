@@ -16,6 +16,8 @@ $site['title'] = 'Move photo';
 $site['script'] = '<script  src="' . $config['projectURL'] . '/js/form.js" type="text/javascript"> </script>';
 $photoId=$_GET['id'];
 $albumId=$_GET['albumId'];
+$accessDenied = false;
+
 
 if (isset ($_POST["Move"])) {
     if ($_POST["imageId"] != '') {
@@ -41,6 +43,7 @@ if (isset ($_POST["Move"])) {
                     include(dirname(__FILE__) . '/../common/error401.php');
                     exit();
                 }
+                $accessDenied = true;
             }
         }
     } else {
@@ -61,6 +64,7 @@ if($photoId != ''){
                 include(dirname(__FILE__) . '/../common/error401.php');
                 exit();
             }
+            $accessDenied = true;
         }
     }
 }
