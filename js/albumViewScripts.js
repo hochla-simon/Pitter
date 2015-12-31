@@ -5,10 +5,10 @@ function closeSubAlbums(parentAlbumId, newImgSrc) {
 	$('li[data-id=' + parentAlbumId + ' ] .toggleArrow').attr('src', newImgSrc);
 	var albumListToBeClosed = $('ul[data-albumId=' + parentAlbumId + ' ]');
 	albumListToBeClosed.css('display', 'none');
-	var childAlbumsToBeClosed = albumListToBeClosed.children();
+	/*var childAlbumsToBeClosed = albumListToBeClosed.children();
 	childAlbumsToBeClosed.each(function(index, element) {
 		closeSubAlbums($(element).data('id'), newImgSrc);
-	});
+	});*/
 }
 
 function sortSubAlbums(){
@@ -47,6 +47,17 @@ function deleteLastChildAlbum(parentAlbumId){
 
 $(document).ready(function() {
 
+	if(typeof(localStorage) !== "undefined") {
+		if (localStorage.getItem("albumsOpen") !== null) {
+			var albumsOpen = JSON.parse(localStorage.getItem("albumsOpen"));
+		} else {
+			var albumsOpen = [];
+		}
+	}
+	else{
+		var albumsOpen = [];
+	}
+
 	$(".toggleArrow").click(function(index, element) {
 		var parentAlbumId = $(this).parent('li').data('id');
 		var originalImgSrc = $(this).attr('src');
@@ -56,10 +67,20 @@ $(document).ready(function() {
 			$('ul[data-albumId=' + parentAlbumId + ' ]').css('display', '');
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
 			$(this).attr('src', newImgSrc);
+			if (albumsOpen.indexOf(parentAlbumId)== -1){
+				albumsOpen.push(parentAlbumId);
+				localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+			}
 		} else {
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_right_image;
 			closeSubAlbums(parentAlbumId, newImgSrc);
+			var index = albumsOpen.indexOf(parentAlbumId);
+			if (index > -1) {
+				albumsOpen.splice(index, 1);
+				localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+			}
 		}
+		console.log(JSON.parse(localStorage.getItem("albumsOpen")));
 	});
 
 	$.contextMenu({
@@ -143,9 +164,13 @@ $(document).ready(function() {
     $( '.albums, .childAlbums' ).disableSelection();
     sortSubAlbums();
 
-	$(".albums .active").parent('li').parents('li').each(function(index, element) {
-		$(element).children('.toggleArrow').click();
-	});
+	/* expand album tree */
+	for(var i= 0; i < albumsOpen.length; i++)
+	{
+		var album = $('ul[data-albumId=' + albumsOpen[i] + ' ]');
+		//album.parent('li').parents('li').children('.toggleArrow').click();
+		album.css('display', '');
+	}
 
 	$("#photos").sortable({
 		placeholder: 'ui-state-highlight',
