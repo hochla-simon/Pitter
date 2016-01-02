@@ -204,6 +204,10 @@ if (!empty($album_data)) {
 </div>
 
 <script type="text/javascript">
+    <?php if($_GET['id'] != ''):?>
+    var currentAlbumId = <?php echo $_GET['id'];?>;
+    <?php endif;?>
+
     var track_load = 0; //total loaded record group(s)
     var loading  = false; //to prevents multipal ajax loads
     var album_id = <?php echo(json_encode($albumId)); ?>;

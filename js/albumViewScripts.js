@@ -207,6 +207,12 @@ $(document).ready(function() {
     $( '.albums, .childAlbums' ).disableSelection();
     sortSubAlbums();
 
+	if(typeof currentAlbumId != undefined){
+		albumsOpen.push(currentAlbumId);
+		albumsOpen.push(parseInt($('ul[data-albumid="' + currentAlbumId + '"]').parent().closest('ul').attr('data-albumid')));
+	}
+	console.log(albumsOpen);
+
 	expandAlbumTree(albumsOpen);
 
 	$("#photos").sortable({
