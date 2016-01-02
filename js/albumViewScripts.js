@@ -5,10 +5,10 @@ function closeSubAlbums(parentAlbumId, newImgSrc) {
 	$('li[data-id=' + parentAlbumId + ' ] .toggleArrow').attr('src', newImgSrc);
 	var albumListToBeClosed = $('ul[data-albumId=' + parentAlbumId + ' ]');
 	albumListToBeClosed.css('display', 'none');
-	var childAlbumsToBeClosed = albumListToBeClosed.children();
+	/*var childAlbumsToBeClosed = albumListToBeClosed.children();
 	childAlbumsToBeClosed.each(function(index, element) {
 		closeSubAlbums($(element).data('id'), newImgSrc);
-	});
+	});*/
 }
 
 function sortSubAlbums(){
@@ -42,10 +42,43 @@ function deleteLastChildAlbum(parentAlbumId){
     if ($('ul[data-albumId=' + parentAlbumId + ' ] li').length === 0){
         var arrow = $('li[data-id=' + parentAlbumId + ' ] .toggleArrow:first');
         arrow.css('visibility', 'hidden');
-    }
+		if(typeof(localStorage) !== "undefined") {
+			if (localStorage.getItem("albumsOpen") !== null) {
+				var albumsOpen = JSON.parse(localStorage.getItem("albumsOpen"));
+				var index = albumsOpen.indexOf(parentAlbumId);
+				if (index > -1) {
+					albumsOpen.splice(index, 1);
+					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				}
+			}
+		}
+	}
+
+}
+
+function expandAlbumTree(albumsOpen){
+	for(var i= 0; i < albumsOpen.length; i++)
+	{
+		var album = $('ul[data-albumId=' + albumsOpen[i] + ' ]');
+		album.css('display', '');
+		var arrow = $('li[data-id=' + albumsOpen[i] + ' ] .toggleArrow:first');
+		var originalImgSrc = arrow.attr('src').substring(0, arrow.attr('src').lastIndexOf('/') + 1);
+		arrow.attr('src', originalImgSrc + arrow_down_image);
+	}
 }
 
 $(document).ready(function() {
+
+	if(typeof(localStorage) !== "undefined") {
+		if (localStorage.getItem("albumsOpen") !== null) {
+			var albumsOpen = JSON.parse(localStorage.getItem("albumsOpen"));
+		} else {
+			var albumsOpen = [];
+		}
+	}
+	else{
+		var albumsOpen = [];
+	}
 
 	$(".toggleArrow").click(function(index, element) {
 		var parentAlbumId = $(this).parent('li').data('id');
@@ -56,9 +89,22 @@ $(document).ready(function() {
 			$('ul[data-albumId=' + parentAlbumId + ' ]').css('display', '');
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
 			$(this).attr('src', newImgSrc);
+			if (albumsOpen.indexOf(parentAlbumId)== -1){
+				albumsOpen.push(parentAlbumId);
+				if(typeof(localStorage) !== "undefined") {
+					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				}
+			}
 		} else {
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_right_image;
 			closeSubAlbums(parentAlbumId, newImgSrc);
+			var index = albumsOpen.indexOf(parentAlbumId);
+			if (index > -1) {
+				albumsOpen.splice(index, 1);
+				if(typeof(localStorage) !== "undefined") {
+					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				}
+			}
 		}
 	});
 
@@ -137,15 +183,31 @@ $(document).ready(function() {
                         data : 'albumId=' + albumId + '&parentAlbumId=' + newParentAlbumId,
                         dataType : 'html'
                     });
+
+				//add new album in local Storage
+
+				albumsOpen.push(newParentAlbumId);
+				if(typeof(localStorage) !== "undefined") {
+					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				}
+				//close all albums
+
+				// no visibility
+				$('.childAlbums').css('display', 'none');
+				// right arrow
+				var arrow = $('.toggleArrow');
+				var originalImgSrc = arrow.attr('src').substring(0, arrow.attr('src').lastIndexOf('/') + 1);
+				arrow.attr('src', originalImgSrc + arrow_right_image);
+
+				//open only the good albums
+				expandAlbumTree(albumsOpen);
             }
         }
     );
     $( '.albums, .childAlbums' ).disableSelection();
     sortSubAlbums();
 
-	$(".albums .active").parent('li').parents('li').each(function(index, element) {
-		$(element).children('.toggleArrow').click();
-	});
+	expandAlbumTree(albumsOpen);
 
 	$("#photos").sortable({
 		placeholder: 'ui-state-highlight',
