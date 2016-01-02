@@ -91,7 +91,9 @@ $(document).ready(function() {
 			$(this).attr('src', newImgSrc);
 			if (albumsOpen.indexOf(parentAlbumId)== -1){
 				albumsOpen.push(parentAlbumId);
-				localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				if(typeof(localStorage) !== "undefined") {
+					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				}
 			}
 		} else {
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_right_image;
@@ -99,7 +101,9 @@ $(document).ready(function() {
 			var index = albumsOpen.indexOf(parentAlbumId);
 			if (index > -1) {
 				albumsOpen.splice(index, 1);
-				localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				if(typeof(localStorage) !== "undefined") {
+					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				}
 			}
 		}
 	});
@@ -183,7 +187,9 @@ $(document).ready(function() {
 				//add new album in local Storage
 
 				albumsOpen.push(newParentAlbumId);
-				localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				if(typeof(localStorage) !== "undefined") {
+					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
+				}
 				//close all albums
 
 				// no visibility
