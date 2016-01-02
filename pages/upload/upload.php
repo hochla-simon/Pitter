@@ -68,7 +68,9 @@ if($uploadOk == 1){
             $last_id = mysql_insert_id();
 
             $image_id = $last_id;
-            if ($imageFileType === 'jpg') {
+            $imageFileContentType = exif_imagetype($_FILES['file']['tmp_name']);
+
+            if ($imageFileContentType === IMAGETYPE_JPEG) {
                 $exif = exif_read_data($_FILES['file']['tmp_name'], 0, true);
 
                 if ($exif != false) {
@@ -80,7 +82,7 @@ if($uploadOk == 1){
                         }
                     }
                 }
-            } else if ($imageFileType === 'png') {
+            } else if ($imageFileContentType === IMAGETYPE_PNG) {
                 $size = getimagesize($_FILES['file']['tmp_name']);
 
                 $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
@@ -127,7 +129,7 @@ if($uploadOk == 1){
                 }
 
                 fclose($fp);
-            } else if ($imageFileType === 'gif') {
+            } else if ($imageFileContentType === IMAGETYPE_GIF) {
                 $size = getimagesize($_FILES['file']['tmp_name']);
 
                 $insert_sql_string = 'INSERT INTO metadata (imageId, name, value)
