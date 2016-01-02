@@ -35,15 +35,17 @@ else:
 
 
         $i = 0;
-        while($row = mysql_fetch_assoc($result)) {
-            ?>
-            <a id="image_<?php echo $row['id'];?>" href="photoView.html?id=<?php echo $row['id'];?>" data-id="<?php echo $row['id'];?>" class="draggablePhoto ui-draggable ui-draggable-handle" style="position: relative;"><div title="<?php echo $row['filename'];?>.<?php echo $row['extension'];?>" class="thumbnail"><span class="center_img"></span><img src="image.html?id=<?php echo $row['id'];?>&amp;max_size=100"></div></a>
-            <?php
-            $i++;
-        }
-        if($i == 0){
-            echo '<br /><br />'.createMessage('No images could be found matching your request.');
-        }
+        if (!$phpunit['isTest']):
+            while($row = mysql_fetch_assoc($result)) {
+                ?>
+                <a id="image_<?php echo $row['id'];?>" href="photoView.html?id=<?php echo $row['id'];?>" data-id="<?php echo $row['id'];?>" class="draggablePhoto ui-draggable ui-draggable-handle" style="position: relative;"><div title="<?php echo $row['filename'];?>.<?php echo $row['extension'];?>" class="thumbnail"><span class="center_img"></span><img src="image.html?id=<?php echo $row['id'];?>&amp;max_size=100"></div></a>
+                <?php
+                $i++;
+            }
+            if($i == 0){
+                echo '<br /><br />'.createMessage('No images could be found matching your request.');
+            }
+        endif;
     }
 endif;
 if(!$phpunit['isTest']) {

@@ -27,7 +27,6 @@ else:
         <?php
         endif;
             if(trim($_POST['keywords'] != '')):
-                $result = $db->query("select distinct images.id, images.filename, images.extension from imagesToAlbums, albums, images left join metadata on (images.id = metadata.imageId) where images.id = imagesToAlbums.imageId and albums.id = imagesToAlbums.albumId and albums.ownerId = '".$currentUser['id']."' ".(($_POST['albumId'] != '') ? " and albums.id = '".mysql_real_escape_string($_POST['albumId'])."'" : "")." and (".get_search_cols($_POST['keywords'], array('albums', 'images', 'metadata'), false).") order by id desc");
                 if (!$phpunit['isTest']):?>
                     <script type="text/javascript">
                         var track_load = 0; //total loaded record group(s)

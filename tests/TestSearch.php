@@ -8,8 +8,10 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         include(dirname(__FILE__).'/../index.php');
 
         $_POST = array(
-            'submit' => true,
-            'albumId' => '',
+            'currentUserId' => 1,
+            'images_per_group' => 40,
+            'group_no' => 0,
+            'album_id' => '',
             'keywords' => 'test'
         );
 
@@ -17,7 +19,7 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         $newImageId = mysql_insert_id();
         $db->query('INSERT INTO imagesToAlbums (albumId, imageId, positionInAlbum) VALUES ("1", "'. $newImageId .'", "2")');
 
-        include(dirname(__FILE__).'/../pages/view/search.php');
+        include(dirname(__FILE__).'/../pages/view/autoloadProcessSearch.php');
         $this->assertEquals(1, mysql_num_rows($result));
         $photo = mysql_fetch_assoc($result);
         $this->assertEquals("1", $photo["id"]);
@@ -32,12 +34,14 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         include(dirname(__FILE__).'/../index.php');
 
         $_POST = array(
-            'submit' => true,
-            'albumId' => '',
+            'currentUserId' => 1,
+            'images_per_group' => 40,
+            'group_no' => 0,
+            'album_id' => '',
             'keywords' => 'tests'
         );
 
-        include(dirname(__FILE__).'/../pages/view/search.php');
+        include(dirname(__FILE__).'/../pages/view/autoloadProcessSearch.php');
         $this->assertEquals(0, mysql_num_rows($result));
     }
 
@@ -49,8 +53,10 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         include(dirname(__FILE__).'/../index.php');
 
         $_POST = array(
-            'submit' => true,
-            'albumId' => '3',
+            'currentUserId' => 1,
+            'images_per_group' => 40,
+            'group_no' => 0,
+            'album_id' => '3',
             'keywords' => 'tset'
         );
 
@@ -58,7 +64,7 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         $newImageId = mysql_insert_id();
         $db->query('INSERT INTO imagesToAlbums (albumId, imageId, positionInAlbum) VALUES ("3", "'. $newImageId .'", "1")');
 
-        include(dirname(__FILE__).'/../pages/view/search.php');
+        include(dirname(__FILE__).'/../pages/view/autoloadProcessSearch.php');
         $this->assertEquals(1, mysql_num_rows($result));
         $photo = mysql_fetch_assoc($result);
         $this->assertEquals($newImageId, $photo["id"]);
@@ -73,12 +79,14 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         include(dirname(__FILE__).'/../index.php');
 
         $_POST = array(
-            'submit' => true,
-            'albumId' => '3',
+            'currentUserId' => 1,
+            'images_per_group' => 40,
+            'group_no' => 0,
+            'album_id' => '3',
             'keywords' => 'flamingo'
         );
 
-        include(dirname(__FILE__).'/../pages/view/search.php');
+        include(dirname(__FILE__).'/../pages/view/autoloadProcessSearch.php');
         $this->assertEquals(0, mysql_num_rows($result));
     }
 
@@ -90,12 +98,14 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         include(dirname(__FILE__).'/../index.php');
 
         $_POST = array(
-            'submit' => true,
-            'albumId' => '',
+            'currentUserId' => 1,
+            'images_per_group' => 40,
+            'group_no' => 0,
+            'album_id' => '',
             'keywords' => 'testEdit'
         );
 
-        include(dirname(__FILE__).'/../pages/view/search.php');
+        include(dirname(__FILE__).'/../pages/view/autoloadProcessSearch.php');
         $this->assertEquals(1, mysql_num_rows($result));
         $photo = mysql_fetch_assoc($result);
         $this->assertEquals("bird", $photo["filename"]);
@@ -109,14 +119,16 @@ class TestSearch extends PHPUnit_Framework_TestCase {
         include(dirname(__FILE__).'/../index.php');
 
         $_POST = array(
-            'submit' => true,
-            'albumId' => '',
+            'currentUserId' => 1,
+            'images_per_group' => 40,
+            'group_no' => 0,
+            'album_id' => '',
             'keywords' => '1451494651'
         );
 
         $db->query('INSERT INTO metadata (imageId, name, value) VALUES ("1", "testData", "1451494651")');
 
-        include(dirname(__FILE__).'/../pages/view/search.php');
+        include(dirname(__FILE__).'/../pages/view/autoloadProcessSearch.php');
         $this->assertEquals(1, mysql_num_rows($result));
         $photo = mysql_fetch_assoc($result);
         $this->assertEquals("1", $photo["id"]);
