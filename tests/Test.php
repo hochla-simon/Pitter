@@ -11,6 +11,8 @@ require 'TestMovePhoto.php';
 require 'TestCopyPhoto.php';
 require 'TestUserBasedSharing.php';
 require 'TestSearch.php';
+require 'TestOwnership.php';
+require 'TestLinkBasedSharing.php';
 
 /**
  * Created by PhpStorm.
@@ -36,6 +38,17 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testInstallation();
         $test->testSettings();
     }
+
+    public function testLinkBasedSharing() {
+        $test = new TestLinkBasedSharing();
+        $test->TestLinkGenerator();
+        $test->TestSearchPageWithCorrectData();
+        $test->TestSearchPageWithEmptyShareLink();
+        $test->TestSearchPageWithWrongAlbumId();
+        $test->TestSearchPageWithWrongShareLink();
+    }
+
+
 
     public function testUpload() {
         $test = new TestImageUpload();
@@ -113,6 +126,15 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testFailingInsideAlbumSearch();
         $test->testSearchWithAlbumName();
         $test->testSearchWithMetadata();
+    }
+
+    public function testOwnership() {
+        $test = new TestOwnership();
+        $test->setUpBeforeClass();
+        $test->testOwnerAccess();
+        $test->testNonOwnerAccess();
+        $test->testAdministratorAccess();
+        $test->tearDownAfterClass();
     }
 
     public function testFinalDeletionOfConfiguration() {

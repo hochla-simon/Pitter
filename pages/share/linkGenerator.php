@@ -29,10 +29,16 @@ if (!empty($album_data)) {
             }while(!$linkValid);
             $sqlInsertQuery = 'INSERT INTO linkToAlbums (albumId,link) VALUES (' . $albumId . ',"' . mysql_real_escape_string($link) . '");';
             $db->query($sqlInsertQuery);
-            echo $link;
+            if (!$phpunit['isTest']) {
+                echo $link;
+            }
         }else{
-            echo $row['link'];
+            if (!$phpunit['isTest']) {
+                echo $row['link'];
+            }
         }
     }
 }
-die();
+if (!$phpunit['isTest']) {
+    die();
+}

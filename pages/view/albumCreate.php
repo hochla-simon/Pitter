@@ -7,6 +7,7 @@ else:
 	include_once(dirname(__FILE__).'/albumFunctions.php');
 
 	$site['title'] = 'Add new album';
+	$accessDenied = false;
 
 	if ($_GET['parentId']) {
 		$parentAlbumId = $_GET['parentId'];
@@ -23,6 +24,7 @@ else:
 				include(dirname(__FILE__) . '/../common/error401.php');
 				exit();
 			}
+			$accessDenied = true;
 		}
 	}
 
