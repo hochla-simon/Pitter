@@ -45,6 +45,18 @@ function deleteLastChildAlbum(parentAlbumId){
     }
 }
 
+function expandAlbumTree(albumsOpen){
+	for(var i= 0; i < albumsOpen.length; i++)
+	{
+		var album = $('ul[data-albumId=' + albumsOpen[i] + ' ]');
+		//album.parent('li').parents('li').children('.toggleArrow').click();
+		album.css('display', '');
+		var arrow = $('li[data-id=' + albumsOpen[i] + ' ] .toggleArrow:first');
+		var originalImgSrc = arrow.attr('src').substring(0, arrow.attr('src').lastIndexOf('/') + 1);
+		arrow.attr('src', originalImgSrc + arrow_down_image);
+	}
+}
+
 $(document).ready(function() {
 
 	if(typeof(localStorage) !== "undefined") {
@@ -164,13 +176,7 @@ $(document).ready(function() {
     $( '.albums, .childAlbums' ).disableSelection();
     sortSubAlbums();
 
-	/* expand album tree */
-	for(var i= 0; i < albumsOpen.length; i++)
-	{
-		var album = $('ul[data-albumId=' + albumsOpen[i] + ' ]');
-		//album.parent('li').parents('li').children('.toggleArrow').click();
-		album.css('display', '');
-	}
+	expandAlbumTree(albumsOpen);
 
 	$("#photos").sortable({
 		placeholder: 'ui-state-highlight',
