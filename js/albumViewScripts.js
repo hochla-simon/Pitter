@@ -53,22 +53,32 @@ function deleteLastChildAlbum(parentAlbumId){
 			}
 		}
 	}
-
 }
 
 function expandAlbumTree(albumsOpen){
 	for(var i= 0; i < albumsOpen.length; i++)
 	{
 		var album = $('ul[data-albumId=' + albumsOpen[i] + ' ]');
-		album.css('display', '');
-		var arrow = $('li[data-id=' + albumsOpen[i] + ' ] .toggleArrow:first');
-		var originalImgSrc = arrow.attr('src').substring(0, arrow.attr('src').lastIndexOf('/') + 1);
-		arrow.attr('src', originalImgSrc + arrow_down_image);
+		if (album.length !==0 ) {
+			album.css('display', '');
+			var arrow = $('li[data-id=' + albumsOpen[i] + ' ] .toggleArrow:first');
+			if (arrow.length !==0 ) {
+				var originalImgSrc = arrow.attr('src').substring(0, arrow.attr('src').lastIndexOf('/') + 1);
+				arrow.attr('src', originalImgSrc + arrow_down_image);
+			}
+		}
+		else{
+			var stock = JSON.parse(localStorage.getItem("albumsOpen"));
+			var index = stock.indexOf(albumsOpen[i]);
+			if (index > -1) {
+				stock.splice(index, 1);
+				localStorage.setItem("albumsOpen", JSON.stringify(stock));
+			}
+		}
 	}
 }
 
-$(document).ready(function() {
-
+function setalbumsOpen(){
 	if(typeof(localStorage) !== "undefined") {
 		if (localStorage.getItem("albumsOpen") !== null) {
 			var albumsOpen = JSON.parse(localStorage.getItem("albumsOpen"));
@@ -79,12 +89,19 @@ $(document).ready(function() {
 	else{
 		var albumsOpen = [];
 	}
+	return albumsOpen;
+}
+
+$(document).ready(function() {
+
+	var albumsOpen = setalbumsOpen();
 
 	$(".toggleArrow").click(function(index, element) {
 		var parentAlbumId = $(this).parent('li').data('id');
 		var originalImgSrc = $(this).attr('src');
 		var lastSlashIndex = originalImgSrc.lastIndexOf('/') + 1;
 		var newImgSrc = '';
+		var albumsOpen = setalbumsOpen();
 		if (originalImgSrc.substring(lastSlashIndex) === arrow_right_image) {
 			$('ul[data-albumId=' + parentAlbumId + ' ]').css('display', '');
 			newImgSrc = originalImgSrc.substring(0, lastSlashIndex) + arrow_down_image;
@@ -185,7 +202,7 @@ $(document).ready(function() {
                     });
 
 				//add new album in local Storage
-
+				var albumsOpen = setalbumsOpen();
 				albumsOpen.push(newParentAlbumId);
 				if(typeof(localStorage) !== "undefined") {
 					localStorage.setItem("albumsOpen", JSON.stringify(albumsOpen));
@@ -211,7 +228,6 @@ $(document).ready(function() {
 		albumsOpen.push(currentAlbumId);
 		albumsOpen.push(parseInt($('ul[data-albumid="' + currentAlbumId + '"]').parent().closest('ul').attr('data-albumid')));
 	}
-	console.log(albumsOpen);
 
 	expandAlbumTree(albumsOpen);
 
