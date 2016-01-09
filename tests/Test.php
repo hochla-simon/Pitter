@@ -13,6 +13,7 @@ require 'TestUserBasedSharing.php';
 require 'TestSearch.php';
 require 'TestOwnership.php';
 require 'TestLinkBasedSharing.php';
+require 'TestMetadata.php';
 
 /**
  * Created by PhpStorm.
@@ -135,6 +136,15 @@ class Test extends PHPUnit_Framework_TestCase
         $test->testNonOwnerAccess();
         $test->testAdministratorAccess();
         $test->tearDownAfterClass();
+    }
+
+    public function testMetadata() {
+        $test = new TestMetadata();
+        $test->setup();
+        $test->TestJPEGCameraInfo();
+        $test->TestPNG();
+        $test->TestGif();
+        $test->teardown();
     }
 
     public function testFinalDeletionOfConfiguration() {
